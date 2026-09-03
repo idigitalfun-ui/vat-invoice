@@ -31,7 +31,7 @@
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-sm font-bold tracking-tight text-white leading-tight">VAT Invoice Studio</h1>
-              <span class="px-1.5 py-0.2 bg-blue-500/20 text-blue-400 border border-blue-500/40 rounded text-[9.5px] font-mono font-semibold">v1.1</span>
+              <span class="px-1.5 py-0.2 bg-blue-500/20 text-blue-400 border border-blue-500/40 rounded text-[9.5px] font-mono font-semibold">v1.2</span>
             </div>
             <p class="text-[10.5px] text-slate-400">Irish Commercial Invoicing</p>
           </div>
@@ -398,7 +398,12 @@
                 </thead>
                 <tbody id="ws-acc-items-tbody"></tbody>
               </table>
-                    <div class="invoice-bottom-grid">
+              <div class="no-print my-1 flex justify-start">
+                <button onclick="addRow('ws_acc')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Add Row</button>
+              </div>
+            </div>
+
+            <div class="invoice-bottom-grid">
               <div class="invoice-notes-block flex flex-col justify-end">
                 <div class="font-medium text-slate-800">Make all checks payable to Company Name</div>
                 <div class="text-slate-600 mt-0.5">If you have any questions concerning this invoice, use the contact details above.</div>
