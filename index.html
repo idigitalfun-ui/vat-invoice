@@ -156,163 +156,165 @@
 
       <!-- Controls: Wholesale Accessories -->
       <div id="controls-ws_acc" class="flex flex-col gap-3">
+      <!-- Controls: Wholesale Accessories (Greenish) -->
+      <div id="controls-ws_acc" class="flex flex-col gap-3">
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
           <label class="block text-xs text-slate-300 mb-1 font-medium">B2B Customer Preset:</label>
           <select id="ws-acc-store-select" onchange="onStoreSelectChanged('ws_acc', this.value)"
+                  class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-emerald-400 outline-none">
+          </select>
+        </div>
+
+        <div class="catalog-card bg-emerald-950/20 border-emerald-800/40">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-300 mb-2 flex items-center justify-between">
+            <span>📦 Wholesale Accessories Catalog</span>
+            <span class="text-[9px] bg-emerald-500/20 px-1.5 py-0.5 rounded">Bulk Packs</span>
+          </h3>
+          <div class="flex flex-wrap gap-1 max-h-48 overflow-y-auto pr-0.5">
+            <button onclick="addFromCatalog('wsAccessories', 0)" class="catalog-chip bg-emerald-950/60 text-emerald-200 border border-emerald-800/60">⚡ Gerlax Charger (50pk €4)</button>
+            <button onclick="addFromCatalog('wsAccessories', 1)" class="catalog-chip bg-emerald-950/60 text-emerald-200 border border-emerald-800/60">⌚ GSK9 Watch (6pk €24.93)</button>
+            <button onclick="addFromCatalog('wsAccessories', 2)" class="catalog-chip bg-emerald-950/60 text-emerald-200 border border-emerald-800/60">🔋 Hoco Wireless (6pk €9.95)</button>
+            <button onclick="addFromCatalog('wsAccessories', 3)" class="catalog-chip bg-emerald-950/60 text-emerald-200 border border-emerald-800/60">🔌 Hoco C-to-C 3m (10pk €2.49)</button>
+            <button onclick="addFromCatalog('wsAccessories', 4)" class="catalog-chip bg-emerald-950/60 text-emerald-200 border border-emerald-800/60">🔌 Hoco C-to-L 3m (10pk €2.49)</button>
+            <button onclick="addFromCatalog('wsAccessories', 5)" class="catalog-chip bg-emerald-950/60 text-emerald-200 border border-emerald-800/60">📱 Smart Case 10th (5pk €5.95)</button>
+            <button onclick="addFromCatalog('wsAccessories', 6)" class="catalog-chip bg-emerald-950/60 text-emerald-200 border border-emerald-800/60">📻 Borofone BC48 (10pk €5.95)</button>
+            <button onclick="addFromCatalog('wsAccessories', 7)" class="catalog-chip bg-emerald-950/60 text-emerald-200 border border-emerald-800/60">🛡️ Pamper Case 40mm (20pk €0.90)</button>
+          </div>
+        </div>
+
+        <button onclick="addRow('ws_acc')" 
+                class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          Add Wholesale Accessory Row
+        </button>
+      </div>
+
+      <!-- Controls: Wholesale Devices (Yellow orange - Darkish) -->
+      <div id="controls-ws_dev" class="hidden flex-col gap-3">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
+          <label class="block text-xs text-slate-300 mb-1 font-medium">B2B Customer Preset:</label>
+          <select id="ws-dev-store-select" onchange="onStoreSelectChanged('ws_dev', this.value)"
                   class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-amber-400 outline-none">
           </select>
         </div>
 
         <div class="catalog-card bg-amber-950/20 border-amber-800/40">
           <h3 class="text-xs font-bold uppercase tracking-wider text-amber-300 mb-2 flex items-center justify-between">
-            <span>📦 Wholesale Accessories Catalog</span>
-            <span class="text-[9px] bg-amber-500/20 px-1.5 py-0.5 rounded">Bulk Packs</span>
-          </h3>
-          <div class="flex flex-wrap gap-1 max-h-48 overflow-y-auto pr-0.5">
-            <button onclick="addFromCatalog('wsAccessories', 0)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">⚡ Gerlax Charger (50pk €4)</button>
-            <button onclick="addFromCatalog('wsAccessories', 1)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">⌚ GSK9 Watch (6pk €24.93)</button>
-            <button onclick="addFromCatalog('wsAccessories', 2)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🔋 Hoco Wireless (6pk €9.95)</button>
-            <button onclick="addFromCatalog('wsAccessories', 3)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🔌 Hoco C-to-C 3m (10pk €2.49)</button>
-            <button onclick="addFromCatalog('wsAccessories', 4)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🔌 Hoco C-to-L 3m (10pk €2.49)</button>
-            <button onclick="addFromCatalog('wsAccessories', 5)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">📱 Smart Case 10th (5pk €5.95)</button>
-            <button onclick="addFromCatalog('wsAccessories', 6)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">📻 Borofone BC48 (10pk €5.95)</button>
-            <button onclick="addFromCatalog('wsAccessories', 7)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🛡️ Pamper Case 40mm (20pk €0.90)</button>
-          </div>
-        </div>
-
-        <button onclick="addRow('ws_acc')" 
-                class="w-full py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-          Add Wholesale Accessory Row
-        </button>
-      </div>
-
-      <!-- Controls: Wholesale Devices -->
-      <div id="controls-ws_dev" class="hidden flex-col gap-3">
-        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
-          <label class="block text-xs text-slate-300 mb-1 font-medium">B2B Customer Preset:</label>
-          <select id="ws-dev-store-select" onchange="onStoreSelectChanged('ws_dev', this.value)"
-                  class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-teal-400 outline-none">
-          </select>
-        </div>
-
-        <div class="catalog-card bg-teal-950/20 border-teal-800/40">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-teal-300 mb-2 flex items-center justify-between">
             <span>📱 Wholesale Handset Lots Catalog</span>
-            <span class="text-[9px] bg-teal-500/20 px-1.5 py-0.5 rounded">B2B Lots</span>
+            <span class="text-[9px] bg-amber-500/20 px-1.5 py-0.5 rounded">B2B Lots</span>
           </h3>
           <div class="flex flex-wrap gap-1 max-h-48 overflow-y-auto pr-0.5">
-            <button onclick="addFromCatalog('wsDevices', 0)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">🍏 iPhone 11 (10 Lot @ €195)</button>
-            <button onclick="addFromCatalog('wsDevices', 1)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">🍏 iPhone 12 (5 Lot @ €285)</button>
-            <button onclick="addFromCatalog('wsDevices', 2)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">🍏 iPhone 13 (5 Lot @ €375)</button>
-            <button onclick="addFromCatalog('wsDevices', 3)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">🤖 Galaxy A14 (10 Lot @ €115)</button>
-            <button onclick="addFromCatalog('wsDevices', 4)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">🤖 Galaxy A54 (5 Lot @ €240)</button>
-            <button onclick="addFromCatalog('wsDevices', 5)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">📱 iPad 10th (5 Lot @ €310)</button>
+            <button onclick="addFromCatalog('wsDevices', 0)" class="catalog-chip bg-amber-950/60 text-amber-200 border border-amber-800/60">🍏 iPhone 11 (10 Lot @ €195)</button>
+            <button onclick="addFromCatalog('wsDevices', 1)" class="catalog-chip bg-amber-950/60 text-amber-200 border border-amber-800/60">🍏 iPhone 12 (5 Lot @ €285)</button>
+            <button onclick="addFromCatalog('wsDevices', 2)" class="catalog-chip bg-amber-950/60 text-amber-200 border border-amber-800/60">🍏 iPhone 13 (5 Lot @ €375)</button>
+            <button onclick="addFromCatalog('wsDevices', 3)" class="catalog-chip bg-amber-950/60 text-amber-200 border border-amber-800/60">🤖 Galaxy A14 (10 Lot @ €115)</button>
+            <button onclick="addFromCatalog('wsDevices', 4)" class="catalog-chip bg-amber-950/60 text-amber-200 border border-amber-800/60">🤖 Galaxy A54 (5 Lot @ €240)</button>
+            <button onclick="addFromCatalog('wsDevices', 5)" class="catalog-chip bg-amber-950/60 text-amber-200 border border-amber-800/60">📱 iPad 10th (5 Lot @ €310)</button>
           </div>
         </div>
 
         <button onclick="addRow('ws_dev')" 
-                class="w-full py-2 bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
+                class="w-full py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
           Add Wholesale Device Lot Row
         </button>
       </div>
 
-      <!-- Controls: Retail Accessories -->
+      <!-- Controls: Retail Accessories (Blue) -->
       <div id="controls-rt_acc" class="hidden flex-col gap-3">
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
           <label class="block text-xs text-slate-300 mb-1 font-medium">Bill From Branch (13 Stores):</label>
           <select id="rt-acc-store-select" onchange="onStoreSelectChanged('rt_acc', this.value)"
-                  class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-rose-400 outline-none">
+                  class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-blue-400 outline-none">
           </select>
         </div>
 
         <!-- Quick Shelf Price Adder for Retail Accessories -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
-          <label class="block text-xs text-rose-300 font-bold mb-1">💡 Quick-Add Shelf Price (Inc VAT):</label>
+          <label class="block text-xs text-blue-300 font-bold mb-1">💡 Quick-Add Shelf Price (Inc VAT):</label>
           <div class="flex items-center gap-2">
             <div class="relative flex-1">
               <span class="absolute left-2.5 top-1.5 text-xs text-slate-400 font-mono">€</span>
               <input type="number" step="0.5" id="rt-acc-shelf-calc-input" placeholder="e.g. 15.00" 
-                     class="w-full pl-6 pr-2 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-white mono font-semibold focus:ring-1 focus:ring-rose-400 outline-none">
+                     class="w-full pl-6 pr-2 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-white mono font-semibold focus:ring-1 focus:ring-blue-400 outline-none">
             </div>
             <button onclick="addFromShelfPrice('rt_acc')" 
-                    class="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-lg transition shadow whitespace-nowrap">
+                    class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg transition shadow whitespace-nowrap">
               + Add Net Row
             </button>
           </div>
           <p class="text-[10px] text-slate-400 mt-1">Converts €15 shelf price to official Net €12.20 on invoice.</p>
         </div>
 
-        <div class="catalog-card bg-rose-950/20 border-rose-800/40">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-rose-300 mb-2 flex items-center justify-between">
+        <div class="catalog-card bg-blue-950/20 border-blue-800/40">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-blue-300 mb-2 flex items-center justify-between">
             <span>🛡️ Retail Accessories Favorites</span>
-            <span class="text-[9px] bg-rose-500/20 px-1.5 py-0.5 rounded">Gross -> Net Auto</span>
+            <span class="text-[9px] bg-blue-500/20 px-1.5 py-0.5 rounded">Gross -> Net Auto</span>
           </h3>
           <div class="flex flex-wrap gap-1 max-h-48 overflow-y-auto pr-0.5">
-            <button onclick="addFromCatalog('rtAccessories', 0)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🛡️ Samsung A10-A51 TG (€15)</button>
-            <button onclick="addFromCatalog('rtAccessories', 1)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🛡️ iPhone Tempered Glass (€15)</button>
-            <button onclick="addFromCatalog('rtAccessories', 2)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🔌 20W Fast Charger (€15)</button>
-            <button onclick="addFromCatalog('rtAccessories', 3)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">⚡ Type-C to Lightning 1m (€10)</button>
-            <button onclick="addFromCatalog('rtAccessories', 4)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">⚡ Type-C to Type-C 1m (€10)</button>
-            <button onclick="addFromCatalog('rtAccessories', 5)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">📱 Clear Armor Case (€15)</button>
-            <button onclick="addFromCatalog('rtAccessories', 6)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🚗 MagSafe Car Mount (€25)</button>
-            <button onclick="addFromCatalog('rtAccessories', 7)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🎧 TWS Earbuds Pro (€30)</button>
+            <button onclick="addFromCatalog('rtAccessories', 0)" class="catalog-chip bg-blue-950/60 text-blue-200 border border-blue-800/60">🛡️ Samsung A10-A51 TG (€15)</button>
+            <button onclick="addFromCatalog('rtAccessories', 1)" class="catalog-chip bg-blue-950/60 text-blue-200 border border-blue-800/60">🛡️ iPhone Tempered Glass (€15)</button>
+            <button onclick="addFromCatalog('rtAccessories', 2)" class="catalog-chip bg-blue-950/60 text-blue-200 border border-blue-800/60">🔌 20W Fast Charger (€15)</button>
+            <button onclick="addFromCatalog('rtAccessories', 3)" class="catalog-chip bg-blue-950/60 text-blue-200 border border-blue-800/60">⚡ Type-C to Lightning 1m (€10)</button>
+            <button onclick="addFromCatalog('rtAccessories', 4)" class="catalog-chip bg-blue-950/60 text-blue-200 border border-blue-800/60">⚡ Type-C to Type-C 1m (€10)</button>
+            <button onclick="addFromCatalog('rtAccessories', 5)" class="catalog-chip bg-blue-950/60 text-blue-200 border border-blue-800/60">📱 Clear Armor Case (€15)</button>
+            <button onclick="addFromCatalog('rtAccessories', 6)" class="catalog-chip bg-blue-950/60 text-blue-200 border border-blue-800/60">🚗 MagSafe Car Mount (€25)</button>
+            <button onclick="addFromCatalog('rtAccessories', 7)" class="catalog-chip bg-blue-950/60 text-blue-200 border border-blue-800/60">🎧 TWS Earbuds Pro (€30)</button>
           </div>
         </div>
 
         <button onclick="addRow('rt_acc')" 
-                class="w-full py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
+                class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
           Add Retail Accessory Row
         </button>
       </div>
 
-      <!-- Controls: Retail Devices -->
+      <!-- Controls: Retail Devices (Red) -->
       <div id="controls-rt_dev" class="hidden flex-col gap-3">
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
           <label class="block text-xs text-slate-300 mb-1 font-medium">Bill From Branch (13 Stores):</label>
           <select id="rt-dev-store-select" onchange="onStoreSelectChanged('rt_dev', this.value)"
-                  class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-indigo-400 outline-none">
+                  class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-red-400 outline-none">
           </select>
         </div>
 
         <!-- Quick Shelf Price Adder for Retail Devices -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
-          <label class="block text-xs text-indigo-300 font-bold mb-1">💡 Quick-Add Shelf Price (Inc VAT):</label>
+          <label class="block text-xs text-red-300 font-bold mb-1">💡 Quick-Add Shelf Price (Inc VAT):</label>
           <div class="flex items-center gap-2">
             <div class="relative flex-1">
               <span class="absolute left-2.5 top-1.5 text-xs text-slate-400 font-mono">€</span>
               <input type="number" step="0.5" id="rt-dev-shelf-calc-input" placeholder="e.g. 349.00" 
-                     class="w-full pl-6 pr-2 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-white mono font-semibold focus:ring-1 focus:ring-indigo-400 outline-none">
+                     class="w-full pl-6 pr-2 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-white mono font-semibold focus:ring-1 focus:ring-red-400 outline-none">
             </div>
             <button onclick="addFromShelfPrice('rt_dev')" 
-                    class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-lg transition shadow whitespace-nowrap">
+                    class="px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded-lg transition shadow whitespace-nowrap">
               + Add Net Row
             </button>
           </div>
           <p class="text-[10px] text-slate-400 mt-1">Converts €349 shelf price to official Net €283.74 on invoice.</p>
         </div>
 
-        <div class="catalog-card bg-indigo-950/20 border-indigo-800/40">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-300 mb-2 flex items-center justify-between">
+        <div class="catalog-card bg-red-950/20 border-red-800/40">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-red-300 mb-2 flex items-center justify-between">
             <span>📱 Retail Handsets & Tablets</span>
-            <span class="text-[9px] bg-indigo-500/20 px-1.5 py-0.5 rounded">IMEI Tracked</span>
+            <span class="text-[9px] bg-red-500/20 px-1.5 py-0.5 rounded">IMEI Tracked</span>
           </h3>
           <div class="flex flex-wrap gap-1 max-h-48 overflow-y-auto pr-0.5">
-            <button onclick="addFromCatalog('rtDevices', 0)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🍏 iPhone 11 64GB (€249)</button>
-            <button onclick="addFromCatalog('rtDevices', 1)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🍏 iPhone 12 128GB (€349)</button>
-            <button onclick="addFromCatalog('rtDevices', 2)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🍏 iPhone 13 128GB (€449)</button>
-            <button onclick="addFromCatalog('rtDevices', 3)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🤖 Galaxy A14 64GB (€149)</button>
-            <button onclick="addFromCatalog('rtDevices', 4)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🤖 Galaxy A54 5G (€299)</button>
-            <button onclick="addFromCatalog('rtDevices', 5)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">📱 iPad 10th Gen (€389)</button>
+            <button onclick="addFromCatalog('rtDevices', 0)" class="catalog-chip bg-red-950/60 text-red-200 border border-red-800/60">🍏 iPhone 11 64GB (€249)</button>
+            <button onclick="addFromCatalog('rtDevices', 1)" class="catalog-chip bg-red-950/60 text-red-200 border border-red-800/60">🍏 iPhone 12 128GB (€349)</button>
+            <button onclick="addFromCatalog('rtDevices', 2)" class="catalog-chip bg-red-950/60 text-red-200 border border-red-800/60">🍏 iPhone 13 128GB (€449)</button>
+            <button onclick="addFromCatalog('rtDevices', 3)" class="catalog-chip bg-red-950/60 text-red-200 border border-red-800/60">🤖 Galaxy A14 64GB (€149)</button>
+            <button onclick="addFromCatalog('rtDevices', 4)" class="catalog-chip bg-red-950/60 text-red-200 border border-red-800/60">🤖 Galaxy A54 5G (€299)</button>
+            <button onclick="addFromCatalog('rtDevices', 5)" class="catalog-chip bg-red-950/60 text-red-200 border border-red-800/60">📱 iPad 10th Gen (€389)</button>
           </div>
         </div>
 
         <button onclick="addRow('rt_dev')" 
-                class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
+                class="w-full py-2 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-          Add Retail Device Row
+          Add Retail Handset Row
         </button>
       </div>
 
@@ -344,7 +346,7 @@
           <div class="invoice-body">
             <div class="invoice-top-details">
               <div>
-                <div class="invoice-title-large">WHOLESALE ACCESSORIES INVOICE</div>
+                <div class="invoice-title-large text-emerald-950">WHOLESALE ACCESSORIES INVOICE</div>
                 <div class="mt-1 flex items-center gap-1.5">
                   <span class="text-xs text-slate-600 font-medium">Invoice Date:</span>
                   <span id="ws-acc-disp-date" class="text-xs font-bold text-slate-900">14/02/2024</span>
@@ -364,7 +366,7 @@
             </div>
 
             <div class="mb-2.5">
-              <div class="bill-heading">Bill To</div>
+              <div class="bill-heading text-emerald-900">Bill To</div>
               <div class="bill-content">
                 <input type="text" id="ws-acc-billto-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="Variety World" placeholder="Shop / Client Name">
                 <input type="text" id="ws-acc-billto-address" class="editable-cell-input text-slate-700 text-[11px]" value="Lyster Square, Portlaoise, R32P796" placeholder="Address">
@@ -471,7 +473,7 @@
             <div class="banner-logo-container">
               <div class="flex items-center gap-2.5">
                 <img src="assets/get-connected-banner-text.png" alt="Get Connected" class="h-9 object-contain drop-shadow-md">
-                <span class="text-xs uppercase tracking-widest text-emerald-300 font-bold ml-2 px-2 py-0.5 bg-emerald-950/60 rounded border border-emerald-500/30">Wholesale Devices</span>
+                <span class="text-xs uppercase tracking-widest text-amber-300 font-bold ml-2 px-2 py-0.5 bg-amber-950/60 rounded border border-amber-500/30">Wholesale Devices</span>
               </div>
             </div>
             <div class="banner-footer-text">
@@ -489,7 +491,7 @@
           <div class="invoice-body">
             <div class="invoice-top-details">
               <div>
-                <div class="invoice-title-large text-teal-950">WHOLESALE DEVICES INVOICE</div>
+                <div class="invoice-title-large text-amber-950">WHOLESALE DEVICES INVOICE</div>
                 <div class="mt-1 flex items-center gap-1.5">
                   <span class="text-xs text-slate-600 font-medium">Invoice Date:</span>
                   <span id="ws-dev-disp-date" class="text-xs font-bold text-slate-900">14/02/2024</span>
@@ -509,7 +511,7 @@
             </div>
 
             <div class="mb-2.5">
-              <div class="bill-heading text-teal-900">Bill To (Wholesale Buyer)</div>
+              <div class="bill-heading text-amber-900">Bill To (Wholesale Buyer)</div>
               <div class="bill-content">
                 <input type="text" id="ws-dev-billto-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="Smart Phone Hub Ltd">
                 <input type="text" id="ws-dev-billto-address" class="editable-cell-input text-slate-700 text-[11px]" value="Main Street, Portlaoise, Co. Laois">
@@ -551,7 +553,7 @@
 
             <div class="invoice-bottom-grid">
               <div class="invoice-notes-block flex flex-col justify-end">
-                <div class="font-medium text-teal-900">B2B Device Lot Terms: Tested & Certified Handset Lots</div>
+                <div class="font-medium text-amber-900">B2B Device Lot Terms: Tested & Certified Handset Lots</div>
                 <div class="text-slate-600 mt-0.5">Thank you for your wholesale order!</div>
               </div>
               <div>
@@ -634,7 +636,7 @@
           <div class="invoice-body">
             <div class="invoice-top-details">
               <div>
-                <div class="invoice-title-large">RETAIL ACCESSORIES INVOICE</div>
+                <div class="invoice-title-large text-blue-950">RETAIL ACCESSORIES INVOICE</div>
                 <div class="text-xs text-slate-700 flex items-center gap-1.5 mt-1">
                   <span class="font-semibold">Reference:</span>
                   <input type="text" id="rt-acc-input-ref" class="editable-cell-input ref-input font-bold text-slate-900 mono text-xs" value="SALE/POS250582">
@@ -651,7 +653,7 @@
 
             <div class="billing-grid">
               <div class="bill-block">
-                <div class="bill-heading">Bill To</div>
+                <div class="bill-heading text-blue-900">Bill To</div>
                 <div class="bill-content">
                   <input type="text" id="rt-acc-billto-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="Nigel Quinn" placeholder="Customer Name">
                   <input type="email" id="rt-acc-billto-email" class="editable-cell-input text-slate-700 text-[11px]" value="nigel.quinn@hotmail.com" placeholder="Email">
@@ -660,7 +662,7 @@
               </div>
 
               <div class="bill-block">
-                <div class="bill-heading">Bill From</div>
+                <div class="bill-heading text-blue-900">Bill From</div>
                 <div class="bill-content">
                   <input type="text" id="rt-acc-billfrom-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="I Digital Fun Thurles">
                   <textarea id="rt-acc-billfrom-address" rows="2" class="editable-cell-input text-slate-700 text-[10.5px] resize-none">Thurles Shopping Centre, Unit 10 Slievenamon Rd, Thurles, Co. Tipperary, E41 E674</textarea>
@@ -773,7 +775,7 @@
           <div class="invoice-body">
             <div class="invoice-top-details">
               <div>
-                <div class="invoice-title-large text-indigo-950">RETAIL DEVICE SALES INVOICE</div>
+                <div class="invoice-title-large text-red-950">RETAIL DEVICE SALES INVOICE</div>
                 <div class="text-xs text-slate-700 flex items-center gap-1.5 mt-1">
                   <span class="font-semibold">Reference:</span>
                   <input type="text" id="rt-dev-input-ref" class="editable-cell-input ref-input font-bold text-slate-900 mono text-xs" value="SALE/POS994120">
@@ -790,7 +792,7 @@
 
             <div class="billing-grid">
               <div class="bill-block">
-                <div class="bill-heading text-indigo-900">Customer Details</div>
+                <div class="bill-heading text-red-900">Customer Details</div>
                 <div class="bill-content">
                   <input type="text" id="rt-dev-billto-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="Sean O'Connor">
                   <input type="email" id="rt-dev-billto-email" class="editable-cell-input text-slate-700 text-[11px]" value="sean.oconnor@gmail.com">
@@ -800,7 +802,7 @@
               </div>
 
               <div class="bill-block">
-                <div class="bill-heading text-indigo-900">Store Branch</div>
+                <div class="bill-heading text-red-900">Store Branch</div>
                 <div class="bill-content">
                   <input type="text" id="rt-dev-billfrom-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="I Digital Fun Thurles">
                   <textarea id="rt-dev-billfrom-address" rows="2" class="editable-cell-input text-slate-700 text-[10.5px] resize-none">Thurles Shopping Centre, Unit 10 Slievenamon Rd, Thurles, Co. Tipperary, E41 E674</textarea>
@@ -829,14 +831,14 @@
 
             <div class="invoice-bottom-grid">
               <div class="invoice-notes-block flex flex-col justify-end text-[9.5px] leading-tight text-slate-700">
-                <div class="font-bold text-indigo-950 uppercase tracking-wide mb-1 text-[10px]">Warranty Terms & Conditions:</div>
+                <div class="font-bold text-red-950 uppercase tracking-wide mb-1 text-[10px]">Warranty Terms & Conditions:</div>
                 <div class="space-y-0.5 text-slate-700">
                   <div>• <span class="font-semibold text-slate-900">Brand New:</span> 1 Year manufacturer warranty | <span class="font-semibold text-slate-900">Used/Pre-Owned:</span> 6 Months warranty.</div>
                   <div>• <span class="font-semibold text-slate-900">Exclusions:</span> Warranty void in case of physical, screen, or moisture/liquid damage.</div>
                   <div>• <span class="font-semibold text-slate-900">Faults after 30 days:</span> Remedy order: 1) Repair ➔ 2) Replace (identical/similar) ➔ 3) Refund current sale value.</div>
                   <div>• <span class="font-semibold text-slate-900">Proof of Purchase:</span> Keep original receipt/invoice. Ask for full terms. Statutory rights unaffected.</div>
                 </div>
-                <div class="font-semibold text-indigo-900 mt-1">Thank you for choosing certified devices!</div>
+                <div class="font-semibold text-red-900 mt-1">Thank you for choosing certified devices!</div>
               </div>
               <div>
                 <table class="totals-table">

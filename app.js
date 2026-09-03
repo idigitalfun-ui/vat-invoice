@@ -388,7 +388,7 @@ function switchHierarchy(mainCat, subCat = null) {
     const controls = document.getElementById(`controls-${k}`);
     
     if (k === subCat) {
-      if (btn) btn.className = 'sub-tab-btn active-sub px-3 py-1 text-xs flex items-center gap-1';
+      if (btn) btn.className = `sub-tab-btn active-sub active-sub-${k} px-3 py-1 text-xs flex items-center gap-1`;
       canvas?.classList.remove('hidden');
       if (controls) {
         controls.classList.remove('hidden');
@@ -606,7 +606,7 @@ function renderRetailAccessories() {
   const noticeContactElem = document.getElementById('rt-acc-notice-contact');
 
   if (isGC) {
-    headerElem.className = 'banner-ws-acc';
+    headerElem.className = 'banner-rt-acc';
     logoElem.src = 'assets/get-connected-banner-text.png';
     logoElem.className = 'h-9 object-contain drop-shadow-md';
     brandTextElem.textContent = '';
@@ -711,7 +711,7 @@ function renderRetailDevices() {
   const contactTextElem = document.getElementById('rt-dev-header-contact');
 
   if (isGC) {
-    headerElem.className = 'banner-ws-acc';
+    headerElem.className = 'banner-rt-dev';
     logoElem.src = 'assets/get-connected-banner-text.png';
     logoElem.className = 'h-9 object-contain drop-shadow-md';
     brandTextElem.textContent = '';
