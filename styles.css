@@ -285,7 +285,7 @@ body {
   background-color: #fbfcfe;
 }
 
-/* Row Action Buttons (Delete, Duplicate) */
+/* Row Action Buttons */
 .row-actions-cell {
   width: 32px;
   text-align: center;
@@ -306,7 +306,7 @@ tr:hover .row-actions {
   opacity: 1;
 }
 
-/* Bottom Calculation & Notes Layout */
+/* Bottom Layout */
 .invoice-bottom-grid {
   display: grid;
   grid-template-columns: 1.25fr 1fr;
@@ -405,6 +405,23 @@ tr:hover .row-actions {
 .catalog-chip:hover {
   transform: translateY(-1px);
   filter: brightness(1.2);
+}
+
+/* Scanner Drop Zone */
+.drop-zone {
+  border: 2px dashed #475569;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(15, 23, 42, 0.6);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.drop-zone.dragover {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+  transform: scale(1.01);
 }
 
 /* Toast Notifications */

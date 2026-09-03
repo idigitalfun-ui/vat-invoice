@@ -1,6 +1,6 @@
 /**
- * VAT Invoice Studio - 4 Profile VAT Invoicing Engine
- * Exact Irish VAT precision without rounding discrepancies.
+ * VAT Invoice Studio - 4 Profile VAT Invoicing & AI Document Scanner
+ * Exact Irish VAT precision + Client-Side Photo OCR & Excel Parsing
  */
 
 // Master Store Directory from Shop Details.xlsx
@@ -183,9 +183,10 @@ const CATALOGS = {
   ]
 };
 
-// Application State for All 4 Profiles
+// Application State
 const state = {
   activeProfile: 'wholesale', // 'wholesale', 'retail', 'accessories', 'devices'
+  scannedItemsBuffer: [],
   profiles: {
     wholesale: {
       invoiceNo: '223802',
@@ -263,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
   populateStoreDropdowns();
   loadAllSampleData();
   setupEventListeners();
+  setupScannerHandlers();
   renderActiveProfile();
 });
 
@@ -290,7 +292,6 @@ function parseNum(val) {
   return parseFloat(clean) || 0;
 }
 
-// Round to 2 decimal places cleanly
 function round2(num) {
   return Math.round((Number(num) + Number.EPSILON) * 100) / 100;
 }
@@ -324,21 +325,17 @@ function populateStoreDropdowns() {
 
 // Load All Samples
 function loadAllSampleData() {
-  // Wholesale
   state.profiles.wholesale.items = JSON.parse(JSON.stringify(CATALOGS.wholesaleGC));
   
-  // Retail (Gross €15.00 -> Net €12.20, VAT €2.80, Total €15.00)
   state.profiles.retail.items = [
     { desc: '00SSTG002 - TG Samsung A10/A20/A30/A50/A51', qty: 1, grossPrice: 15.00 }
   ];
 
-  // Accessories
   state.profiles.accessories.items = [
     { sku: 'ACC-TG-01', desc: '9D Full Glue Tempered Glass (iPhone Series)', qty: 2, grossPrice: 15.00 },
     { sku: 'CHG-20W', desc: '20W Super Fast PD Power Adapter', qty: 1, grossPrice: 15.00 }
   ];
 
-  // Devices
   state.profiles.devices.items = [
     { model: 'Apple iPhone 13 128GB Midnight', imei: '359012348756230', grade: 'Grade A (Unlocked)', warranty: '12 Months', qty: 1, grossPrice: 449.00 }
   ];
@@ -348,7 +345,6 @@ function loadAllSampleData() {
 function switchProfile(profileKey) {
   state.activeProfile = profileKey;
   
-  // Tab buttons
   ['wholesale', 'retail', 'accessories', 'devices'].forEach(key => {
     const btn = document.getElementById(`tab-btn-${key}`);
     const canvas = document.getElementById(`canvas-${key}`);
@@ -369,7 +365,6 @@ function switchProfile(profileKey) {
 }
 
 // Exact Irish VAT Calculation Engine
-// Eliminates €15.01 floating point discrepancy by computing VAT as (Gross - Net)
 function calculateProfileTotals(profileKey) {
   const prof = state.profiles[profileKey];
   const taxRate = parseNum(prof.taxRate) || 23;
@@ -380,7 +375,6 @@ function calculateProfileTotals(profileKey) {
   let totalGross = 0;
 
   if (profileKey === 'wholesale') {
-    // Wholesale mode: B2B Net-based calculation
     prof.items.forEach(it => {
       const qty = parseNum(it.qty) || 1;
       const amount = parseNum(it.amount) || 0;
@@ -393,7 +387,6 @@ function calculateProfileTotals(profileKey) {
     const totalDue = round2(subtotal + vatAmount + otherCosts);
     return { subtotal, taxRate, vatAmount, otherCosts, totalDue };
   } else {
-    // Retail, Accessories, and Devices modes: Gross Shelf Price based calculation
     prof.items.forEach(it => {
       const qty = parseNum(it.qty) || 1;
       const gross = parseNum(it.grossPrice) || 0;
@@ -407,8 +400,6 @@ function calculateProfileTotals(profileKey) {
 
     subtotal = round2(subtotal);
     totalGross = round2(totalGross);
-    
-    // In Retail VAT: VAT is precisely the difference between Gross Total and Net Subtotal
     const vatAmount = round2(totalGross - subtotal);
     const totalDue = round2(subtotal + vatAmount + otherCosts);
 
@@ -425,7 +416,7 @@ function renderActiveProfile() {
   else if (p === 'devices') renderDevices();
 }
 
-// 1. Render Wholesale (Get Connected)
+// 1. Render Wholesale
 function renderWholesale() {
   const data = state.profiles.wholesale;
   const calc = calculateProfileTotals('wholesale');
@@ -483,12 +474,11 @@ function renderWholesale() {
   updateSummaryDisplays('wholesale', calc);
 }
 
-// 2. Render Retail (I Digital Fun)
+// 2. Render Retail
 function renderRetail() {
   const data = state.profiles.retail;
   const calc = calculateProfileTotals('retail');
 
-  // Dynamic Header (Get Connected vs IDFL)
   const isGC = data.activeBrand === 'GC';
   const headerElem = document.getElementById('retail-header-banner');
   const logoElem = document.getElementById('retail-logo-img');
@@ -588,7 +578,7 @@ function renderRetail() {
   updateSummaryDisplays('retail', calc);
 }
 
-// 3. Render Accessories Invoice
+// 3. Render Accessories
 function renderAccessories() {
   const data = state.profiles.accessories;
   const calc = calculateProfileTotals('accessories');
@@ -648,7 +638,7 @@ function renderAccessories() {
   updateSummaryDisplays('accessories', calc);
 }
 
-// 4. Render Devices Sales Invoice (With IMEI / Grade / Warranty)
+// 4. Render Devices
 function renderDevices() {
   const data = state.profiles.devices;
   const calc = calculateProfileTotals('devices');
@@ -711,10 +701,9 @@ function renderDevices() {
   updateSummaryDisplays('devices', calc);
 }
 
-// Reusable Summary Display Updater
+// Summary updater
 function updateSummaryDisplays(profileKey, calc) {
   if (!calc) calc = calculateProfileTotals(profileKey);
-
   const prefix = profileKey === 'wholesale' ? 'ws' : (profileKey === 'retail' ? 'rt' : (profileKey === 'accessories' ? 'acc' : 'dev'));
 
   const subtotalElem = document.getElementById(`${prefix}-subtotal-val`);
@@ -730,7 +719,7 @@ function updateSummaryDisplays(profileKey, calc) {
   if (totalElem) totalElem.textContent = formatEuro(calc.totalDue);
 }
 
-// In-place text field updater
+// Field updates in place
 function updateItemField(profileKey, index, field, value) {
   const prof = state.profiles[profileKey];
   if (prof && prof.items[index]) {
@@ -738,7 +727,6 @@ function updateItemField(profileKey, index, field, value) {
   }
 }
 
-// In-place gross price updater (Recalculates exact VAT and Subtotal live)
 function updateItemGrossField(profileKey, index, value) {
   const prof = state.profiles[profileKey];
   if (!prof || !prof.items[index]) return;
@@ -752,7 +740,6 @@ function updateItemGrossField(profileKey, index, value) {
   updateSummaryDisplays(profileKey, calc);
 }
 
-// In-place calculation field updater (Qty or Net Amount)
 function updateItemCalcField(profileKey, index, field, value) {
   const prof = state.profiles[profileKey];
   if (!prof || !prof.items[index]) return;
@@ -766,7 +753,7 @@ function updateItemCalcField(profileKey, index, field, value) {
   updateSummaryDisplays(profileKey, calc);
 }
 
-// Add/Delete/Duplicate Row Handlers
+// Row Handlers
 function addRow(profileKey, customItem = null) {
   const prof = state.profiles[profileKey];
   if (!prof) return;
@@ -804,24 +791,17 @@ function duplicateRow(profileKey, index) {
   showToast('Row duplicated');
 }
 
-// Add from Catalog Presets
 function addFromCatalog(catalogKey, index) {
   const cat = CATALOGS[catalogKey];
   if (!cat || !cat[index]) return;
   const item = cat[index];
 
-  if (catalogKey === 'wholesaleGC') {
-    addRow('wholesale', item);
-  } else if (catalogKey === 'retailIDFL') {
-    addRow('retail', item);
-  } else if (catalogKey === 'accessoriesSpecial') {
-    addRow('accessories', item);
-  } else if (catalogKey === 'devicesSales') {
-    addRow('devices', item);
-  }
+  if (catalogKey === 'wholesaleGC') addRow('wholesale', item);
+  else if (catalogKey === 'retailIDFL') addRow('retail', item);
+  else if (catalogKey === 'accessoriesSpecial') addRow('accessories', item);
+  else if (catalogKey === 'devicesSales') addRow('devices', item);
 }
 
-// Store Selection Handler
 function onStoreSelectChanged(profileKey, storeId) {
   const store = STORES.find(s => s.id === Number(storeId));
   if (!store) return;
@@ -850,7 +830,6 @@ function onStoreSelectChanged(profileKey, storeId) {
   }
 }
 
-// Set Tax Rate
 function setQuickTaxRate(rate) {
   const prof = state.profiles[state.activeProfile];
   if (!prof) return;
@@ -859,7 +838,6 @@ function setQuickTaxRate(rate) {
   showToast(`Tax Rate set to ${rate}%`);
 }
 
-// Generate New Reference / Invoice #
 function generateNewInvoiceNumber() {
   const rand = Math.floor(100000 + Math.random() * 900000);
   const p = state.activeProfile;
@@ -881,7 +859,6 @@ function generateNewInvoiceNumber() {
   showToast(`Generated Invoice # ${rand}`);
 }
 
-// Clear Invoice
 function resetCurrentInvoice() {
   if (confirm('Are you sure you want to reset the current invoice?')) {
     const prof = state.profiles[state.activeProfile];
@@ -892,7 +869,282 @@ function resetCurrentInvoice() {
   }
 }
 
-// Save to History
+// =========================================================
+// AI PHOTO OCR, EXCEL & CLIPBOARD SCANNER HANDLERS
+// =========================================================
+function setupScannerHandlers() {
+  const dropZone = document.getElementById('scanner-drop-zone');
+  const fileInput = document.getElementById('scanner-file-input');
+
+  if (dropZone && fileInput) {
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        processUploadedFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        processUploadedFile(e.target.files[0]);
+      }
+    });
+  }
+}
+
+function openScannerModal() {
+  const select = document.getElementById('scanner-target-profile');
+  if (select) select.value = state.activeProfile;
+  document.getElementById('scanner-modal').classList.remove('hidden');
+}
+
+function closeScannerModal() {
+  document.getElementById('scanner-modal').classList.add('hidden');
+}
+
+// Process Uploaded File (Photo image, Excel XLSX, or CSV)
+async function processUploadedFile(file) {
+  const statusElem = document.getElementById('scanner-status');
+  const previewDiv = document.getElementById('scanner-preview-area');
+  const fileNameElem = document.getElementById('scanner-filename');
+
+  if (!file) return;
+
+  fileNameElem.textContent = `${file.name} (${Math.round(file.size / 1024)} KB)`;
+  statusElem.classList.remove('hidden');
+  previewDiv.classList.add('hidden');
+  statusElem.textContent = 'Analyzing document content...';
+
+  try {
+    if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls') || file.name.endsWith('.csv')) {
+      // Excel File Processing via SheetJS
+      statusElem.textContent = 'Parsing Excel spreadsheet...';
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+          parseTableRows(rows);
+        } catch (err) {
+          statusElem.textContent = 'Error parsing Excel: ' + err.message;
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    } else if (file.type.startsWith('image/')) {
+      // Photo OCR Processing via Tesseract.js
+      statusElem.textContent = 'Extracting text and prices with AI OCR...';
+      if (typeof Tesseract === 'undefined') {
+        statusElem.textContent = 'OCR library loading... Please wait 2 seconds.';
+        return;
+      }
+      
+      const res = await Tesseract.recognize(file, 'eng', {
+        logger: m => {
+          if (m.status === 'recognizing text') {
+            statusElem.textContent = `AI Scanning Photo: ${Math.round(m.progress * 100)}%`;
+          }
+        }
+      });
+
+      statusElem.textContent = 'Text extracted! Identifying invoice rows...';
+      parseOCRText(res.data.text);
+    } else {
+      statusElem.textContent = 'Unsupported format. Please upload JPG/PNG photo or Excel XLSX.';
+    }
+  } catch (err) {
+    statusElem.textContent = 'Failed to process: ' + err.message;
+  }
+}
+
+// Parse Raw Text from Photo OCR
+function parseOCRText(text) {
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+  const items = [];
+
+  lines.forEach(line => {
+    // Look for lines containing numbers or prices (€ or numbers with decimal)
+    const priceMatch = line.match(/(?:€|EUR)?\s*(\d+[.,]\d{2})/i) || line.match(/\b(\d+)\s*(?:€|EUR)/i);
+    const qtyMatch = line.match(/\b(\d+)\s*(?:x|pcs|pk|qty)?\b/i);
+
+    if (priceMatch) {
+      const price = parseFloat(priceMatch[1].replace(',', '.'));
+      let qty = qtyMatch ? parseInt(qtyMatch[1], 10) : 1;
+      if (qty > 1000) qty = 1;
+
+      // Clean description
+      let desc = line.replace(priceMatch[0], '').replace(/(?:€|EUR)/gi, '').trim();
+      if (desc.length < 3) desc = 'Scanned Product / Item';
+
+      items.push({
+        desc: desc,
+        qty: qty,
+        grossPrice: price,
+        amount: round2(price / 1.23)
+      });
+    }
+  });
+
+  if (items.length === 0) {
+    // If no exact price regex match, create rows from lines
+    lines.slice(0, 8).forEach(l => {
+      items.push({ desc: l, qty: 1, grossPrice: 15.00, amount: 12.20 });
+    });
+  }
+
+  showParsedPreview(items);
+}
+
+// Parse Excel rows
+function parseTableRows(rows) {
+  const items = [];
+  rows.forEach(row => {
+    if (!row || row.length === 0) return;
+    const lineText = row.filter(c => c !== undefined && c !== null).join(' ');
+    
+    // Check if row has valid description and numeric price
+    let desc = '';
+    let qty = 1;
+    let price = 0;
+
+    row.forEach(cell => {
+      if (typeof cell === 'string' && cell.length > 2 && isNaN(cell)) {
+        if (!desc || cell.length > desc.length) desc = cell;
+      } else if (typeof cell === 'number' || (!isNaN(cell) && String(cell).trim() !== '')) {
+        const num = parseFloat(cell);
+        if (num > 0) {
+          if (num % 1 === 0 && num < 100 && qty === 1) qty = num;
+          else price = num;
+        }
+      }
+    });
+
+    if (desc && desc.toLowerCase() !== 'item description' && desc.toLowerCase() !== 'subtotal' && desc.toLowerCase() !== 'total') {
+      if (price === 0) price = 15.00;
+      items.push({
+        desc: desc,
+        qty: qty,
+        grossPrice: price,
+        amount: round2(price / 1.23)
+      });
+    }
+  });
+
+  showParsedPreview(items);
+}
+
+// Show Parsed Preview Table
+function showParsedPreview(items) {
+  state.scannedItemsBuffer = items;
+  const statusElem = document.getElementById('scanner-status');
+  const previewDiv = document.getElementById('scanner-preview-area');
+  const tbody = document.getElementById('scanner-preview-tbody');
+
+  statusElem.classList.add('hidden');
+  previewDiv.classList.remove('hidden');
+  tbody.innerHTML = '';
+
+  items.forEach((item, index) => {
+    const tr = document.createElement('tr');
+    tr.className = 'border-b border-slate-700/60 text-xs';
+    tr.innerHTML = `
+      <td class="p-2">
+        <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1 text-slate-100" value="${escapeHtml(item.desc)}"
+               oninput="state.scannedItemsBuffer[${index}].desc = this.value">
+      </td>
+      <td class="p-2 text-center" style="width: 70px;">
+        <input type="number" class="w-full bg-slate-900 border border-slate-700 rounded p-1 text-center text-slate-100 mono" value="${item.qty}"
+               oninput="state.scannedItemsBuffer[${index}].qty = parseNum(this.value)">
+      </td>
+      <td class="p-2 text-right" style="width: 100px;">
+        <input type="number" step="0.01" class="w-full bg-slate-900 border border-slate-700 rounded p-1 text-right text-slate-100 mono" value="${Number(item.grossPrice || item.amount).toFixed(2)}"
+               oninput="state.scannedItemsBuffer[${index}].grossPrice = parseNum(this.value); state.scannedItemsBuffer[${index}].amount = round2(parseNum(this.value)/1.23)">
+      </td>
+      <td class="p-2 text-center" style="width: 40px;">
+        <button onclick="deleteBufferRow(${index})" class="text-rose-400 hover:text-rose-300">✕</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function deleteBufferRow(index) {
+  state.scannedItemsBuffer.splice(index, 1);
+  showParsedPreview(state.scannedItemsBuffer);
+}
+
+// Paste directly from Clipboard
+function parseClipboardText() {
+  const raw = document.getElementById('scanner-clipboard-input').value;
+  if (!raw.trim()) {
+    alert('Please paste some Excel rows or text first.');
+    return;
+  }
+  const lines = raw.split(/\r?\n/).filter(l => l.trim().length > 0);
+  const rows = lines.map(l => l.split(/\t|,/));
+  parseTableRows(rows);
+}
+
+// Apply Scanned Items to Selected Profile
+function applyScannedItemsToProfile() {
+  const targetProfile = document.getElementById('scanner-target-profile').value;
+  const prof = state.profiles[targetProfile];
+  if (!prof) return;
+
+  if (state.scannedItemsBuffer.length === 0) {
+    alert('No items found to import.');
+    return;
+  }
+
+  state.scannedItemsBuffer.forEach(it => {
+    if (targetProfile === 'wholesale') {
+      prof.items.push({
+        desc: it.desc,
+        qty: it.qty || 1,
+        amount: it.amount || round2(it.grossPrice / 1.23)
+      });
+    } else if (targetProfile === 'accessories') {
+      prof.items.push({
+        sku: 'ACC-SCAN',
+        desc: it.desc,
+        qty: it.qty || 1,
+        grossPrice: it.grossPrice || round2(it.amount * 1.23)
+      });
+    } else if (targetProfile === 'devices') {
+      prof.items.push({
+        model: it.desc,
+        imei: '',
+        grade: 'Grade A',
+        warranty: '12 Months',
+        qty: it.qty || 1,
+        grossPrice: it.grossPrice || round2(it.amount * 1.23)
+      });
+    } else {
+      prof.items.push({
+        desc: it.desc,
+        qty: it.qty || 1,
+        grossPrice: it.grossPrice || round2(it.amount * 1.23)
+      });
+    }
+  });
+
+  switchProfile(targetProfile);
+  closeScannerModal();
+  showToast(`✨ Successfully imported ${state.scannedItemsBuffer.length} items into ${targetProfile.toUpperCase()}!`);
+}
+
+// Storage History
 function saveCurrentInvoice() {
   const p = state.activeProfile;
   const prof = state.profiles[p];
@@ -922,7 +1174,7 @@ function loadSavedInvoicesFromStorage() {
     const raw = localStorage.getItem('vat_invoices_history_v2');
     if (raw) state.savedInvoices = JSON.parse(raw);
   } catch (e) {
-    console.error('History load error:', e);
+    console.error('History error:', e);
   }
 }
 
@@ -944,7 +1196,6 @@ function deleteSavedInvoiceRecord(id, e) {
   showToast('Invoice deleted from history');
 }
 
-// Export to CSV
 function exportInvoiceCSV() {
   const p = state.activeProfile;
   const prof = state.profiles[p];
@@ -971,7 +1222,6 @@ function exportInvoiceCSV() {
   showToast('Exported CSV');
 }
 
-// Export JSON
 function exportInvoiceJSON() {
   const p = state.activeProfile;
   const prof = state.profiles[p];
@@ -986,7 +1236,6 @@ function exportInvoiceJSON() {
   showToast('Exported JSON');
 }
 
-// Import JSON
 function importInvoiceJSON(file) {
   if (!file) return;
   const reader = new FileReader();
@@ -1004,12 +1253,10 @@ function importInvoiceJSON(file) {
   reader.readAsText(file);
 }
 
-// Print / PDF
 function triggerPrint() {
   window.print();
 }
 
-// Toast
 function showToast(msg) {
   const container = document.getElementById('toast-container');
   if (!container) return;
@@ -1028,7 +1275,6 @@ function showToast(msg) {
   }, 2400);
 }
 
-// Modals
 function openSavedModal() {
   renderSavedInvoicesModal();
   document.getElementById('saved-invoices-modal').classList.remove('hidden');
@@ -1080,9 +1326,8 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-// Setup Event Listeners
+// Event Listeners
 function setupEventListeners() {
-  // Wholesale
   document.getElementById('ws-input-date')?.addEventListener('change', (e) => {
     state.profiles.wholesale.date = e.target.value;
     document.getElementById('ws-disp-date').textContent = formatDateDisplay(e.target.value);
@@ -1117,7 +1362,6 @@ function setupEventListeners() {
     updateSummaryDisplays('wholesale');
   });
 
-  // Retail
   document.getElementById('rt-input-date')?.addEventListener('change', (e) => {
     state.profiles.retail.date = e.target.value;
     document.getElementById('rt-disp-date').textContent = formatDateDisplay(e.target.value);
@@ -1155,7 +1399,6 @@ function setupEventListeners() {
     updateSummaryDisplays('retail');
   });
 
-  // Accessories Listeners
   document.getElementById('acc-input-date')?.addEventListener('change', (e) => {
     state.profiles.accessories.date = e.target.value;
     document.getElementById('acc-disp-date').textContent = formatDateDisplay(e.target.value);
@@ -1175,9 +1418,6 @@ function setupEventListeners() {
   document.getElementById('acc-billto-email')?.addEventListener('input', (e) => {
     state.profiles.accessories.billTo.email = e.target.value;
   });
-  document.getElementById('acc-billto-vat')?.addEventListener('input', (e) => {
-    state.profiles.accessories.billTo.vatNo = e.target.value;
-  });
   document.getElementById('acc-taxrate-input')?.addEventListener('input', (e) => {
     state.profiles.accessories.taxRate = parseNum(e.target.value);
     renderAccessories();
@@ -1187,7 +1427,6 @@ function setupEventListeners() {
     updateSummaryDisplays('accessories');
   });
 
-  // Devices Listeners
   document.getElementById('dev-input-date')?.addEventListener('change', (e) => {
     state.profiles.devices.date = e.target.value;
     document.getElementById('dev-disp-date').textContent = formatDateDisplay(e.target.value);
@@ -1216,7 +1455,6 @@ function setupEventListeners() {
     updateSummaryDisplays('devices');
   });
 
-  // Ctrl+P / Cmd+P
   window.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
       e.preventDefault();

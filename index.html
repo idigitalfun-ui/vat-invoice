@@ -3,9 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VAT Invoice Studio | 4 Professional Profiles</title>
+  <title>VAT Invoice Studio | 4 Professional Profiles & AI Scanner</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- SheetJS CDN for Excel Spreadsheets -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Tesseract.js CDN for Client-Side Camera Photo & Receipt OCR -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen">
@@ -59,6 +63,13 @@
 
       <!-- Actions -->
       <div class="flex items-center flex-wrap gap-2">
+        <!-- AI Photo / Excel Scanner Button -->
+        <button onclick="openScannerModal()" 
+                class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-lg shadow-indigo-950/60 transition hover:scale-[1.02] active:scale-[0.98]">
+          <span class="text-sm">📷</span>
+          <span>Scan Photo / Excel</span>
+        </button>
+
         <button onclick="triggerPrint()" 
                 class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-900/40 transition hover:scale-[1.02] active:scale-[0.98]">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
@@ -103,7 +114,7 @@
   <!-- Main Grid -->
   <main class="max-w-7xl mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-    <!-- Left Controls Panel (Screen Only) -->
+    <!-- Left Controls Panel -->
     <aside class="no-print lg:col-span-4 flex flex-col gap-4">
       
       <!-- Tax Presets & Actions -->
@@ -242,7 +253,7 @@
       </div>
 
       <div class="p-2.5 bg-slate-900/60 rounded-lg border border-slate-800 text-[11px] text-slate-400">
-        <span class="text-blue-400 font-semibold">💡 Real-Time Inline Canvas:</span> Click and edit any text, amount, quantity, or date directly on the invoice. Everything calculates live with 100% exact VAT precision.
+        <span class="text-blue-400 font-semibold">💡 Instant Live Sync:</span> You can edit any field directly on the canvas, use the presets, or click <strong class="text-purple-300">"📷 Scan Photo / Excel"</strong> to auto-fill from an image or spreadsheet.
       </div>
 
     </aside>
@@ -252,9 +263,7 @@
 
       <div class="invoice-sheet-container w-full">
 
-        <!-- ========================================================= -->
-        <!-- PROFILE 1: WHOLESALE (GET CONNECTED)                      -->
-        <!-- ========================================================= -->
+        <!-- PROFILE 1: WHOLESALE (GET CONNECTED) -->
         <div id="canvas-wholesale" class="a4-sheet">
           <div class="banner-wholesale-gc">
             <div class="banner-logo-container">
@@ -378,9 +387,7 @@
           </div>
         </div>
 
-        <!-- ========================================================= -->
-        <!-- PROFILE 2: RETAIL POS (I DIGITAL FUN)                     -->
-        <!-- ========================================================= -->
+        <!-- PROFILE 2: RETAIL POS (I DIGITAL FUN) -->
         <div id="canvas-retail" class="a4-sheet hidden">
           <div id="retail-header-banner" class="banner-retail-idfl">
             <div class="banner-logo-container">
@@ -503,9 +510,7 @@
           </div>
         </div>
 
-        <!-- ========================================================= -->
-        <!-- PROFILE 3: ACCESSORIES SPECIALIST INVOICE                 -->
-        <!-- ========================================================= -->
+        <!-- PROFILE 3: ACCESSORIES -->
         <div id="canvas-accessories" class="a4-sheet hidden">
           <div class="banner-accessories">
             <div class="banner-logo-container">
@@ -624,9 +629,7 @@
           </div>
         </div>
 
-        <!-- ========================================================= -->
-        <!-- PROFILE 4: DEVICES & IMEI SALES INVOICE                   -->
-        <!-- ========================================================= -->
+        <!-- PROFILE 4: DEVICES -->
         <div id="canvas-devices" class="a4-sheet hidden">
           <div class="banner-devices">
             <div class="banner-logo-container">
@@ -751,6 +754,111 @@
     </section>
 
   </main>
+
+  <!-- ========================================================= -->
+  <!-- AI PHOTO OCR, EXCEL & RECEIPT SCANNER MODAL              -->
+  <!-- ========================================================= -->
+  <div id="scanner-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- Modal Header -->
+      <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center text-white text-base">
+            📷
+          </div>
+          <div>
+            <h3 class="font-bold text-white text-sm">AI Photo & Excel Invoice Scanner</h3>
+            <p class="text-[11px] text-slate-400">Upload photo/receipt, Excel spreadsheet, or paste table data</p>
+          </div>
+        </div>
+        <button onclick="closeScannerModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-5 overflow-y-auto flex flex-col gap-4">
+        
+        <!-- Target Profile Selector -->
+        <div class="flex items-center justify-between p-3 bg-slate-950/80 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-300 font-semibold">Import into Invoice Profile:</span>
+          <select id="scanner-target-profile" class="bg-slate-900 border border-slate-700 text-xs text-white rounded-lg p-1.5 focus:ring-1 focus:ring-purple-500 outline-none">
+            <option value="wholesale">1. Get Connected (Wholesale)</option>
+            <option value="retail">2. I Digital Fun (Retail)</option>
+            <option value="accessories">3. Accessories Invoice</option>
+            <option value="devices">4. Devices & IMEI Sales</option>
+          </select>
+        </div>
+
+        <!-- Drop Zone for Camera Photo or Excel -->
+        <div id="scanner-drop-zone" class="drop-zone" onclick="document.getElementById('scanner-file-input').click()">
+          <input type="file" id="scanner-file-input" accept="image/*,.xlsx,.xls,.csv" class="hidden">
+          <div class="flex flex-col items-center gap-2">
+            <span class="text-3xl">📸 📊</span>
+            <div class="text-xs font-semibold text-white">Click or Drag & Drop Camera Photo, Receipt or Excel Spreadsheet here</div>
+            <div class="text-[11px] text-slate-400">Supports JPG, PNG, WEBP, XLSX, XLS, CSV</div>
+            <div id="scanner-filename" class="text-xs text-purple-400 font-mono mt-1"></div>
+          </div>
+        </div>
+
+        <!-- Or Paste from Excel / Text Area -->
+        <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800/80 flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-400 font-medium">Or Paste copied cells from Excel (Ctrl+V):</span>
+            <button onclick="parseClipboardText()" class="text-xs bg-slate-800 hover:bg-slate-700 text-purple-300 px-2.5 py-1 rounded border border-slate-700 font-medium">
+              Parse Pasted Text
+            </button>
+          </div>
+          <textarea id="scanner-clipboard-input" rows="2" placeholder="Paste table rows from Excel or message here..." 
+                    class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 resize-none font-mono"></textarea>
+        </div>
+
+        <!-- Processing Status Indicator -->
+        <div id="scanner-status" class="hidden p-3 bg-purple-950/40 border border-purple-800/60 rounded-xl text-center text-xs text-purple-200 font-medium animate-pulse">
+          Analyzing document...
+        </div>
+
+        <!-- Extracted Items Preview Area -->
+        <div id="scanner-preview-area" class="hidden flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+              <span>✓ Extracted Items Preview:</span>
+            </span>
+            <span class="text-[11px] text-slate-400">Review & edit before applying</span>
+          </div>
+
+          <div class="border border-slate-700 rounded-xl overflow-hidden max-h-48 overflow-y-auto">
+            <table class="w-full text-left border-collapse">
+              <thead class="bg-slate-950 text-[11px] text-slate-400 uppercase">
+                <tr>
+                  <th class="p-2">Description</th>
+                  <th class="p-2 text-center">QTY</th>
+                  <th class="p-2 text-right">Price (€)</th>
+                  <th class="p-2 text-center"></th>
+                </tr>
+              </thead>
+              <tbody id="scanner-preview-tbody" class="divide-y divide-slate-800 bg-slate-900/50"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-slate-950/80 border-t border-slate-800 flex items-center justify-between">
+        <button onclick="closeScannerModal()" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg">
+          Cancel
+        </button>
+        <button onclick="applyScannedItemsToProfile()" 
+                class="px-5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-lg shadow-lg shadow-emerald-950/60 flex items-center gap-1.5 transition hover:scale-[1.02] active:scale-[0.98]">
+          <span>✨</span>
+          <span>Populate Active Invoice</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
 
   <!-- Saved Invoices History Modal -->
   <div id="saved-invoices-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
