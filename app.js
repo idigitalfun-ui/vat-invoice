@@ -1205,11 +1205,16 @@ function saveCurrentInvoice() {
   const p = state.activeSub;
   const prof = state.profiles[p];
   const calc = calculateProfileTotals(p);
-  const invoiceNo = prof.invoiceNo || prof.reference || 'INV-' + Math.floor(100000 + Math.random() * 900000);
+  const invoiceNo = String(prof.invoiceNo || prof.reference || 'INV-' + Math.floor(100000 + Math.random() * 900000)).trim();
   const clientName = prof.billTo?.name || 'Customer';
 
+  // Check if an invoice with same number & subcategory already exists in saved drafts
+  const existingIndex = state.savedInvoices.findIndex(r => 
+    r.subCat === p && String(r.invoiceNo).trim().toLowerCase() === invoiceNo.toLowerCase()
+  );
+
   const record = {
-    id: 'INV_' + Date.now(),
+    id: existingIndex >= 0 ? state.savedInvoices[existingIndex].id : ('INV_' + Date.now()),
     mainCat: state.activeMain,
     subCat: p,
     invoiceNo: invoiceNo,
@@ -1220,9 +1225,15 @@ function saveCurrentInvoice() {
     timestamp: new Date().toISOString()
   };
 
-  state.savedInvoices.unshift(record);
+  if (existingIndex >= 0) {
+    state.savedInvoices[existingIndex] = record;
+    showToast(`Updated existing draft: #${invoiceNo}`);
+  } else {
+    state.savedInvoices.unshift(record);
+    showToast(`Saved new draft: #${invoiceNo}`);
+  }
+
   localStorage.setItem('vat_invoices_history_v3', JSON.stringify(state.savedInvoices));
-  showToast(`Invoice ${record.invoiceNo} saved!`);
   renderSavedInvoicesModal();
 }
 
