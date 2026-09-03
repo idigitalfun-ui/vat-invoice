@@ -459,6 +459,12 @@ function renderActiveProfile() {
   else if (p === 'rt_dev') renderRetailDevices();
 }
 
+function adjustInputWidth(el) {
+  if (!el) return;
+  const len = Math.max((el.value || '').length, (el.placeholder || '').length, 14);
+  el.style.width = (len + 2) + 'ch';
+}
+
 // 1. Render Wholesale Accessories
 function renderWholesaleAccessories() {
   const data = state.profiles.ws_acc;
@@ -466,7 +472,8 @@ function renderWholesaleAccessories() {
 
   document.getElementById('ws-acc-disp-date').textContent = formatDateDisplay(data.date);
   document.getElementById('ws-acc-input-date').value = data.date;
-  document.getElementById('ws-acc-input-invoiceno').value = data.invoiceNo;
+  const invNoEl = document.getElementById('ws-acc-input-invoiceno');
+  if (invNoEl) { invNoEl.value = data.invoiceNo; adjustInputWidth(invNoEl); }
   document.getElementById('ws-acc-input-payment').value = data.paymentMethod;
 
   document.getElementById('ws-acc-billto-name').value = data.billTo.name || '';
@@ -527,7 +534,8 @@ function renderWholesaleDevices() {
 
   document.getElementById('ws-dev-disp-date').textContent = formatDateDisplay(data.date);
   document.getElementById('ws-dev-input-date').value = data.date;
-  document.getElementById('ws-dev-input-invoiceno').value = data.invoiceNo;
+  const invNoEl = document.getElementById('ws-dev-input-invoiceno');
+  if (invNoEl) { invNoEl.value = data.invoiceNo; adjustInputWidth(invNoEl); }
   document.getElementById('ws-dev-input-payment').value = data.paymentMethod;
 
   document.getElementById('ws-dev-billto-name').value = data.billTo.name || '';
@@ -631,7 +639,8 @@ function renderRetailAccessories() {
     if (noticeContactElem) noticeContactElem.textContent = 'CONTACT: 057 868 2426    EMAIL: INFO@IDFLMOBILE.COM';
   }
 
-  document.getElementById('rt-acc-input-ref').value = data.reference;
+  const refEl = document.getElementById('rt-acc-input-ref');
+  if (refEl) { refEl.value = data.reference; adjustInputWidth(refEl); }
   document.getElementById('rt-acc-disp-date').textContent = formatDateDisplay(data.date);
   document.getElementById('rt-acc-input-date').value = data.date;
 
@@ -733,7 +742,8 @@ function renderRetailDevices() {
     `;
   }
 
-  document.getElementById('rt-dev-input-ref').value = data.reference;
+  const refEl = document.getElementById('rt-dev-input-ref');
+  if (refEl) { refEl.value = data.reference; adjustInputWidth(refEl); }
   document.getElementById('rt-dev-disp-date').textContent = formatDateDisplay(data.date);
   document.getElementById('rt-dev-input-date').value = data.date;
 
@@ -1009,16 +1019,20 @@ function generateNewInvoiceNumber() {
 
   if (p === 'ws_acc') {
     prof.invoiceNo = String(rand);
-    document.getElementById('ws-acc-input-invoiceno').value = rand;
+    const el = document.getElementById('ws-acc-input-invoiceno');
+    if (el) { el.value = rand; adjustInputWidth(el); }
   } else if (p === 'ws_dev') {
     prof.invoiceNo = `GC-DEV-${rand}`;
-    document.getElementById('ws-dev-input-invoiceno').value = `GC-DEV-${rand}`;
+    const el = document.getElementById('ws-dev-input-invoiceno');
+    if (el) { el.value = `GC-DEV-${rand}`; adjustInputWidth(el); }
   } else if (p === 'rt_acc') {
     prof.reference = `SALE/POS${rand}`;
-    document.getElementById('rt-acc-input-ref').value = `SALE/POS${rand}`;
+    const el = document.getElementById('rt-acc-input-ref');
+    if (el) { el.value = `SALE/POS${rand}`; adjustInputWidth(el); }
   } else if (p === 'rt_dev') {
     prof.reference = `SALE/POS${rand}`;
-    document.getElementById('rt-dev-input-ref').value = `SALE/POS${rand}`;
+    const el = document.getElementById('rt-dev-input-ref');
+    if (el) { el.value = `SALE/POS${rand}`; adjustInputWidth(el); }
   }
   showToast(`Generated # ${rand}`);
 }
@@ -1533,7 +1547,7 @@ function setupEventListeners() {
     state.profiles.ws_acc.date = e.target.value;
     document.getElementById('ws-acc-disp-date').textContent = formatDateDisplay(e.target.value);
   });
-  document.getElementById('ws-acc-input-invoiceno')?.addEventListener('input', (e) => { state.profiles.ws_acc.invoiceNo = e.target.value; });
+  document.getElementById('ws-acc-input-invoiceno')?.addEventListener('input', (e) => { state.profiles.ws_acc.invoiceNo = e.target.value; adjustInputWidth(e.target); });
   document.getElementById('ws-acc-input-payment')?.addEventListener('input', (e) => { state.profiles.ws_acc.paymentMethod = e.target.value; });
   document.getElementById('ws-acc-billto-name')?.addEventListener('input', (e) => { state.profiles.ws_acc.billTo.name = e.target.value; });
   document.getElementById('ws-acc-billto-address')?.addEventListener('input', (e) => { state.profiles.ws_acc.billTo.address = e.target.value; });
@@ -1548,7 +1562,7 @@ function setupEventListeners() {
     state.profiles.ws_dev.date = e.target.value;
     document.getElementById('ws-dev-disp-date').textContent = formatDateDisplay(e.target.value);
   });
-  document.getElementById('ws-dev-input-invoiceno')?.addEventListener('input', (e) => { state.profiles.ws_dev.invoiceNo = e.target.value; });
+  document.getElementById('ws-dev-input-invoiceno')?.addEventListener('input', (e) => { state.profiles.ws_dev.invoiceNo = e.target.value; adjustInputWidth(e.target); });
   document.getElementById('ws-dev-input-payment')?.addEventListener('input', (e) => { state.profiles.ws_dev.paymentMethod = e.target.value; });
   document.getElementById('ws-dev-billto-name')?.addEventListener('input', (e) => { state.profiles.ws_dev.billTo.name = e.target.value; });
   document.getElementById('ws-dev-billto-address')?.addEventListener('input', (e) => { state.profiles.ws_dev.billTo.address = e.target.value; });
@@ -1563,7 +1577,7 @@ function setupEventListeners() {
     state.profiles.rt_acc.date = e.target.value;
     document.getElementById('rt-acc-disp-date').textContent = formatDateDisplay(e.target.value);
   });
-  document.getElementById('rt-acc-input-ref')?.addEventListener('input', (e) => { state.profiles.rt_acc.reference = e.target.value; });
+  document.getElementById('rt-acc-input-ref')?.addEventListener('input', (e) => { state.profiles.rt_acc.reference = e.target.value; adjustInputWidth(e.target); });
   document.getElementById('rt-acc-billfrom-name')?.addEventListener('input', (e) => { state.profiles.rt_acc.billFrom.name = e.target.value; });
   document.getElementById('rt-acc-billfrom-address')?.addEventListener('input', (e) => { state.profiles.rt_acc.billFrom.address = e.target.value; });
   document.getElementById('rt-acc-billfrom-phone')?.addEventListener('input', (e) => { state.profiles.rt_acc.billFrom.phone = e.target.value; });
@@ -1578,7 +1592,7 @@ function setupEventListeners() {
     state.profiles.rt_dev.date = e.target.value;
     document.getElementById('rt-dev-disp-date').textContent = formatDateDisplay(e.target.value);
   });
-  document.getElementById('rt-dev-input-ref')?.addEventListener('input', (e) => { state.profiles.rt_dev.reference = e.target.value; });
+  document.getElementById('rt-dev-input-ref')?.addEventListener('input', (e) => { state.profiles.rt_dev.reference = e.target.value; adjustInputWidth(e.target); });
   document.getElementById('rt-dev-billfrom-name')?.addEventListener('input', (e) => { state.profiles.rt_dev.billFrom.name = e.target.value; });
   document.getElementById('rt-dev-billfrom-address')?.addEventListener('input', (e) => { state.profiles.rt_dev.billFrom.address = e.target.value; });
   document.getElementById('rt-dev-billfrom-phone')?.addEventListener('input', (e) => { state.profiles.rt_dev.billFrom.phone = e.target.value; });

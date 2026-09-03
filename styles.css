@@ -515,6 +515,22 @@ input[type=number] {
   font-family: 'JetBrains Mono', monospace;
 }
 
+.editable-cell-input.ref-input {
+  min-width: 210px;
+  max-width: 360px;
+  width: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+}
+
+.editable-cell-input.inv-input {
+  min-width: 140px;
+  max-width: 240px;
+  width: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+}
+
 /* Presets & Catalog Cards */
 .catalog-card {
   border-radius: 10px;
