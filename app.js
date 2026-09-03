@@ -174,12 +174,12 @@ const CATALOGS = {
     { sku: "00AUD001", desc: "TWS True Wireless Bluetooth Earbuds Pro", grossPrice: 30.00 }
   ],
   rtDevices: [
-    { model: "Apple iPhone 11 64GB Black", imei: "356789104523901", grade: "Grade A", warranty: "12 Months", grossPrice: 249.00 },
-    { model: "Apple iPhone 12 128GB Blue", imei: "358901237645129", grade: "Grade A", warranty: "12 Months", grossPrice: 349.00 },
-    { model: "Apple iPhone 13 128GB Midnight", imei: "359012348756230", grade: "Grade A", warranty: "12 Months", grossPrice: 449.00 },
-    { model: "Samsung Galaxy A14 64GB Black", imei: "354567890123456", grade: "Brand New Boxed", warranty: "24 Months", grossPrice: 149.00 },
-    { model: "Samsung Galaxy A54 5G 128GB Lime", imei: "357890123456789", grade: "Brand New Boxed", warranty: "24 Months", grossPrice: 299.00 },
-    { model: "Apple iPad 10th Gen 64GB WiFi Silver", imei: "DMPX89012345", grade: "Grade A", warranty: "12 Months", grossPrice: 389.00 }
+    { desc: "356789104523901 - Apple iPhone 11 64GB Black", grade: "Grade A", grossPrice: 249.00 },
+    { desc: "358901237645129 - Apple iPhone 12 128GB Blue", grade: "Grade A", grossPrice: 349.00 },
+    { desc: "359012348756230 - Apple iPhone 13 128GB Midnight", grade: "Grade A", grossPrice: 449.00 },
+    { desc: "354567890123456 - Samsung Galaxy A14 64GB Black", grade: "Brand New", grossPrice: 149.00 },
+    { desc: "357890123456789 - Samsung Galaxy A54 5G 128GB Lime", grade: "Brand New", grossPrice: 299.00 },
+    { desc: "DMPX89012345 - Apple iPad 10th Gen 64GB WiFi Silver", grade: "Grade A", grossPrice: 389.00 }
   ]
 };
 
@@ -341,7 +341,7 @@ function loadAllSampleData() {
     { sku: '00SSTG002', desc: '00SSTG002 - TG Samsung A10/A20/A30/A50/A51', qty: 1, grossPrice: 15.00 }
   ];
   state.profiles.rt_dev.items = [
-    { model: 'Apple iPhone 13 128GB Midnight', imei: '359012348756230', grade: 'Grade A (Unlocked)', warranty: '12 Months', qty: 1, grossPrice: 449.00 }
+    { desc: '359012348756230 - Apple iPhone 13 128GB Midnight', grade: 'Brand New', qty: 1, grossPrice: 449.00 }
   ];
 }
 
@@ -753,6 +753,17 @@ function renderRetailDevices() {
     const tr = document.createElement('tr');
     tr.className = 'item-row';
     const displayAmount = Number(item.amount || (item.grossPrice ? round2(item.grossPrice / 1.23) : 0)).toFixed(2);
+    
+    let itemDesc = item.desc;
+    if (!itemDesc) {
+      if (item.imei && item.model) {
+        itemDesc = `${item.imei} - ${item.model}`;
+      } else if (item.imei) {
+        itemDesc = item.imei;
+      } else {
+        itemDesc = item.model || '';
+      }
+    }
 
     tr.innerHTML = `
       <td class="row-actions-cell no-print">
@@ -765,30 +776,23 @@ function renderRetailDevices() {
           </button>
         </div>
       </td>
-      <td style="width: 27%;">
-        <input type="text" class="editable-cell-input font-medium" value="${escapeHtml(item.model || item.desc || '')}" 
-               oninput="updateItemField('rt_dev', ${index}, 'model', this.value)" placeholder="Device Model & Specs">
+      <td style="width: 58%; vertical-align: top;">
+        <textarea rows="2" class="editable-cell-input font-medium text-[11px] resize-none w-full" 
+                  style="line-height: 1.35; padding: 2px 4px; overflow: hidden; white-space: normal; word-break: break-word;"
+                  oninput="updateItemField('rt_dev', ${index}, 'desc', this.value)" placeholder="IMEI - Device Name">${escapeHtml(itemDesc)}</textarea>
       </td>
-      <td style="width: 21%;">
-        <input type="text" class="editable-cell-input font-mono text-[10px] text-indigo-900" value="${escapeHtml(item.imei || '')}" 
-               oninput="updateItemField('rt_dev', ${index}, 'imei', this.value)" placeholder="IMEI / Serial No">
-      </td>
-      <td style="width: 17%;">
-        <input type="text" class="editable-cell-input text-[10.5px]" value="${escapeHtml(item.grade || 'Grade A')}" 
+      <td style="width: 16%; vertical-align: top;">
+        <input type="text" class="editable-cell-input text-[11px]" value="${escapeHtml(item.grade || 'Brand New')}" 
                oninput="updateItemField('rt_dev', ${index}, 'grade', this.value)" placeholder="Condition Grade">
       </td>
-      <td style="width: 13%;">
-        <input type="text" class="editable-cell-input text-[10px]" value="${escapeHtml(item.warranty || '12 Months')}" 
-               oninput="updateItemField('rt_dev', ${index}, 'warranty', this.value)" placeholder="Warranty">
-      </td>
-      <td style="width: 11%; text-align: right; white-space: nowrap;">
+      <td style="width: 13%; text-align: right; white-space: nowrap; vertical-align: top;">
         <div class="money-cell" style="width: 82px;">
           <span class="money-sym">€</span>
           <input type="number" step="0.01" min="0" class="money-input" 
                  value="${displayAmount}" oninput="updateItemNetField('rt_dev', ${index}, this.value)">
         </div>
       </td>
-      <td style="width: 11%; text-align: right; white-space: nowrap;" id="rt_dev-linetotal-${index}">
+      <td style="width: 13%; text-align: right; white-space: nowrap; vertical-align: top;" id="rt_dev-linetotal-${index}">
         <div class="money-cell" style="width: 82px;">
           <span class="money-sym">€</span>
           <span class="money-num">${Number(item.lineTotal).toFixed(2)}</span>
