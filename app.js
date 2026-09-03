@@ -252,7 +252,7 @@ const state = {
         email: 'INFO@IDFLMOBILE.COM'
       },
       billTo: {
-        name: 'Sean O'Connor',
+        name: "Sean O'Connor",
         email: 'sean.oconnor@gmail.com',
         phone: '085 123 4567',
         address: '14 Elm Court, Portlaoise, Co. Laois'
