@@ -756,30 +756,30 @@ function renderRetailDevices() {
           </button>
         </div>
       </td>
-      <td style="width: 32%;">
+      <td style="width: 27%;">
         <input type="text" class="editable-cell-input font-medium" value="${escapeHtml(item.model || item.desc || '')}" 
                oninput="updateItemField('rt_dev', ${index}, 'model', this.value)" placeholder="Device Model & Specs">
       </td>
-      <td style="width: 22%;">
+      <td style="width: 21%;">
         <input type="text" class="editable-cell-input font-mono text-[10px] text-indigo-900" value="${escapeHtml(item.imei || '')}" 
                oninput="updateItemField('rt_dev', ${index}, 'imei', this.value)" placeholder="IMEI / Serial No">
       </td>
-      <td style="width: 14%;">
-        <input type="text" class="editable-cell-input text-[10px]" value="${escapeHtml(item.grade || 'Grade A')}" 
-               oninput="updateItemField('rt_dev', ${index}, 'grade', this.value)" placeholder="Condition">
+      <td style="width: 17%;">
+        <input type="text" class="editable-cell-input text-[10.5px]" value="${escapeHtml(item.grade || 'Grade A')}" 
+               oninput="updateItemField('rt_dev', ${index}, 'grade', this.value)" placeholder="Condition Grade">
       </td>
-      <td style="width: 14%;">
-        <input type="text" class="editable-cell-input text-[10px]" value="${escapeHtml(item.warranty || '12M Warranty')}" 
+      <td style="width: 13%;">
+        <input type="text" class="editable-cell-input text-[10px]" value="${escapeHtml(item.warranty || '12 Months')}" 
                oninput="updateItemField('rt_dev', ${index}, 'warranty', this.value)" placeholder="Warranty">
       </td>
-      <td style="width: 18%; text-align: right;">
+      <td style="width: 11%; text-align: right; white-space: nowrap;">
         <div class="row-amount-box">
           <span class="row-currency">€</span>
           <input type="number" step="0.01" min="0" class="row-amount-input" 
                  value="${displayAmount}" oninput="updateItemNetField('rt_dev', ${index}, this.value)">
         </div>
       </td>
-      <td style="width: 18%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 11px;" id="rt_dev-linetotal-${index}">
+      <td style="width: 11%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 11px; white-space: nowrap;" id="rt_dev-linetotal-${index}">
         ${formatEuro(item.lineTotal)}
       </td>
     `;
