@@ -353,28 +353,54 @@ function switchHierarchy(mainCat, subCat = null) {
   }
   state.activeSub = subCat;
 
-  // Main buttons
-  document.getElementById('main-btn-wholesale')?.classList.toggle('active-main', mainCat === 'wholesale');
-  document.getElementById('main-btn-retail')?.classList.toggle('active-main', mainCat === 'retail');
+  // Main buttons styling
+  const btnWs = document.getElementById('main-btn-wholesale');
+  const btnRt = document.getElementById('main-btn-retail');
+  if (btnWs) btnWs.className = `main-cat-btn px-3.5 py-1.5 text-xs flex items-center gap-1.5 ${mainCat === 'wholesale' ? 'active-main' : ''}`;
+  if (btnRt) btnRt.className = `main-cat-btn px-3.5 py-1.5 text-xs flex items-center gap-1.5 ${mainCat === 'retail' ? 'active-main' : ''}`;
 
   // Sub nav groups
-  document.getElementById('sub-nav-wholesale')?.classList.toggle('hidden', mainCat !== 'wholesale');
-  document.getElementById('sub-nav-retail')?.classList.toggle('hidden', mainCat !== 'retail');
+  const snWs = document.getElementById('sub-nav-wholesale');
+  const snRt = document.getElementById('sub-nav-retail');
+  if (snWs) {
+    if (mainCat === 'wholesale') {
+      snWs.classList.remove('hidden');
+      snWs.classList.add('inline-flex');
+    } else {
+      snWs.classList.add('hidden');
+      snWs.classList.remove('inline-flex');
+    }
+  }
+  if (snRt) {
+    if (mainCat === 'retail') {
+      snRt.classList.remove('hidden');
+      snRt.classList.add('inline-flex');
+    } else {
+      snRt.classList.add('hidden');
+      snRt.classList.remove('inline-flex');
+    }
+  }
 
-  // Sub buttons
+  // Sub buttons & Canvas & Controls
   ['ws_acc', 'ws_dev', 'rt_acc', 'rt_dev'].forEach(k => {
     const btn = document.getElementById(`sub-btn-${k}`);
     const canvas = document.getElementById(`canvas-${k}`);
     const controls = document.getElementById(`controls-${k}`);
     
     if (k === subCat) {
-      btn?.classList.add('active-sub');
+      if (btn) btn.className = 'sub-tab-btn active-sub px-3 py-1 text-xs flex items-center gap-1';
       canvas?.classList.remove('hidden');
-      controls?.classList.remove('hidden');
+      if (controls) {
+        controls.classList.remove('hidden');
+        controls.classList.add('flex');
+      }
     } else {
-      btn?.classList.remove('active-sub');
+      if (btn) btn.className = 'sub-tab-btn px-3 py-1 text-xs flex items-center gap-1';
       canvas?.classList.add('hidden');
-      controls?.classList.add('hidden');
+      if (controls) {
+        controls.classList.add('hidden');
+        controls.classList.remove('flex');
+      }
     }
   });
 
@@ -392,7 +418,6 @@ function calculateProfileTotals(profileKey) {
   let totalGross = 0;
 
   if (profileKey.startsWith('ws_')) {
-    // Wholesale Net-Based Calculation
     prof.items.forEach(it => {
       const qty = parseNum(it.qty) || 1;
       const amount = parseNum(it.amount) || 0;
@@ -405,7 +430,6 @@ function calculateProfileTotals(profileKey) {
     const totalDue = round2(subtotal + vatAmount + otherCosts);
     return { subtotal, taxRate, vatAmount, otherCosts, totalDue };
   } else {
-    // Retail Gross-Based Calculation (Exact Gross -> Net conversion)
     prof.items.forEach(it => {
       const qty = parseNum(it.qty) || 1;
       const gross = parseNum(it.grossPrice) || 0;
@@ -962,11 +986,19 @@ function setupScannerHandlers() {
 function openScannerModal() {
   const select = document.getElementById('scanner-target-profile');
   if (select) select.value = state.activeSub;
-  document.getElementById('scanner-modal').classList.remove('hidden');
+  const m = document.getElementById('scanner-modal');
+  if (m) {
+    m.classList.remove('hidden');
+    m.classList.add('flex');
+  }
 }
 
 function closeScannerModal() {
-  document.getElementById('scanner-modal').classList.add('hidden');
+  const m = document.getElementById('scanner-modal');
+  if (m) {
+    m.classList.add('hidden');
+    m.classList.remove('flex');
+  }
 }
 
 async function processUploadedFile(file) {
@@ -1302,11 +1334,19 @@ function showToast(msg) {
 
 function openSavedModal() {
   renderSavedInvoicesModal();
-  document.getElementById('saved-invoices-modal').classList.remove('hidden');
+  const m = document.getElementById('saved-invoices-modal');
+  if (m) {
+    m.classList.remove('hidden');
+    m.classList.add('flex');
+  }
 }
 
 function closeSavedModal() {
-  document.getElementById('saved-invoices-modal').classList.add('hidden');
+  const m = document.getElementById('saved-invoices-modal');
+  if (m) {
+    m.classList.add('hidden');
+    m.classList.remove('flex');
+  }
 }
 
 function renderSavedInvoicesModal() {

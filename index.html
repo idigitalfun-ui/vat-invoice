@@ -18,7 +18,7 @@
   <div id="toast-container"></div>
 
   <!-- App Header & Navigation Bar -->
-  <header class="app-header sticky top-0 z-50 px-4 lg:px-8 py-2.5 shadow-2xl backdrop-blur-md">
+  <header class="app-header sticky top-0 z-40 px-4 lg:px-8 py-2.5 shadow-2xl backdrop-blur-md">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
       
       <!-- Brand & 2-Level Navigation -->
@@ -66,7 +66,7 @@
         </div>
 
         <!-- SUB-HEADINGS: Retail Sub-Tabs -->
-        <div id="sub-nav-retail" class="hidden inline-flex p-1 bg-slate-900/80 rounded-lg border border-rose-500/30 gap-1">
+        <div id="sub-nav-retail" class="hidden p-1 bg-slate-900/80 rounded-lg border border-rose-500/30 gap-1">
           <button id="sub-btn-rt_acc" onclick="switchHierarchy('retail', 'rt_acc')" 
                   class="sub-tab-btn px-3 py-1 text-xs flex items-center gap-1">
             <span class="w-2 h-2 rounded-full bg-rose-400"></span>
@@ -187,7 +187,7 @@
       </div>
 
       <!-- Controls: Wholesale Devices -->
-      <div id="controls-ws_dev" class="hidden flex flex-col gap-3">
+      <div id="controls-ws_dev" class="hidden flex-col gap-3">
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
           <label class="block text-xs text-slate-300 mb-1 font-medium">B2B Customer Preset:</label>
           <select id="ws-dev-store-select" onchange="onStoreSelectChanged('ws_dev', this.value)"
@@ -218,7 +218,7 @@
       </div>
 
       <!-- Controls: Retail Accessories -->
-      <div id="controls-rt_acc" class="hidden flex flex-col gap-3">
+      <div id="controls-rt_acc" class="hidden flex-col gap-3">
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
           <label class="block text-xs text-slate-300 mb-1 font-medium">Bill From Branch (13 Stores):</label>
           <select id="rt-acc-store-select" onchange="onStoreSelectChanged('rt_acc', this.value)"
@@ -251,7 +251,7 @@
       </div>
 
       <!-- Controls: Retail Devices -->
-      <div id="controls-rt_dev" class="hidden flex flex-col gap-3">
+      <div id="controls-rt_dev" class="hidden flex-col gap-3">
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
           <label class="block text-xs text-slate-300 mb-1 font-medium">Bill From Branch (13 Stores):</label>
           <select id="rt-dev-store-select" onchange="onStoreSelectChanged('rt_dev', this.value)"
@@ -288,9 +288,7 @@
 
       <div class="invoice-sheet-container w-full">
 
-        <!-- ========================================================= -->
-        <!-- 1. WHOLESALE ACCESSORIES CANVAS                           -->
-        <!-- ========================================================= -->
+        <!-- 1. WHOLESALE ACCESSORIES CANVAS -->
         <div id="canvas-ws_acc" class="a4-sheet">
           <div class="banner-ws-acc">
             <div class="banner-logo-container">
@@ -414,9 +412,7 @@
           </div>
         </div>
 
-        <!-- ========================================================= -->
-        <!-- 2. WHOLESALE DEVICES CANVAS                               -->
-        <!-- ========================================================= -->
+        <!-- 2. WHOLESALE DEVICES CANVAS -->
         <div id="canvas-ws_dev" class="a4-sheet hidden">
           <div class="banner-ws-dev">
             <div class="banner-logo-container">
@@ -543,9 +539,7 @@
           </div>
         </div>
 
-        <!-- ========================================================= -->
-        <!-- 3. RETAIL ACCESSORIES CANVAS                              -->
-        <!-- ========================================================= -->
+        <!-- 3. RETAIL ACCESSORIES CANVAS -->
         <div id="canvas-rt_acc" class="a4-sheet hidden">
           <div id="rt-acc-header-banner" class="banner-rt-acc">
             <div class="banner-logo-container">
@@ -666,9 +660,7 @@
           </div>
         </div>
 
-        <!-- ========================================================= -->
-        <!-- 4. RETAIL DEVICES CANVAS                                  -->
-        <!-- ========================================================= -->
+        <!-- 4. RETAIL DEVICES CANVAS -->
         <div id="canvas-rt_dev" class="a4-sheet hidden">
           <div id="rt-dev-header-banner" class="banner-rt-dev">
             <div class="banner-logo-container">
@@ -798,7 +790,7 @@
   </main>
 
   <!-- SCANNER MODAL -->
-  <div id="scanner-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+  <div id="scanner-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
       
       <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
@@ -853,7 +845,7 @@
           Analyzing document...
         </div>
 
-        <div id="scanner-preview-area" class="hidden flex flex-col gap-2">
+        <div id="scanner-preview-area" class="hidden flex-col gap-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
               <span>✓ Extracted Items Preview:</span>
@@ -893,7 +885,7 @@
   </div>
 
   <!-- SAVED HISTORY MODAL -->
-  <div id="saved-invoices-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <div id="saved-invoices-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-xl w-full max-w-lg shadow-2xl overflow-hidden">
       <div class="p-3.5 border-b border-slate-800 flex items-center justify-between">
         <h3 class="font-bold text-white text-sm flex items-center gap-2">

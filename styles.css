@@ -14,6 +14,11 @@
   box-sizing: border-box;
 }
 
+/* Absolute Hidden Utility to prevent any display override */
+.hidden {
+  display: none !important;
+}
+
 body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: #070c18;
@@ -51,11 +56,12 @@ body {
   border-radius: 8px;
   font-weight: 700;
   letter-spacing: 0.3px;
+  cursor: pointer;
 }
 
 .main-cat-btn.active-main {
-  background: #2563eb;
-  color: #ffffff;
+  background: #2563eb !important;
+  color: #ffffff !important;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
 }
 
@@ -74,10 +80,11 @@ body {
   position: relative;
   border-radius: 6px;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .sub-tab-btn.active-sub {
-  background: #ffffff;
+  background: #ffffff !important;
   color: #0f2b48 !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
@@ -464,6 +471,7 @@ tr:hover .row-actions {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  pointer-events: none;
 }
 
 .toast-msg {
@@ -479,6 +487,7 @@ tr:hover .row-actions {
   gap: 8px;
   border-left: 4px solid #3b82f6;
   animation: slideToast 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto;
 }
 
 @keyframes slideToast {
