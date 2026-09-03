@@ -1337,10 +1337,53 @@ function deleteSavedInvoiceRecord(id, e) {
   showToast('Invoice deleted from history');
 }
 
+function getInvoiceFormattedName() {
+  const p = state.activeSub;
+  const prof = state.profiles[p];
+
+  let storeName = '';
+  let customerName = '';
+
+  if (p === 'rt_acc') {
+    storeName = document.getElementById('rt-acc-billfrom-name')?.value || prof.billFrom?.name || 'Thurles';
+    customerName = document.getElementById('rt-acc-billto-name')?.value || prof.billTo?.name || 'Customer';
+  } else if (p === 'rt_dev') {
+    storeName = document.getElementById('rt-dev-billfrom-name')?.value || prof.billFrom?.name || 'Thurles';
+    customerName = document.getElementById('rt-dev-billto-name')?.value || prof.billTo?.name || 'Customer';
+  } else if (p === 'ws_acc') {
+    storeName = 'Get Connected';
+    customerName = document.getElementById('ws-acc-billto-name')?.value || prof.billTo?.name || 'Customer';
+  } else if (p === 'ws_dev') {
+    storeName = 'Get Connected';
+    customerName = document.getElementById('ws-dev-billto-name')?.value || prof.billTo?.name || 'Customer';
+  }
+
+  // Extract clean store name (e.g. "I Digital Fun – Thurles" -> "Thurles")
+  let cleanStore = storeName.trim();
+  if (typeof STORES !== 'undefined' && Array.isArray(STORES)) {
+    for (const s of STORES) {
+      if (cleanStore.toLowerCase().includes(s.name.toLowerCase()) || 
+          cleanStore.toLowerCase().includes(s.city.split(',')[0].toLowerCase())) {
+        cleanStore = s.city.split(',')[0].trim();
+        break;
+      }
+    }
+  }
+
+  cleanStore = cleanStore.replace(/^I\s*Digital\s*Fun\s*[-–—]?\s*/i, '').trim();
+  cleanStore = cleanStore.replace(/\s*\([^)]*\)$/, '').trim();
+  if (!cleanStore) cleanStore = storeName.trim() || 'Store';
+  
+  let cleanCustomer = customerName.trim() || 'Customer';
+
+  return `VAT Invoice (${cleanStore}) - ${cleanCustomer}`;
+}
+
 function exportInvoiceCSV() {
   const p = state.activeSub;
   const prof = state.profiles[p];
   const calc = calculateProfileTotals(p);
+  const fileName = getInvoiceFormattedName();
   
   let csv = 'Item Description,Quantity,Amount (EUR),Total (EUR)\r\n';
   prof.items.forEach(it => {
@@ -1357,7 +1400,7 @@ function exportInvoiceCSV() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${p}_invoice_${prof.invoiceNo || prof.reference}.csv`;
+  a.download = `${fileName}.csv`;
   a.click();
   URL.revokeObjectURL(url);
   showToast('Exported CSV');
@@ -1366,12 +1409,13 @@ function exportInvoiceCSV() {
 function exportInvoiceJSON() {
   const p = state.activeSub;
   const prof = state.profiles[p];
+  const fileName = getInvoiceFormattedName();
   const jsonStr = JSON.stringify({ mainCat: state.activeMain, subCat: p, exportedAt: new Date(), ...prof }, null, 2);
   const blob = new Blob([jsonStr], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${p}_invoice_${prof.invoiceNo || prof.reference}_${Date.now()}.json`;
+  a.download = `${fileName}.json`;
   a.click();
   URL.revokeObjectURL(url);
   showToast('Exported JSON');
@@ -1395,7 +1439,15 @@ function importInvoiceJSON(file) {
 }
 
 function triggerPrint() {
+  const originalTitle = document.title;
+  const pdfName = getInvoiceFormattedName();
+
+  document.title = pdfName;
   window.print();
+
+  setTimeout(() => {
+    document.title = originalTitle;
+  }, 1200);
 }
 
 function showToast(msg) {
@@ -1532,6 +1584,17 @@ function setupEventListeners() {
   document.getElementById('rt-dev-billto-address')?.addEventListener('input', (e) => { state.profiles.rt_dev.billTo.address = e.target.value; });
   document.getElementById('rt_dev-taxrate-input')?.addEventListener('input', (e) => { state.profiles.rt_dev.taxRate = parseNum(e.target.value); renderRetailDevices(); });
   document.getElementById('rt_dev-other-input')?.addEventListener('input', (e) => { state.profiles.rt_dev.otherCosts = parseNum(e.target.value); updateSummaryDisplays('rt_dev'); });
+
+  window.addEventListener('beforeprint', () => {
+    window._prevDocTitle = document.title;
+    document.title = getInvoiceFormattedName();
+  });
+
+  window.addEventListener('afterprint', () => {
+    if (window._prevDocTitle) {
+      document.title = window._prevDocTitle;
+    }
+  });
 
   window.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
