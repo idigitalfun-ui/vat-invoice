@@ -227,6 +227,23 @@
           </select>
         </div>
 
+        <!-- Quick Shelf Price Adder for Retail Accessories -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
+          <label class="block text-xs text-rose-300 font-bold mb-1">💡 Quick-Add Shelf Price (Inc VAT):</label>
+          <div class="flex items-center gap-2">
+            <div class="relative flex-1">
+              <span class="absolute left-2.5 top-1.5 text-xs text-slate-400 font-mono">€</span>
+              <input type="number" step="0.5" id="rt-acc-shelf-calc-input" placeholder="e.g. 15.00" 
+                     class="w-full pl-6 pr-2 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-white mono font-semibold focus:ring-1 focus:ring-rose-400 outline-none">
+            </div>
+            <button onclick="addFromShelfPrice('rt_acc')" 
+                    class="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-lg transition shadow whitespace-nowrap">
+              + Add Net Row
+            </button>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-1">Converts €15 shelf price to official Net €12.20 on invoice.</p>
+        </div>
+
         <div class="catalog-card bg-rose-950/20 border-rose-800/40">
           <h3 class="text-xs font-bold uppercase tracking-wider text-rose-300 mb-2 flex items-center justify-between">
             <span>🛡️ Retail Accessories Favorites</span>
@@ -258,6 +275,23 @@
           <select id="rt-dev-store-select" onchange="onStoreSelectChanged('rt_dev', this.value)"
                   class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-indigo-400 outline-none">
           </select>
+        </div>
+
+        <!-- Quick Shelf Price Adder for Retail Devices -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
+          <label class="block text-xs text-indigo-300 font-bold mb-1">💡 Quick-Add Shelf Price (Inc VAT):</label>
+          <div class="flex items-center gap-2">
+            <div class="relative flex-1">
+              <span class="absolute left-2.5 top-1.5 text-xs text-slate-400 font-mono">€</span>
+              <input type="number" step="0.5" id="rt-dev-shelf-calc-input" placeholder="e.g. 349.00" 
+                     class="w-full pl-6 pr-2 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-white mono font-semibold focus:ring-1 focus:ring-indigo-400 outline-none">
+            </div>
+            <button onclick="addFromShelfPrice('rt_dev')" 
+                    class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-lg transition shadow whitespace-nowrap">
+              + Add Net Row
+            </button>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-1">Converts €349 shelf price to official Net €283.74 on invoice.</p>
         </div>
 
         <div class="catalog-card bg-indigo-950/20 border-indigo-800/40">
@@ -606,7 +640,7 @@
                     <th class="row-actions-cell no-print"></th>
                     <th>Item Description</th>
                     <th class="text-center" style="width: 10%;">QTY</th>
-                    <th class="text-right" style="width: 18%;">Shelf Price (Inc VAT)</th>
+                    <th class="text-right" style="width: 16%;">Amount</th>
                     <th class="text-right" style="width: 16%;">Total</th>
                   </tr>
                 </thead>
@@ -730,7 +764,7 @@
                     <th>IMEI / Serial No</th>
                     <th>Grade</th>
                     <th>Warranty</th>
-                    <th class="text-right" style="width: 18%;">Price (Inc VAT)</th>
+                    <th class="text-right" style="width: 18%;">Price</th>
                     <th class="text-right" style="width: 18%;">Total</th>
                   </tr>
                 </thead>

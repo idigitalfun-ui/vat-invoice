@@ -501,13 +501,13 @@ function renderWholesaleAccessories() {
                value="${item.qty}" oninput="updateItemCalcField('ws_acc', ${index}, 'qty', this.value)">
       </td>
       <td style="width: 16%; text-align: right;">
-        <div class="flex items-center justify-end">
-          <span class="text-gray-500 mr-1 text-xs">€</span>
-          <input type="number" step="0.01" min="0" class="editable-cell-input text-right mono font-medium" 
+        <div class="row-amount-box">
+          <span class="row-currency">€</span>
+          <input type="number" step="0.01" min="0" class="row-amount-input" 
                  value="${Number(item.amount).toFixed(2)}" oninput="updateItemCalcField('ws_acc', ${index}, 'amount', this.value)">
         </div>
       </td>
-      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace;" id="ws_acc-linetotal-${index}">
+      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 11px;" id="ws_acc-linetotal-${index}">
         ${formatEuro(item.lineTotal)}
       </td>
     `;
@@ -563,13 +563,13 @@ function renderWholesaleDevices() {
                value="${item.qty}" oninput="updateItemCalcField('ws_dev', ${index}, 'qty', this.value)">
       </td>
       <td style="width: 16%; text-align: right;">
-        <div class="flex items-center justify-end">
-          <span class="text-gray-500 mr-1 text-xs">€</span>
-          <input type="number" step="0.01" min="0" class="editable-cell-input text-right mono font-medium" 
+        <div class="row-amount-box">
+          <span class="row-currency">€</span>
+          <input type="number" step="0.01" min="0" class="row-amount-input" 
                  value="${Number(item.amount).toFixed(2)}" oninput="updateItemCalcField('ws_dev', ${index}, 'amount', this.value)">
         </div>
       </td>
-      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace;" id="ws_dev-linetotal-${index}">
+      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 11px;" id="ws_dev-linetotal-${index}">
         ${formatEuro(item.lineTotal)}
       </td>
     `;
@@ -643,7 +643,7 @@ function renderRetailAccessories() {
   data.items.forEach((item, index) => {
     const tr = document.createElement('tr');
     tr.className = 'item-row';
-    const displayGross = Number(item.grossPrice || 0).toFixed(2);
+    const displayAmount = Number(item.amount || (item.grossPrice ? round2(item.grossPrice / 1.23) : 0)).toFixed(2);
 
     tr.innerHTML = `
       <td class="row-actions-cell no-print">
@@ -665,13 +665,13 @@ function renderRetailAccessories() {
                value="${item.qty}" oninput="updateItemCalcField('rt_acc', ${index}, 'qty', this.value)">
       </td>
       <td style="width: 16%; text-align: right;">
-        <div class="flex items-center justify-end" title="Enter Retail Shelf Price (e.g. 15) -> Net = 15/1.23 = 12.20">
-          <span class="text-gray-500 mr-1 text-xs">€</span>
-          <input type="number" step="0.01" min="0" class="editable-cell-input text-right mono font-medium" 
-                 value="${displayGross}" oninput="updateItemGrossField('rt_acc', ${index}, this.value)">
+        <div class="row-amount-box">
+          <span class="row-currency">€</span>
+          <input type="number" step="0.01" min="0" class="row-amount-input" 
+                 value="${displayAmount}" oninput="updateItemNetField('rt_acc', ${index}, this.value)">
         </div>
       </td>
-      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace;" id="rt_acc-linetotal-${index}">
+      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 11px;" id="rt_acc-linetotal-${index}">
         ${formatEuro(item.lineTotal)}
       </td>
     `;
@@ -743,7 +743,7 @@ function renderRetailDevices() {
   data.items.forEach((item, index) => {
     const tr = document.createElement('tr');
     tr.className = 'item-row';
-    const displayGross = Number(item.grossPrice || 0).toFixed(2);
+    const displayAmount = Number(item.amount || (item.grossPrice ? round2(item.grossPrice / 1.23) : 0)).toFixed(2);
 
     tr.innerHTML = `
       <td class="row-actions-cell no-print">
@@ -773,13 +773,13 @@ function renderRetailDevices() {
                oninput="updateItemField('rt_dev', ${index}, 'warranty', this.value)" placeholder="Warranty">
       </td>
       <td style="width: 18%; text-align: right;">
-        <div class="flex items-center justify-end">
-          <span class="text-gray-500 mr-1 text-xs">€</span>
-          <input type="number" step="0.01" min="0" class="editable-cell-input text-right mono font-medium" 
-                 value="${displayGross}" oninput="updateItemGrossField('rt_dev', ${index}, this.value)">
+        <div class="row-amount-box">
+          <span class="row-currency">€</span>
+          <input type="number" step="0.01" min="0" class="row-amount-input" 
+                 value="${displayAmount}" oninput="updateItemNetField('rt_dev', ${index}, this.value)">
         </div>
       </td>
-      <td style="width: 18%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace;" id="rt_dev-linetotal-${index}">
+      <td style="width: 18%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 11px;" id="rt_dev-linetotal-${index}">
         ${formatEuro(item.lineTotal)}
       </td>
     `;
@@ -814,10 +814,27 @@ function updateItemField(profileKey, index, field, value) {
   }
 }
 
+function updateItemNetField(profileKey, index, value) {
+  const prof = state.profiles[profileKey];
+  if (!prof || !prof.items[index]) return;
+  const net = parseNum(value);
+  prof.items[index].amount = net;
+  prof.items[index].grossPrice = round2(net * (1 + (parseNum(prof.taxRate) || 23) / 100));
+
+  const calc = calculateProfileTotals(profileKey);
+  const item = prof.items[index];
+  const linetotalCell = document.getElementById(`${profileKey}-linetotal-${index}`);
+  if (linetotalCell) linetotalCell.textContent = formatEuro(item.lineTotal);
+
+  updateSummaryDisplays(profileKey, calc);
+}
+
 function updateItemGrossField(profileKey, index, value) {
   const prof = state.profiles[profileKey];
   if (!prof || !prof.items[index]) return;
-  prof.items[index].grossPrice = parseNum(value);
+  const gross = parseNum(value);
+  prof.items[index].grossPrice = gross;
+  prof.items[index].amount = round2(gross / (1 + (parseNum(prof.taxRate) || 23) / 100));
 
   const calc = calculateProfileTotals(profileKey);
   const item = prof.items[index];
@@ -838,6 +855,26 @@ function updateItemCalcField(profileKey, index, field, value) {
   if (linetotalCell) linetotalCell.textContent = formatEuro(item.lineTotal);
 
   updateSummaryDisplays(profileKey, calc);
+}
+
+function addFromShelfPrice(profileKey) {
+  const inputElem = document.getElementById(profileKey === 'rt_acc' ? 'rt-acc-shelf-calc-input' : 'rt-dev-shelf-calc-input');
+  if (!inputElem) return;
+  const gross = parseNum(inputElem.value);
+  if (gross <= 0) {
+    alert('Please enter a valid shelf price (e.g. 15.00)');
+    return;
+  }
+  const taxRate = parseNum(state.profiles[profileKey].taxRate) || 23;
+  const net = round2(gross / (1 + taxRate / 100));
+
+  if (profileKey === 'rt_acc') {
+    addRow('rt_acc', { sku: '00ACC', desc: 'Retail Accessory', qty: 1, grossPrice: gross, amount: net });
+  } else {
+    addRow('rt_dev', { model: 'Retail Device', imei: '', grade: 'Grade A', warranty: '12 Months', qty: 1, grossPrice: gross, amount: net });
+  }
+  inputElem.value = '';
+  showToast(`Added Net €${net.toFixed(2)} (from Shelf €${gross.toFixed(2)})`);
 }
 
 // Add/Delete Row Handlers
