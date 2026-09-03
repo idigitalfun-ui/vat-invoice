@@ -500,15 +500,18 @@ function renderWholesaleAccessories() {
         <input type="number" step="1" min="1" class="editable-cell-input text-center mono font-medium" 
                value="${item.qty}" oninput="updateItemCalcField('ws_acc', ${index}, 'qty', this.value)">
       </td>
-      <td style="width: 16%; text-align: right;">
-        <div class="row-amount-box">
-          <span class="row-currency">€</span>
-          <input type="number" step="0.01" min="0" class="row-amount-input" 
+      <td style="width: 16%; text-align: right; white-space: nowrap;">
+        <div class="money-cell">
+          <span class="money-sym">€</span>
+          <input type="number" step="0.01" min="0" class="money-input" 
                  value="${Number(item.amount).toFixed(2)}" oninput="updateItemCalcField('ws_acc', ${index}, 'amount', this.value)">
         </div>
       </td>
-      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 11px;" id="ws_acc-linetotal-${index}">
-        ${formatEuro(item.lineTotal)}
+      <td style="width: 16%; text-align: right; white-space: nowrap;" id="ws_acc-linetotal-${index}">
+        <div class="money-cell">
+          <span class="money-sym">€</span>
+          <span class="money-num">${Number(item.lineTotal).toFixed(2)}</span>
+        </div>
       </td>
     `;
     tbody.appendChild(tr);
@@ -562,15 +565,18 @@ function renderWholesaleDevices() {
         <input type="number" step="1" min="1" class="editable-cell-input text-center mono font-medium" 
                value="${item.qty}" oninput="updateItemCalcField('ws_dev', ${index}, 'qty', this.value)">
       </td>
-      <td style="width: 16%; text-align: right;">
-        <div class="row-amount-box">
-          <span class="row-currency">€</span>
-          <input type="number" step="0.01" min="0" class="row-amount-input" 
+      <td style="width: 16%; text-align: right; white-space: nowrap;">
+        <div class="money-cell">
+          <span class="money-sym">€</span>
+          <input type="number" step="0.01" min="0" class="money-input" 
                  value="${Number(item.amount).toFixed(2)}" oninput="updateItemCalcField('ws_dev', ${index}, 'amount', this.value)">
         </div>
       </td>
-      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 11px;" id="ws_dev-linetotal-${index}">
-        ${formatEuro(item.lineTotal)}
+      <td style="width: 16%; text-align: right; white-space: nowrap;" id="ws_dev-linetotal-${index}">
+        <div class="money-cell">
+          <span class="money-sym">€</span>
+          <span class="money-num">${Number(item.lineTotal).toFixed(2)}</span>
+        </div>
       </td>
     `;
     tbody.appendChild(tr);
@@ -664,15 +670,18 @@ function renderRetailAccessories() {
         <input type="number" step="1" min="1" class="editable-cell-input text-center mono font-medium" 
                value="${item.qty}" oninput="updateItemCalcField('rt_acc', ${index}, 'qty', this.value)">
       </td>
-      <td style="width: 16%; text-align: right;">
-        <div class="row-amount-box">
-          <span class="row-currency">€</span>
-          <input type="number" step="0.01" min="0" class="row-amount-input" 
+      <td style="width: 16%; text-align: right; white-space: nowrap;">
+        <div class="money-cell">
+          <span class="money-sym">€</span>
+          <input type="number" step="0.01" min="0" class="money-input" 
                  value="${displayAmount}" oninput="updateItemNetField('rt_acc', ${index}, this.value)">
         </div>
       </td>
-      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 11px;" id="rt_acc-linetotal-${index}">
-        ${formatEuro(item.lineTotal)}
+      <td style="width: 16%; text-align: right; white-space: nowrap;" id="rt_acc-linetotal-${index}">
+        <div class="money-cell">
+          <span class="money-sym">€</span>
+          <span class="money-num">${Number(item.lineTotal).toFixed(2)}</span>
+        </div>
       </td>
     `;
     tbody.appendChild(tr);
@@ -773,14 +782,17 @@ function renderRetailDevices() {
                oninput="updateItemField('rt_dev', ${index}, 'warranty', this.value)" placeholder="Warranty">
       </td>
       <td style="width: 11%; text-align: right; white-space: nowrap;">
-        <div class="row-amount-box">
-          <span class="row-currency">€</span>
-          <input type="number" step="0.01" min="0" class="row-amount-input" 
+        <div class="money-cell" style="width: 82px;">
+          <span class="money-sym">€</span>
+          <input type="number" step="0.01" min="0" class="money-input" 
                  value="${displayAmount}" oninput="updateItemNetField('rt_dev', ${index}, this.value)">
         </div>
       </td>
-      <td style="width: 11%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 11px; white-space: nowrap;" id="rt_dev-linetotal-${index}">
-        ${formatEuro(item.lineTotal)}
+      <td style="width: 11%; text-align: right; white-space: nowrap;" id="rt_dev-linetotal-${index}">
+        <div class="money-cell" style="width: 82px;">
+          <span class="money-sym">€</span>
+          <span class="money-num">${Number(item.lineTotal).toFixed(2)}</span>
+        </div>
       </td>
     `;
     tbody.appendChild(tr);
@@ -799,11 +811,11 @@ function updateSummaryDisplays(profileKey, calc) {
   const otherElem = document.getElementById(`${profileKey}-other-input`);
   const totalElem = document.getElementById(`${profileKey}-totaldue-val`);
 
-  if (subtotalElem) subtotalElem.textContent = formatEuro(calc.subtotal);
+  if (subtotalElem) subtotalElem.textContent = Number(calc.subtotal).toFixed(2);
   if (taxrateElem) taxrateElem.value = Number(calc.taxRate).toFixed(2);
-  if (vatElem) vatElem.textContent = formatEuro(calc.vatAmount);
+  if (vatElem) vatElem.textContent = Number(calc.vatAmount).toFixed(2);
   if (otherElem) otherElem.value = Number(calc.otherCosts).toFixed(2);
-  if (totalElem) totalElem.textContent = formatEuro(calc.totalDue);
+  if (totalElem) totalElem.textContent = Number(calc.totalDue).toFixed(2);
 }
 
 // In place updates
@@ -824,7 +836,15 @@ function updateItemNetField(profileKey, index, value) {
   const calc = calculateProfileTotals(profileKey);
   const item = prof.items[index];
   const linetotalCell = document.getElementById(`${profileKey}-linetotal-${index}`);
-  if (linetotalCell) linetotalCell.textContent = formatEuro(item.lineTotal);
+  if (linetotalCell) {
+    const widthStyle = profileKey === 'rt_dev' ? 'style="width: 82px;"' : '';
+    linetotalCell.innerHTML = `
+      <div class="money-cell" ${widthStyle}>
+        <span class="money-sym">€</span>
+        <span class="money-num">${Number(item.lineTotal).toFixed(2)}</span>
+      </div>
+    `;
+  }
 
   updateSummaryDisplays(profileKey, calc);
 }
@@ -839,7 +859,15 @@ function updateItemGrossField(profileKey, index, value) {
   const calc = calculateProfileTotals(profileKey);
   const item = prof.items[index];
   const linetotalCell = document.getElementById(`${profileKey}-linetotal-${index}`);
-  if (linetotalCell) linetotalCell.textContent = formatEuro(item.lineTotal);
+  if (linetotalCell) {
+    const widthStyle = profileKey === 'rt_dev' ? 'style="width: 82px;"' : '';
+    linetotalCell.innerHTML = `
+      <div class="money-cell" ${widthStyle}>
+        <span class="money-sym">€</span>
+        <span class="money-num">${Number(item.lineTotal).toFixed(2)}</span>
+      </div>
+    `;
+  }
 
   updateSummaryDisplays(profileKey, calc);
 }
@@ -852,7 +880,15 @@ function updateItemCalcField(profileKey, index, field, value) {
   const calc = calculateProfileTotals(profileKey);
   const item = prof.items[index];
   const linetotalCell = document.getElementById(`${profileKey}-linetotal-${index}`);
-  if (linetotalCell) linetotalCell.textContent = formatEuro(item.lineTotal);
+  if (linetotalCell) {
+    const widthStyle = profileKey === 'rt_dev' ? 'style="width: 82px;"' : '';
+    linetotalCell.innerHTML = `
+      <div class="money-cell" ${widthStyle}>
+        <span class="money-sym">€</span>
+        <span class="money-num">${Number(item.lineTotal).toFixed(2)}</span>
+      </div>
+    `;
+  }
 
   updateSummaryDisplays(profileKey, calc);
 }

@@ -398,12 +398,7 @@
                 </thead>
                 <tbody id="ws-acc-items-tbody"></tbody>
               </table>
-              <div class="no-print my-1 flex justify-start">
-                <button onclick="addRow('ws_acc')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Add Row</button>
-              </div>
-            </div>
-
-            <div class="invoice-bottom-grid">
+                    <div class="invoice-bottom-grid">
               <div class="invoice-notes-block flex flex-col justify-end">
                 <div class="font-medium text-slate-800">Make all checks payable to Company Name</div>
                 <div class="text-slate-600 mt-0.5">If you have any questions concerning this invoice, use the contact details above.</div>
@@ -413,33 +408,51 @@
                 <table class="totals-table">
                   <tr>
                     <td class="label-col">Subtotal</td>
-                    <td class="val-col" id="ws_acc-subtotal-val">€ 653.95</td>
+                    <td class="val-col">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <span class="money-num" id="ws_acc-subtotal-val">653.95</span>
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <td class="label-col">Tax Rate (%)</td>
                     <td class="val-col">
-                      <div class="totals-input-box">
-                        <input type="number" step="0.5" id="ws_acc-taxrate-input" class="totals-num-input" value="23.00">
-                        <span class="text-slate-800 ml-0.5">%</span>
+                      <div class="percent-cell">
+                        <span></span>
+                        <div class="percent-box">
+                          <input type="number" step="0.5" id="ws_acc-taxrate-input" class="money-input" value="23.00">
+                          <span class="font-mono">%</span>
+                        </div>
                       </div>
                     </td>
                   </tr>
                   <tr>
                     <td class="label-col">VAT</td>
-                    <td class="val-col" id="ws_acc-vat-val">€ 150.41</td>
+                    <td class="val-col">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <span class="money-num" id="ws_acc-vat-val">150.41</span>
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <td class="label-col">Other Costs</td>
                     <td class="val-col">
-                      <div class="totals-input-box">
-                        <span class="text-slate-800 mr-0.5">€</span>
-                        <input type="number" step="0.5" id="ws_acc-other-input" class="totals-num-input" value="0.00">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <input type="number" step="0.5" id="ws_acc-other-input" class="money-input" value="0.00">
                       </div>
                     </td>
                   </tr>
                   <tr class="total-due-row">
                     <td class="label-col text-slate-900 font-bold">Total Due</td>
-                    <td class="val-col text-slate-900 font-bold text-xs" id="ws_acc-totaldue-val">€ 804.36</td>
+                    <td class="val-col text-slate-900 font-bold">
+                      <div class="money-cell">
+                        <span class="money-sym font-bold">€</span>
+                        <span class="money-num font-bold text-xs" id="ws_acc-totaldue-val">804.36</span>
+                      </div>
+                    </td>
                   </tr>
                 </table>
               </div>
@@ -540,33 +553,51 @@
                 <table class="totals-table">
                   <tr>
                     <td class="label-col">Subtotal</td>
-                    <td class="val-col" id="ws_dev-subtotal-val">€ 7,800.00</td>
+                    <td class="val-col">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <span class="money-num" id="ws_dev-subtotal-val">7,800.00</span>
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <td class="label-col">Tax Rate (%)</td>
                     <td class="val-col">
-                      <div class="totals-input-box">
-                        <input type="number" step="0.5" id="ws_dev-taxrate-input" class="totals-num-input" value="23.00">
-                        <span class="text-slate-800 ml-0.5">%</span>
+                      <div class="percent-cell">
+                        <span></span>
+                        <div class="percent-box">
+                          <input type="number" step="0.5" id="ws_dev-taxrate-input" class="money-input" value="23.00">
+                          <span class="font-mono">%</span>
+                        </div>
                       </div>
                     </td>
                   </tr>
                   <tr>
                     <td class="label-col">VAT Amount</td>
-                    <td class="val-col" id="ws_dev-vat-val">€ 1,794.00</td>
+                    <td class="val-col">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <span class="money-num" id="ws_dev-vat-val">1,794.00</span>
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <td class="label-col">Other Costs</td>
                     <td class="val-col">
-                      <div class="totals-input-box">
-                        <span class="text-slate-800 mr-0.5">€</span>
-                        <input type="number" step="0.5" id="ws_dev-other-input" class="totals-num-input" value="0.00">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <input type="number" step="0.5" id="ws_dev-other-input" class="money-input" value="0.00">
                       </div>
                     </td>
                   </tr>
                   <tr class="total-due-row">
                     <td class="label-col text-slate-900 font-bold">Total Due</td>
-                    <td class="val-col text-slate-900 font-bold text-xs" id="ws_dev-totaldue-val">€ 9,594.00</td>
+                    <td class="val-col text-slate-900 font-bold">
+                      <div class="money-cell">
+                        <span class="money-sym font-bold">€</span>
+                        <span class="money-num font-bold text-xs" id="ws_dev-totaldue-val">9,594.00</span>
+                      </div>
+                    </td>
                   </tr>
                 </table>
               </div>
@@ -661,33 +692,51 @@
                 <table class="totals-table">
                   <tr>
                     <td class="label-col">Subtotal</td>
-                    <td class="val-col" id="rt_acc-subtotal-val">€ 12.20</td>
+                    <td class="val-col">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <span class="money-num" id="rt_acc-subtotal-val">12.20</span>
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <td class="label-col">Tax Rate (%)</td>
                     <td class="val-col">
-                      <div class="totals-input-box">
-                        <input type="number" step="0.5" id="rt_acc-taxrate-input" class="totals-num-input" value="23.00">
-                        <span class="text-slate-800 ml-0.5">%</span>
+                      <div class="percent-cell">
+                        <span></span>
+                        <div class="percent-box">
+                          <input type="number" step="0.5" id="rt_acc-taxrate-input" class="money-input" value="23.00">
+                          <span class="font-mono">%</span>
+                        </div>
                       </div>
                     </td>
                   </tr>
                   <tr>
                     <td class="label-col">Vat Cost</td>
-                    <td class="val-col" id="rt_acc-vat-val">€ 2.80</td>
+                    <td class="val-col">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <span class="money-num" id="rt_acc-vat-val">2.80</span>
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <td class="label-col">Other Costs</td>
                     <td class="val-col">
-                      <div class="totals-input-box">
-                        <span class="text-slate-800 mr-0.5">€</span>
-                        <input type="number" step="0.5" id="rt_acc-other-input" class="totals-num-input" value="0.00">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <input type="number" step="0.5" id="rt_acc-other-input" class="money-input" value="0.00">
                       </div>
                     </td>
                   </tr>
                   <tr class="total-due-row">
                     <td class="label-col text-slate-900 font-bold">Total Cost</td>
-                    <td class="val-col text-slate-900 font-bold text-xs" id="rt_acc-totaldue-val">€ 15.00</td>
+                    <td class="val-col text-slate-900 font-bold">
+                      <div class="money-cell">
+                        <span class="money-sym font-bold">€</span>
+                        <span class="money-num font-bold text-xs" id="rt_acc-totaldue-val">15.00</span>
+                      </div>
+                    </td>
                   </tr>
                 </table>
               </div>
@@ -784,33 +833,51 @@
                 <table class="totals-table">
                   <tr>
                     <td class="label-col">Subtotal</td>
-                    <td class="val-col" id="rt_dev-subtotal-val">€ 365.04</td>
+                    <td class="val-col">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <span class="money-num" id="rt_dev-subtotal-val">365.04</span>
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <td class="label-col">Tax Rate (%)</td>
                     <td class="val-col">
-                      <div class="totals-input-box">
-                        <input type="number" step="0.5" id="rt_dev-taxrate-input" class="totals-num-input" value="23.00">
-                        <span class="text-slate-800 ml-0.5">%</span>
+                      <div class="percent-cell">
+                        <span></span>
+                        <div class="percent-box">
+                          <input type="number" step="0.5" id="rt_dev-taxrate-input" class="money-input" value="23.00">
+                          <span class="font-mono">%</span>
+                        </div>
                       </div>
                     </td>
                   </tr>
                   <tr>
                     <td class="label-col">VAT Amount</td>
-                    <td class="val-col" id="rt_dev-vat-val">€ 83.96</td>
+                    <td class="val-col">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <span class="money-num" id="rt_dev-vat-val">83.96</span>
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <td class="label-col">Other Costs</td>
                     <td class="val-col">
-                      <div class="totals-input-box">
-                        <span class="text-slate-800 mr-0.5">€</span>
-                        <input type="number" step="0.5" id="rt_dev-other-input" class="totals-num-input" value="0.00">
+                      <div class="money-cell">
+                        <span class="money-sym">€</span>
+                        <input type="number" step="0.5" id="rt_dev-other-input" class="money-input" value="0.00">
                       </div>
                     </td>
                   </tr>
                   <tr class="total-due-row">
-                    <td class="label-col text-slate-900 font-bold">Total Cost</td>
-                    <td class="val-col text-slate-900 font-bold text-xs" id="rt_dev-totaldue-val">€ 449.00</td>
+                    <td class="label-col text-slate-900 font-bold">Total Due</td>
+                    <td class="val-col text-slate-900 font-bold">
+                      <div class="money-cell">
+                        <span class="money-sym font-bold">€</span>
+                        <span class="money-num font-bold text-xs" id="rt_dev-totaldue-val">449.00</span>
+                      </div>
+                    </td>
                   </tr>
                 </table>
               </div>
