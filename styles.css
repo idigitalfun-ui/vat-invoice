@@ -1,12 +1,13 @@
-/* VAT Invoice System - Professional Irish VAT Invoice Engine */
+/* VAT Invoice Studio - 4 Distinct Profile Modes & Irish VAT Precision */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  --primary-navy: #0f2b48;
-  --primary-navy-dark: #091b2e;
-  --gc-yellow: #ffee00;
+  --gc-blue: #092648;
+  --gc-gold: #f59e0b;
+  --idfl-navy: #0d1f38;
   --idfl-red: #e11d48;
-  --idfl-amber: #f59e0b;
+  --acc-teal: #0f766e;
+  --dev-indigo: #4338ca;
 }
 
 * {
@@ -15,7 +16,7 @@
 
 body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #090e1a;
+  background-color: #070c18;
   color: #1e293b;
   margin: 0;
   padding: 0;
@@ -40,21 +41,21 @@ body {
 
 /* Navigation & App Header */
 .app-header {
-  background: #0f172a;
+  background: #0b1329;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.tab-btn {
+.profile-tab-btn {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   border-bottom: 3px solid transparent;
 }
 
-.tab-btn.active-tab {
+.profile-tab-btn.active-tab {
   background: #ffffff;
   color: #0f2b48 !important;
   font-weight: 700;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   border-bottom: 3px solid #2563eb;
 }
 
@@ -62,7 +63,7 @@ body {
 .invoice-sheet-container {
   display: flex;
   justify-content: center;
-  padding: 1rem 0.5rem 2.5rem 0.5rem;
+  padding: 0.75rem 0.5rem 2.5rem 0.5rem;
 }
 
 /* A4 Page Layout */
@@ -71,7 +72,7 @@ body {
   min-height: 297mm;
   max-width: 210mm;
   background: #ffffff;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
   margin: 0 auto;
   position: relative;
   display: flex;
@@ -79,12 +80,17 @@ body {
   box-sizing: border-box;
 }
 
-/* Top Banner Header */
-.invoice-banner {
+/* =========================================================
+   4 DISTINCT PROFILE BANNER DESIGNS
+   ========================================================= */
+
+/* Banner 1: Get Connected (Wholesale) - Royal Sapphire & Gold */
+.banner-wholesale-gc {
   width: 100%;
-  height: 116px;
+  height: 114px;
+  background: linear-gradient(135deg, #05162b 0%, #0c2d54 50%, #071e38 100%);
+  background-image: url('assets/header-bg.png');
   background-size: 100% 100%;
-  background-position: center;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -93,24 +99,55 @@ body {
   align-items: center;
   padding: 8px 18px 6px 18px;
   color: white;
-  background-image: url('assets/header-bg.png');
-  background-color: #0a2540;
+  border-bottom: 3px solid #f59e0b;
 }
 
-.wholesale-banner-bg {
-  background-image: url('assets/header-bg.png');
-  background-color: #0a2540;
-}
-
-.retail-idfl-banner-bg {
-  background: linear-gradient(135deg, #091a2f 0%, #0d2644 40%, #173258 70%, #0a1f38 100%);
+/* Banner 2: I Digital Fun (Retail POS) - Crimson & Deep Slate */
+.banner-retail-idfl {
+  width: 100%;
+  height: 114px;
+  background: linear-gradient(135deg, #091a2f 0%, #0d2644 45%, #18355c 80%, #0a1f38 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 18px 6px 18px;
+  color: white;
   border-bottom: 3px solid #e11d48;
 }
 
-.retail-gc-banner-bg {
-  background-image: url('assets/header-bg.png');
-  background-color: #0a2540;
-  border-bottom: 3px solid #f59e0b;
+/* Banner 3: Accessories Invoice - Cyber Slate & Emerald / Amber */
+.banner-accessories {
+  width: 100%;
+  height: 114px;
+  background: linear-gradient(135deg, #062024 0%, #0f3d44 50%, #08282d 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 18px 6px 18px;
+  color: white;
+  border-bottom: 3px solid #0d9488;
+}
+
+/* Banner 4: Devices Sales Invoice - Executive Indigo & Titanium */
+.banner-devices {
+  width: 100%;
+  height: 114px;
+  background: linear-gradient(135deg, #111836 0%, #1e295d 50%, #101633 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 18px 6px 18px;
+  color: white;
+  border-bottom: 3px solid #6366f1;
 }
 
 .banner-logo-container {
@@ -118,7 +155,7 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 56px;
+  height: 54px;
 }
 
 .banner-footer-text {
@@ -137,40 +174,38 @@ body {
   opacity: 0.75;
 }
 
-/* Invoice Content Body */
+/* Invoice Body */
 .invoice-body {
-  padding: 16px 26px 16px 26px;
+  padding: 15px 24px 15px 24px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-/* Title & Top Meta Section */
 .invoice-top-details {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .invoice-title-large {
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 700;
   font-family: 'Inter', Georgia, serif;
   color: #111827;
   line-height: 1.1;
 }
 
-/* Billing Grid */
 .billing-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .bill-heading {
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 700;
   font-family: 'Inter', Georgia, serif;
   color: #111827;
@@ -178,28 +213,56 @@ body {
 }
 
 .bill-content {
-  font-size: 11.5px;
+  font-size: 11px;
   line-height: 1.4;
   color: #1f2937;
 }
 
-/* Table Styles matching Wholesale 1 PDF & Retail */
+/* =========================================================
+   TABLE DESIGNS FOR EACH PROFILE
+   ========================================================= */
 .invoice-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 4px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+}
+
+/* Profile 1 Header */
+.table-theme-gc th {
+  background-color: #0c2d54;
+  color: #ffffff;
+  border-color: #0c2d54;
+}
+
+/* Profile 2 Header */
+.table-theme-idfl th {
+  background-color: #0f2b48;
+  color: #ffffff;
+  border-color: #0f2b48;
+}
+
+/* Profile 3 Header */
+.table-theme-acc th {
+  background-color: #0f3d44;
+  color: #ffffff;
+  border-color: #0f3d44;
+}
+
+/* Profile 4 Header */
+.table-theme-dev th {
+  background-color: #1e295d;
+  color: #ffffff;
+  border-color: #1e295d;
 }
 
 .invoice-table th {
-  background-color: #0f2b48;
-  color: #ffffff;
-  padding: 5.5px 8px;
+  padding: 5px 7px;
   font-size: 11px;
   font-weight: 600;
   text-align: left;
   letter-spacing: 0.2px;
-  border: 1px solid #0f2b48;
+  border: 1px solid;
 }
 
 .invoice-table th.text-center {
@@ -211,7 +274,7 @@ body {
 }
 
 .invoice-table td {
-  padding: 4px 7px;
+  padding: 3.5px 6px;
   font-size: 10.5px;
   border: 1px solid #333333;
   color: #000000;
@@ -219,12 +282,12 @@ body {
 }
 
 .invoice-table tr.item-row:nth-child(even) {
-  background-color: #fafbfd;
+  background-color: #fbfcfe;
 }
 
 /* Row Action Buttons (Delete, Duplicate) */
 .row-actions-cell {
-  width: 34px;
+  width: 32px;
   text-align: center;
   border: none !important;
   background: transparent !important;
@@ -264,7 +327,7 @@ tr:hover .row-actions {
 }
 
 .totals-table td {
-  padding: 3px 6px;
+  padding: 2.5px 6px;
   font-size: 11px;
   border: none;
 }
@@ -273,7 +336,7 @@ tr:hover .row-actions {
   text-align: left;
   font-weight: 500;
   color: #334155;
-  width: 50%;
+  width: 48%;
 }
 
 .totals-table td.val-col {
@@ -288,7 +351,7 @@ tr:hover .row-actions {
   font-weight: 800;
   font-size: 12px;
   background-color: #f8fafc;
-  padding: 4.5px 6px;
+  padding: 4px 6px;
 }
 
 /* Inline Editable Inputs */
@@ -296,7 +359,7 @@ tr:hover .row-actions {
   width: 100%;
   background: transparent;
   border: 1px dashed transparent;
-  padding: 1.5px 3px;
+  padding: 1px 3px;
   font-family: inherit;
   font-size: inherit;
   color: inherit;
@@ -320,37 +383,16 @@ tr:hover .row-actions {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Glass Panels & Presets Cards */
+/* Presets & Catalog Cards */
 .catalog-card {
   border-radius: 10px;
   padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.2s ease;
-}
-
-.catalog-card-wholesale-acc {
-  background: linear-gradient(135deg, #1e1b10 0%, #2a2312 100%);
-  border-color: rgba(245, 158, 11, 0.25);
-}
-
-.catalog-card-wholesale-dev {
-  background: linear-gradient(135deg, #0d201e 0%, #122b27 100%);
-  border-color: rgba(16, 185, 129, 0.25);
-}
-
-.catalog-card-retail-acc {
-  background: linear-gradient(135deg, #241218 0%, #301620 100%);
-  border-color: rgba(225, 29, 72, 0.25);
-}
-
-.catalog-card-retail-dev {
-  background: linear-gradient(135deg, #14182b 0%, #1b213b 100%);
-  border-color: rgba(99, 102, 241, 0.25);
 }
 
 .catalog-chip {
   font-size: 10.5px;
-  padding: 3.5px 7px;
+  padding: 3px 6.5px;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -362,7 +404,7 @@ tr:hover .row-actions {
 
 .catalog-chip:hover {
   transform: translateY(-1px);
-  filter: brightness(1.15);
+  filter: brightness(1.2);
 }
 
 /* Toast Notifications */
@@ -423,7 +465,6 @@ tr:hover .row-actions {
   .sidebar-controls,
   .row-actions-cell,
   .row-actions,
-  .add-item-bar,
   #toast-container,
   button,
   .catalog-card {
@@ -454,21 +495,19 @@ tr:hover .row-actions {
   }
 
   .invoice-banner {
-    height: 110px !important;
-    min-height: 110px !important;
-    max-height: 110px !important;
-    padding: 8px 16px 6px 16px !important;
+    height: 105px !important;
+    min-height: 105px !important;
+    max-height: 105px !important;
+    padding: 6px 14px 4px 14px !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
   .invoice-body {
-    padding: 16px 24px 16px 24px !important;
+    padding: 14px 22px 14px 22px !important;
   }
 
   .invoice-table th {
-    background-color: #0f2b48 !important;
-    color: #ffffff !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }

@@ -3,51 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VAT Invoice Generator | Get Connected & I Digital Fun</title>
+  <title>VAT Invoice Studio | 4 Professional Profiles</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen">
 
-  <!-- Toast Notification Container -->
+  <!-- Toast Container -->
   <div id="toast-container"></div>
 
   <!-- App Header & Navigation Bar -->
-  <header class="app-header sticky top-0 z-50 px-4 lg:px-8 py-2.5 shadow-xl backdrop-blur-md">
+  <header class="app-header sticky top-0 z-50 px-4 lg:px-8 py-2.5 shadow-2xl backdrop-blur-md">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
       
-      <!-- Brand & Tabs -->
-      <div class="flex items-center gap-6">
-        <div class="flex items-center gap-2.5">
+      <!-- Brand & 4 Profile Tabs -->
+      <div class="flex items-center flex-wrap gap-4">
+        <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white shadow-md text-base">
             €
           </div>
           <div>
             <h1 class="text-sm font-bold tracking-tight text-white leading-tight">VAT Invoice Studio</h1>
-            <p class="text-[11px] text-slate-400">Irish VAT Invoicing System</p>
+            <p class="text-[10.5px] text-slate-400">Irish VAT Invoicing System</p>
           </div>
         </div>
 
-        <!-- Mode Switcher Tabs -->
+        <!-- 4 Profile Modes Switcher -->
         <div class="inline-flex p-1 bg-slate-900/90 rounded-xl border border-slate-800 tab-bar shadow-inner">
-          <button id="tab-btn-wholesale" onclick="setTab('wholesale')" 
-                  class="tab-btn active-tab px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-2">
+          <button id="tab-btn-wholesale" onclick="switchProfile('wholesale')" 
+                  class="profile-tab-btn active-tab px-3 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-            Wholesale (Get Connected)
+            1. Get Connected (Wholesale)
           </button>
-          <button id="tab-btn-retail" onclick="setTab('retail')" 
-                  class="tab-btn px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-2">
+          
+          <button id="tab-btn-retail" onclick="switchProfile('retail')" 
+                  class="profile-tab-btn px-3 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-            Retail (I Digital Fun)
+            2. I Digital Fun (Retail)
+          </button>
+
+          <button id="tab-btn-accessories" onclick="switchProfile('accessories')" 
+                  class="profile-tab-btn px-3 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+            3. Accessories
+          </button>
+
+          <button id="tab-btn-devices" onclick="switchProfile('devices')" 
+                  class="profile-tab-btn px-3 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+            4. Devices & IMEI
           </button>
         </div>
       </div>
 
-      <!-- Action Buttons -->
+      <!-- Actions -->
       <div class="flex items-center flex-wrap gap-2">
         <button onclick="triggerPrint()" 
-                class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-900/40 transition hover:scale-[1.02] active:scale-[0.98]">
+                class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-900/40 transition hover:scale-[1.02] active:scale-[0.98]">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
           Print / PDF
         </button>
@@ -66,23 +79,20 @@
 
         <div class="h-5 w-px bg-slate-700 mx-0.5"></div>
 
-        <button onclick="exportInvoiceCSV()" 
-                title="Export to CSV" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition text-xs font-mono font-bold">
+        <button onclick="exportInvoiceCSV()" title="Export CSV" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-mono font-bold">
           CSV
         </button>
 
-        <button onclick="exportInvoiceJSON()" 
-                title="Export JSON Data" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+        <button onclick="exportInvoiceJSON()" title="Export JSON" class="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
         </button>
 
-        <label title="Import JSON Data" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 cursor-pointer transition">
+        <label title="Import JSON" class="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 cursor-pointer">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
           <input type="file" accept=".json" class="hidden" onchange="importInvoiceJSON(this.files[0])">
         </label>
 
-        <button onclick="resetCurrentInvoice()" 
-                title="Clear / Reset" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/40 text-slate-400 hover:text-rose-300 border border-slate-700 transition">
+        <button onclick="resetCurrentInvoice()" title="Reset Current" class="p-1.5 rounded bg-slate-800 hover:bg-rose-900/40 text-slate-400 hover:text-rose-300 border border-slate-700">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
         </button>
       </div>
@@ -90,186 +100,165 @@
     </div>
   </header>
 
-  <!-- Main Container -->
+  <!-- Main Grid -->
   <main class="max-w-7xl mx-auto px-4 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
     <!-- Left Controls Panel (Screen Only) -->
     <aside class="no-print lg:col-span-4 flex flex-col gap-4">
       
-      <!-- Quick Actions / Sample Loaders -->
-      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 shadow-lg">
-        <h2 class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2.5 flex items-center justify-between">
-          <span>Quick Samples & Taxes</span>
-          <span class="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded">1-Page A4 Mode</span>
-        </h2>
-        
-        <div class="grid grid-cols-2 gap-2 mb-2.5">
-          <button onclick="loadSampleWholesaleData(); setTab('wholesale'); showToast('Loaded Wholesale Sample (Wholesale Invoice 1)');"
-                  class="p-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-semibold text-left transition flex items-center gap-2">
-            <span class="text-base">📦</span>
-            <div>
-              <div>Wholesale Sample</div>
-              <div class="text-[10px] text-amber-400/70 font-normal">Get Connected 12 items</div>
-            </div>
-          </button>
-          
-          <button onclick="loadSampleRetailData(); setTab('retail'); showToast('Loaded Retail Sample (Retail Invoice.xlsx)');"
-                  class="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-semibold text-left transition flex items-center gap-2">
-            <span class="text-base">📱</span>
-            <div>
-              <div>Retail Sample</div>
-              <div class="text-[10px] text-rose-400/70 font-normal">I Digital Fun Thurles</div>
-            </div>
-          </button>
-        </div>
-
-        <div class="flex items-center justify-between pt-2 border-t border-slate-800">
-          <button onclick="generateNewInvoiceNumber()" 
-                  class="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 font-medium transition">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-            Auto New Invoice #
-          </button>
-
-          <!-- Tax Presets -->
+      <!-- Tax Presets & Actions -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs text-slate-300 font-semibold">VAT Tax Rate:</span>
           <div class="flex items-center gap-1">
-            <button onclick="setQuickTaxRate(23.00)" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded border border-slate-700 font-mono">23%</button>
+            <button onclick="setQuickTaxRate(23.00)" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded border border-slate-700 font-mono">23% (Std)</button>
             <button onclick="setQuickTaxRate(13.50)" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded border border-slate-700 font-mono">13.5%</button>
             <button onclick="setQuickTaxRate(0.00)" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded border border-slate-700 font-mono">0%</button>
           </div>
         </div>
+        <button onclick="generateNewInvoiceNumber()" 
+                class="w-full py-1.5 bg-slate-800 hover:bg-slate-700 text-blue-300 text-xs font-medium rounded-lg border border-slate-700 flex items-center justify-center gap-1.5 transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          Auto Generate New Reference / Invoice #
+        </button>
       </div>
 
-      <!-- Tab Specific Controls: WHOLESALE -->
-      <div id="wholesale-controls" class="flex flex-col gap-3">
-        
-        <!-- Store Selector for Wholesale Bill To -->
+      <!-- Controls 1: Wholesale -->
+      <div id="controls-wholesale" class="flex flex-col gap-3">
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
-          <label class="block text-xs text-slate-300 mb-1 font-medium">B2B Customer / Branch Preset:</label>
+          <label class="block text-xs text-slate-300 mb-1 font-medium">B2B Customer Preset:</label>
           <select id="wholesale-store-select" onchange="onStoreSelectChanged('wholesale', this.value)"
                   class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-amber-400 outline-none">
           </select>
         </div>
 
-        <!-- 1. Wholesale Accessories Catalog (Distinct Design 1) -->
-        <div class="catalog-card catalog-card-wholesale-acc shadow-lg">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center justify-between mb-2">
-            <span class="flex items-center gap-1.5">📦 Wholesale Accessories (Bulk Packs)</span>
-            <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">B2B Cartons</span>
+        <div class="catalog-card bg-amber-950/20 border-amber-800/40">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-amber-300 mb-2 flex items-center justify-between">
+            <span>📦 Get Connected Wholesale Catalog</span>
+            <span class="text-[9px] bg-amber-500/20 px-1.5 py-0.5 rounded">Bulk Packs</span>
           </h3>
-          <div class="flex flex-wrap gap-1 max-h-36 overflow-y-auto pr-0.5">
-            <button onclick="addCatalogItem('wholesaleAccessories', 0)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">⚡ Gerlax 25YPS Charger (50pk €4)</button>
-            <button onclick="addCatalogItem('wholesaleAccessories', 1)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">⌚ GSK9 Mini Watch (6pk €24.93)</button>
-            <button onclick="addCatalogItem('wholesaleAccessories', 2)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🔋 Hoco Wireless (6pk €9.95)</button>
-            <button onclick="addCatalogItem('wholesaleAccessories', 3)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🔌 Hoco X91 C-C 3m (10pk €2.49)</button>
-            <button onclick="addCatalogItem('wholesaleAccessories', 4)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🔌 Hoco X91 C-L 3m (10pk €2.49)</button>
-            <button onclick="addCatalogItem('wholesaleAccessories', 5)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">📱 Smart Case 10th (5pk €5.95)</button>
-            <button onclick="addCatalogItem('wholesaleAccessories', 6)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">📻 Borofone BC48 (10pk €5.95)</button>
-            <button onclick="addCatalogItem('wholesaleAccessories', 7)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🛡️ Pamper Case 40mm (20pk €0.90)</button>
-            <button onclick="addCatalogItem('wholesaleAccessories', 9)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🔌 Hoco X93 Type-C (10pk €2.45)</button>
-            <button onclick="addCatalogItem('wholesaleAccessories', 11)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🚗 Hoco CA52 Car Mount (7pk €2.95)</button>
+          <div class="flex flex-wrap gap-1 max-h-48 overflow-y-auto pr-0.5">
+            <button onclick="addFromCatalog('wholesaleGC', 0)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">⚡ Gerlax Charger (50pk €4)</button>
+            <button onclick="addFromCatalog('wholesaleGC', 1)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">⌚ GSK9 Watch (6pk €24.93)</button>
+            <button onclick="addFromCatalog('wholesaleGC', 2)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🔋 Hoco Wireless (6pk €9.95)</button>
+            <button onclick="addFromCatalog('wholesaleGC', 3)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🔌 Hoco C-to-C 3m (10pk €2.49)</button>
+            <button onclick="addFromCatalog('wholesaleGC', 4)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🔌 Hoco C-to-L 3m (10pk €2.49)</button>
+            <button onclick="addFromCatalog('wholesaleGC', 5)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">📱 Smart Case 10th (5pk €5.95)</button>
+            <button onclick="addFromCatalog('wholesaleGC', 6)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">📻 Borofone BC48 (10pk €5.95)</button>
+            <button onclick="addFromCatalog('wholesaleGC', 7)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🛡️ Pamper Case 40mm (20pk €0.90)</button>
+            <button onclick="addFromCatalog('wholesaleGC', 9)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🔌 Hoco X93 Type-C (10pk €2.45)</button>
+            <button onclick="addFromCatalog('wholesaleGC', 11)" class="catalog-chip bg-amber-900/40 text-amber-200 border border-amber-700/50">🚗 Hoco CA52 Mount (7pk €2.95)</button>
           </div>
         </div>
 
-        <!-- 2. Wholesale Devices Catalog (Distinct Design 2) -->
-        <div class="catalog-card catalog-card-wholesale-dev shadow-lg">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center justify-between mb-2">
-            <span class="flex items-center gap-1.5">📱 Wholesale Devices (Lot Units)</span>
-            <span class="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded">Handsets</span>
-          </h3>
-          <div class="flex flex-wrap gap-1 max-h-32 overflow-y-auto pr-0.5">
-            <button onclick="addCatalogItem('wholesaleDevices', 0)" class="catalog-chip bg-emerald-900/40 text-emerald-200 border border-emerald-700/50">🍏 iPhone 11 64GB (5pk €195)</button>
-            <button onclick="addCatalogItem('wholesaleDevices', 1)" class="catalog-chip bg-emerald-900/40 text-emerald-200 border border-emerald-700/50">🍏 iPhone 12 128GB (5pk €275)</button>
-            <button onclick="addCatalogItem('wholesaleDevices', 2)" class="catalog-chip bg-emerald-900/40 text-emerald-200 border border-emerald-700/50">🍏 iPhone 13 128GB (3pk €360)</button>
-            <button onclick="addCatalogItem('wholesaleDevices', 3)" class="catalog-chip bg-emerald-900/40 text-emerald-200 border border-emerald-700/50">🤖 Galaxy A14 64GB (10pk €115)</button>
-            <button onclick="addCatalogItem('wholesaleDevices', 4)" class="catalog-chip bg-emerald-900/40 text-emerald-200 border border-emerald-700/50">🤖 Galaxy A54 5G (5pk €235)</button>
-            <button onclick="addCatalogItem('wholesaleDevices', 5)" class="catalog-chip bg-emerald-900/40 text-emerald-200 border border-emerald-700/50">📱 iPad 10th Gen 64GB (3pk €295)</button>
-          </div>
-        </div>
-
-        <button onclick="addWholesaleItem('New Wholesale Item', 1, 0.00)" 
+        <button onclick="addRow('wholesale')" 
                 class="w-full py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-          Add Custom Line Item
+          Add Custom Wholesale Row
         </button>
       </div>
 
-      <!-- Tab Specific Controls: RETAIL -->
-      <div id="retail-controls" class="hidden flex flex-col gap-3">
-        
-        <!-- Store Selector for Bill From (13 Stores) -->
+      <!-- Controls 2: Retail -->
+      <div id="controls-retail" class="hidden flex flex-col gap-3">
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
-          <div class="flex items-center justify-between mb-1">
-            <label class="block text-xs text-slate-300 font-medium">Bill From Branch (13 Stores):</label>
-            <span class="text-[9px] text-rose-300 bg-rose-950/60 px-1.5 py-0.5 rounded border border-rose-800/40">Auto Header Sync</span>
-          </div>
+          <label class="block text-xs text-slate-300 mb-1 font-medium">Bill From Branch (13 Stores):</label>
           <select id="retail-store-select" onchange="onStoreSelectChanged('retail', this.value)"
                   class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-rose-400 outline-none">
           </select>
         </div>
 
-        <!-- 3. Retail Accessories Catalog (Distinct Design 3) -->
-        <div class="catalog-card catalog-card-retail-acc shadow-lg">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-rose-300 flex items-center justify-between mb-2">
-            <span class="flex items-center gap-1.5">🛡️ Retail Accessories (POS Unit Sales)</span>
-            <span class="text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded">Gross -> Net (Price/1.23)</span>
+        <div class="catalog-card bg-rose-950/20 border-rose-800/40">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-rose-300 mb-2 flex items-center justify-between">
+            <span>🛡️ I Digital Fun Retail Favorites</span>
+            <span class="text-[9px] bg-rose-500/20 px-1.5 py-0.5 rounded">Gross -> Net Auto</span>
           </h3>
-          <div class="flex flex-wrap gap-1 max-h-32 overflow-y-auto pr-0.5">
-            <button onclick="addCatalogItem('retailAccessories', 0)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🛡️ Samsung A10-A51 TG (€15)</button>
-            <button onclick="addCatalogItem('retailAccessories', 1)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🛡️ iPhone TG Glass (€15)</button>
-            <button onclick="addCatalogItem('retailAccessories', 2)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🔌 20W Fast Charger (€15)</button>
-            <button onclick="addCatalogItem('retailAccessories', 3)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">⚡ Type-C to Lightning 1m (€10)</button>
-            <button onclick="addCatalogItem('retailAccessories', 4)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">⚡ Type-C to Type-C 1m (€10)</button>
-            <button onclick="addCatalogItem('retailAccessories', 5)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">📱 Clear Armor Case (€15)</button>
-            <button onclick="addCatalogItem('retailAccessories', 6)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🚗 MagSafe Car Holder (€25)</button>
-            <button onclick="addCatalogItem('retailAccessories', 7)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🎧 TWS Earbuds Pro (€30)</button>
-            <button onclick="addCatalogItem('retailAccessories', 8)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🔋 10,000mAh Power Bank (€25)</button>
+          <div class="flex flex-wrap gap-1 max-h-48 overflow-y-auto pr-0.5">
+            <button onclick="addFromCatalog('retailIDFL', 0)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🛡️ Samsung A10-A51 TG (€15)</button>
+            <button onclick="addFromCatalog('retailIDFL', 1)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🛡️ iPhone Tempered Glass (€15)</button>
+            <button onclick="addFromCatalog('retailIDFL', 2)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🔌 20W Fast Charger (€15)</button>
+            <button onclick="addFromCatalog('retailIDFL', 3)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">⚡ Type-C to Lightning 1m (€10)</button>
+            <button onclick="addFromCatalog('retailIDFL', 4)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">⚡ Type-C to Type-C 1m (€10)</button>
+            <button onclick="addFromCatalog('retailIDFL', 5)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">📱 Clear Armor Case (€15)</button>
+            <button onclick="addFromCatalog('retailIDFL', 6)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🚗 MagSafe Car Mount (€25)</button>
+            <button onclick="addFromCatalog('retailIDFL', 7)" class="catalog-chip bg-rose-950/60 text-rose-200 border border-rose-800/60">🎧 TWS Earbuds Pro (€30)</button>
           </div>
         </div>
 
-        <!-- 4. Retail Devices Catalog (Distinct Design 4) -->
-        <div class="catalog-card catalog-card-retail-dev shadow-lg">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-300 flex items-center justify-between mb-2">
-            <span class="flex items-center gap-1.5">📱 Retail Handsets & Tablets (Consumer)</span>
-            <span class="text-[9px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded">IMEI Tracked</span>
-          </h3>
-          <div class="flex flex-wrap gap-1 max-h-32 overflow-y-auto pr-0.5">
-            <button onclick="addCatalogItem('retailDevices', 0)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🍏 iPhone 11 64GB (€249)</button>
-            <button onclick="addCatalogItem('retailDevices', 1)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🍏 iPhone 12 128GB (€349)</button>
-            <button onclick="addCatalogItem('retailDevices', 2)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🍏 iPhone 13 128GB (€449)</button>
-            <button onclick="addCatalogItem('retailDevices', 3)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🤖 Galaxy A14 64GB (€149)</button>
-            <button onclick="addCatalogItem('retailDevices', 4)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🤖 Galaxy A54 5G (€299)</button>
-            <button onclick="addCatalogItem('retailDevices', 5)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">📱 iPad 10th Gen 64GB (€389)</button>
-          </div>
-        </div>
-
-        <button onclick="addRetailItem('New Accessory / Device', 1, 15.00)" 
+        <button onclick="addRow('retail')" 
                 class="w-full py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-          Add Custom Retail Item
+          Add Custom Retail Row
         </button>
       </div>
 
-      <!-- Quick Hint -->
+      <!-- Controls 3: Accessories -->
+      <div id="controls-accessories" class="hidden flex flex-col gap-3">
+        <div class="catalog-card bg-teal-950/20 border-teal-800/40">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-teal-300 mb-2 flex items-center justify-between">
+            <span>🔌 Specialist Accessories Catalog</span>
+            <span class="text-[9px] bg-teal-500/20 px-1.5 py-0.5 rounded">SKU Tracked</span>
+          </h3>
+          <div class="flex flex-wrap gap-1 max-h-48 overflow-y-auto pr-0.5">
+            <button onclick="addFromCatalog('accessoriesSpecial', 0)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">🛡️ 9D iPhone TG (€15)</button>
+            <button onclick="addFromCatalog('accessoriesSpecial', 1)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">🛡️ Samsung Curved TG (€15)</button>
+            <button onclick="addFromCatalog('accessoriesSpecial', 2)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">🔌 20W PD Adapter (€15)</button>
+            <button onclick="addFromCatalog('accessoriesSpecial', 3)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">🔌 65W GaN Laptop/Phone (€45)</button>
+            <button onclick="addFromCatalog('accessoriesSpecial', 4)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">⚡ Braided Type-C 100W (€12)</button>
+            <button onclick="addFromCatalog('accessoriesSpecial', 5)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">⚡ MFi Lightning Cable (€12)</button>
+            <button onclick="addFromCatalog('accessoriesSpecial', 6)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">🔋 10k MagSafe Power Bank (€35)</button>
+            <button onclick="addFromCatalog('accessoriesSpecial', 7)" class="catalog-chip bg-teal-950/60 text-teal-200 border border-teal-800/60">🚗 Auto-Clamp Car Mount (€28)</button>
+          </div>
+        </div>
+
+        <button onclick="addRow('accessories')" 
+                class="w-full py-2 bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          Add Accessory Row
+        </button>
+      </div>
+
+      <!-- Controls 4: Devices -->
+      <div id="controls-devices" class="hidden flex flex-col gap-3">
+        <div class="catalog-card bg-indigo-950/20 border-indigo-800/40">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-300 mb-2 flex items-center justify-between">
+            <span>📱 Handsets, Tablets & Devices</span>
+            <span class="text-[9px] bg-indigo-500/20 px-1.5 py-0.5 rounded">IMEI Tracked</span>
+          </h3>
+          <div class="flex flex-wrap gap-1 max-h-48 overflow-y-auto pr-0.5">
+            <button onclick="addFromCatalog('devicesSales', 0)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🍏 iPhone 11 64GB (€249)</button>
+            <button onclick="addFromCatalog('devicesSales', 1)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🍏 iPhone 12 128GB (€349)</button>
+            <button onclick="addFromCatalog('devicesSales', 2)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🍏 iPhone 13 128GB (€449)</button>
+            <button onclick="addFromCatalog('devicesSales', 3)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🤖 Galaxy A14 64GB (€149)</button>
+            <button onclick="addFromCatalog('devicesSales', 4)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">🤖 Galaxy A54 5G (€299)</button>
+            <button onclick="addFromCatalog('devicesSales', 5)" class="catalog-chip bg-indigo-950/60 text-indigo-200 border border-indigo-800/60">📱 iPad 10th Gen (€389)</button>
+          </div>
+        </div>
+
+        <button onclick="addRow('devices')" 
+                class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center justify-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          Add Device / Handset Row
+        </button>
+      </div>
+
       <div class="p-2.5 bg-slate-900/60 rounded-lg border border-slate-800 text-[11px] text-slate-400">
-        <span class="text-blue-400 font-semibold">💡 Direct Inline Editing:</span> Click and type on any text, description, quantity, amount, or date directly on the invoice. Everything calculates instantly without losing typing focus!
+        <span class="text-blue-400 font-semibold">💡 Real-Time Inline Canvas:</span> Click and edit any text, amount, quantity, or date directly on the invoice. Everything calculates live with 100% exact VAT precision.
       </div>
 
     </aside>
 
-    <!-- Right Live A4 Canvas -->
+    <!-- Right Live Canvas (4 Profiles) -->
     <section class="lg:col-span-8 flex flex-col items-center">
 
       <div class="invoice-sheet-container w-full">
 
         <!-- ========================================================= -->
-        <!-- 1. WHOLESALE INVOICE CANVAS (GET CONNECTED)              -->
+        <!-- PROFILE 1: WHOLESALE (GET CONNECTED)                      -->
         <!-- ========================================================= -->
-        <div id="wholesale-invoice-canvas" class="a4-sheet">
-
-          <!-- Top Banner -->
-          <div class="invoice-banner wholesale-banner-bg">
+        <div id="canvas-wholesale" class="a4-sheet">
+          <div class="banner-wholesale-gc">
             <div class="banner-logo-container">
-              <img src="assets/get-connected-banner-text.png" alt="Get Connected - Perfect Tech Experience" class="h-10 object-contain drop-shadow-md">
+              <img src="assets/get-connected-banner-text.png" alt="Get Connected" class="h-10 object-contain drop-shadow-md">
             </div>
             <div class="banner-footer-text">
               <div>Unit 3 Kewlew Business park, Mountrath Rd, Portlaoise, Co. Laois, R32 W0DT</div>
@@ -283,20 +272,16 @@
             </div>
           </div>
 
-          <!-- Body -->
           <div class="invoice-body">
-
-            <!-- Title & Top Meta -->
             <div class="invoice-top-details">
               <div>
                 <div class="invoice-title-large">COMMERCIAL VAT INVOICE</div>
-                <div class="mt-1 flex items-center gap-2">
+                <div class="mt-1 flex items-center gap-1.5">
                   <span class="text-xs text-slate-600 font-medium">Invoice Date:</span>
                   <span id="ws-disp-date" class="text-xs font-bold text-slate-900">14/02/2024</span>
                   <input type="date" id="ws-input-date" class="no-print text-[11px] border border-slate-300 rounded px-1.5 py-0.5 text-slate-700 bg-white">
                 </div>
               </div>
-
               <div class="text-right">
                 <div class="text-xs font-semibold text-slate-700 flex items-center justify-end gap-1.5">
                   <span>Invoice #:</span>
@@ -309,36 +294,30 @@
               </div>
             </div>
 
-            <!-- Bill To Section -->
-            <div class="mb-3">
+            <div class="mb-2.5">
               <div class="bill-heading">Bill To</div>
               <div class="bill-content">
-                <div>
-                  <input type="text" id="ws-billto-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="Variety World" placeholder="Shop / Client Name">
-                </div>
-                <div>
-                  <input type="text" id="ws-billto-address" class="editable-cell-input text-slate-700 text-[11px]" value="Lyster Square, Portlaoise, R32P796" placeholder="Address (Optional)">
-                </div>
+                <input type="text" id="ws-billto-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="Variety World" placeholder="Shop / Client Name">
+                <input type="text" id="ws-billto-address" class="editable-cell-input text-slate-700 text-[11px]" value="Lyster Square, Portlaoise, R32P796" placeholder="Address">
                 <div class="bill-meta-row flex items-center gap-4 text-[11px] mt-0.5">
                   <div class="flex items-center gap-1">
-                    <span class="font-medium text-slate-700">Phone :</span>
-                    <input type="text" id="ws-billto-phone" class="editable-cell-input text-slate-800 w-32 text-[11px]" value="+353 862037780" placeholder="Phone">
+                    <span class="font-medium text-slate-700">Phone:</span>
+                    <input type="text" id="ws-billto-phone" class="editable-cell-input text-slate-800 w-32 text-[11px]" value="+353 862037780">
                   </div>
                   <div class="flex items-center gap-1">
-                    <span class="font-medium text-slate-700">Email :</span>
-                    <input type="email" id="ws-billto-email" class="editable-cell-input text-slate-800 w-44 text-[11px]" value="annietariq2011@gmail.com" placeholder="Email">
+                    <span class="font-medium text-slate-700">Email:</span>
+                    <input type="email" id="ws-billto-email" class="editable-cell-input text-slate-800 w-44 text-[11px]" value="annietariq2011@gmail.com">
                   </div>
                 </div>
                 <div class="text-[11px] mt-0.5 flex items-center gap-1">
                   <span class="font-medium text-slate-700">VAT No:</span>
-                  <input type="text" id="ws-billto-vat" class="editable-cell-input text-slate-800 w-28 text-[11px] font-mono" value="4063008G" placeholder="VAT No">
+                  <input type="text" id="ws-billto-vat" class="editable-cell-input text-slate-800 w-28 text-[11px] font-mono" value="4063008G">
                 </div>
               </div>
             </div>
 
-            <!-- Table of Items -->
             <div class="flex-1">
-              <table class="invoice-table">
+              <table class="invoice-table table-theme-gc">
                 <thead>
                   <tr>
                     <th class="row-actions-cell no-print"></th>
@@ -348,31 +327,19 @@
                     <th class="text-right" style="width: 16%;">Total</th>
                   </tr>
                 </thead>
-                <tbody id="ws-items-tbody">
-                  <!-- Dynamically Rendered -->
-                </tbody>
+                <tbody id="ws-items-tbody"></tbody>
               </table>
-
-              <div class="no-print my-1.5 flex justify-start">
-                <button onclick="addWholesaleItem('New Item Description', 1, 0.00)" 
-                        class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium flex items-center gap-1 transition">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                  + Add Row
-                </button>
+              <div class="no-print my-1 flex justify-start">
+                <button onclick="addRow('wholesale')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Add Row</button>
               </div>
             </div>
 
-            <!-- Bottom Section: Notes on Left, Totals on Right -->
             <div class="invoice-bottom-grid">
-              
-              <!-- Left Notes -->
               <div class="invoice-notes-block flex flex-col justify-end">
                 <div class="font-medium text-slate-800">Make all checks payable to Company Name</div>
                 <div class="text-slate-600 mt-0.5">If you have any questions concerning this invoice, use the contact details above.</div>
-                <div class="font-bold text-slate-900 mt-1.5">Thank you for your business!</div>
+                <div class="font-bold text-slate-900 mt-1">Thank you for your business!</div>
               </div>
-
-              <!-- Right Totals Table -->
               <div>
                 <table class="totals-table">
                   <tr>
@@ -380,25 +347,20 @@
                     <td class="val-col" id="ws-subtotal-val">€ 653.95</td>
                   </tr>
                   <tr>
-                    <td class="label-col">
-                      <div class="flex items-center gap-1">
-                        <span>Tax Rate</span>
+                    <td class="label-col">Tax Rate (%)</td>
+                    <td class="val-col">
+                      <div class="flex items-center justify-end gap-1">
                         <input type="number" step="0.5" id="ws-taxrate-input" class="editable-cell-input text-right w-12 mono text-xs font-semibold" value="23.00">
-                        <span>%</span>
+                        <span class="text-xs text-slate-600">%</span>
                       </div>
                     </td>
-                    <td class="val-col text-xs text-slate-600 font-mono">23.00%</td>
                   </tr>
                   <tr>
                     <td class="label-col">VAT</td>
                     <td class="val-col" id="ws-vat-val">€ 150.41</td>
                   </tr>
                   <tr>
-                    <td class="label-col">
-                      <div class="flex items-center gap-1">
-                        <span>Other Costs</span>
-                      </div>
-                    </td>
+                    <td class="label-col">Other Costs</td>
                     <td class="val-col">
                       <div class="flex items-center justify-end">
                         <span class="text-gray-500 mr-1 text-xs">€</span>
@@ -412,23 +374,18 @@
                   </tr>
                 </table>
               </div>
-
             </div>
-
           </div>
         </div>
 
-
         <!-- ========================================================= -->
-        <!-- 2. RETAIL INVOICE CANVAS (I DIGITAL FUN / GET CONNECTED)  -->
+        <!-- PROFILE 2: RETAIL POS (I DIGITAL FUN)                     -->
         <!-- ========================================================= -->
-        <div id="retail-invoice-canvas" class="a4-sheet hidden">
-
-          <!-- Top Banner (Dynamic) -->
-          <div id="retail-header-banner" class="invoice-banner retail-idfl-banner-bg">
+        <div id="canvas-retail" class="a4-sheet hidden">
+          <div id="retail-header-banner" class="banner-retail-idfl">
             <div class="banner-logo-container">
               <div class="flex items-center gap-2.5">
-                <img id="retail-logo-img" src="assets/idfl-logo.png" alt="Brand Logo" class="h-10 object-contain drop-shadow-md">
+                <img id="retail-logo-img" src="assets/idfl-logo.png" alt="Logo" class="h-10 object-contain drop-shadow-md">
                 <span id="retail-brand-text" class="font-extrabold text-2xl tracking-wider text-white drop-shadow-md">I DIGITAL FUN</span>
               </div>
             </div>
@@ -444,10 +401,7 @@
             </div>
           </div>
 
-          <!-- Body -->
           <div class="invoice-body">
-
-            <!-- Title & Reference / Date -->
             <div class="invoice-top-details">
               <div>
                 <div class="invoice-title-large">COMMERCIAL VAT INVOICE</div>
@@ -456,7 +410,6 @@
                   <input type="text" id="rt-input-ref" class="editable-cell-input font-bold w-36 text-slate-900 mono text-xs" value="SALE/POS250582">
                 </div>
               </div>
-
               <div class="text-right">
                 <div class="text-xs font-semibold text-slate-700 flex items-center justify-end gap-1.5">
                   <span>Date:</span>
@@ -466,84 +419,52 @@
               </div>
             </div>
 
-            <!-- Two Column Grid: Bill To & Bill From -->
             <div class="billing-grid">
-              
-              <!-- Bill To -->
               <div class="bill-block">
                 <div class="bill-heading">Bill To</div>
                 <div class="bill-content">
-                  <div>
-                    <input type="text" id="rt-billto-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="Nigel Quinn" placeholder="Customer Name">
-                  </div>
-                  <div>
-                    <input type="email" id="rt-billto-email" class="editable-cell-input text-slate-700 text-[11px]" value="nigel.quinn@hotmail.com" placeholder="Email Address (Optional)">
-                  </div>
-                  <div>
-                    <input type="text" id="rt-billto-phone" class="editable-cell-input text-slate-700 text-[11px]" value="" placeholder="Phone Number (Optional)">
-                  </div>
-                  <div>
-                    <input type="text" id="rt-billto-address" class="editable-cell-input text-slate-700 text-[11px]" value="" placeholder="Address (Optional)">
-                  </div>
+                  <input type="text" id="rt-billto-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="Nigel Quinn" placeholder="Customer Name">
+                  <input type="email" id="rt-billto-email" class="editable-cell-input text-slate-700 text-[11px]" value="nigel.quinn@hotmail.com" placeholder="Email">
+                  <input type="text" id="rt-billto-phone" class="editable-cell-input text-slate-700 text-[11px]" value="" placeholder="Phone Number">
+                  <input type="text" id="rt-billto-address" class="editable-cell-input text-slate-700 text-[11px]" value="" placeholder="Address">
                 </div>
               </div>
 
-              <!-- Bill From -->
               <div class="bill-block">
                 <div class="bill-heading">Bill From</div>
                 <div class="bill-content">
-                  <div>
-                    <input type="text" id="rt-billfrom-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="I Digital Fun Thurles" placeholder="Store Branch">
-                  </div>
-                  <div>
-                    <textarea id="rt-billfrom-address" rows="2" class="editable-cell-input text-slate-700 text-[10.5px] resize-none" placeholder="Store Address">Thurles Shopping Centre, Unit 10 Slievenamon Rd, Thurles Townparks, Thurles, Co. Tipperary, E41 E674</textarea>
-                  </div>
-                  <div>
-                    <input type="text" id="rt-billfrom-phone" class="editable-cell-input text-slate-700 text-[11px]" value="+353 (0)87 314 1419" placeholder="Branch Phone">
-                  </div>
+                  <input type="text" id="rt-billfrom-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="I Digital Fun Thurles">
+                  <textarea id="rt-billfrom-address" rows="2" class="editable-cell-input text-slate-700 text-[10.5px] resize-none">Thurles Shopping Centre, Unit 10 Slievenamon Rd, Thurles, Co. Tipperary, E41 E674</textarea>
+                  <input type="text" id="rt-billfrom-phone" class="editable-cell-input text-slate-700 text-[11px]" value="+353 (0)87 314 1419">
                 </div>
               </div>
-
             </div>
 
-            <!-- Table of Items -->
             <div class="flex-1">
-              <table class="invoice-table">
+              <table class="invoice-table table-theme-idfl">
                 <thead>
                   <tr>
                     <th class="row-actions-cell no-print"></th>
                     <th>Item Description</th>
                     <th class="text-center" style="width: 10%;">QTY</th>
-                    <th class="text-right" style="width: 16%;">Shelf Price (Inc VAT)</th>
+                    <th class="text-right" style="width: 18%;">Shelf Price (Inc VAT)</th>
                     <th class="text-right" style="width: 16%;">Total</th>
                   </tr>
                 </thead>
-                <tbody id="rt-items-tbody">
-                  <!-- Dynamically Rendered -->
-                </tbody>
+                <tbody id="rt-items-tbody"></tbody>
               </table>
-
-              <div class="no-print my-1.5 flex justify-start">
-                <button onclick="addRetailItem('New Item Description', 1, 15.00)" 
-                        class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium flex items-center gap-1 transition">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                  + Add Row
-                </button>
+              <div class="no-print my-1 flex justify-start">
+                <button onclick="addRow('retail')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Add Row</button>
               </div>
             </div>
 
-            <!-- Bottom Section -->
             <div class="invoice-bottom-grid">
-              
-              <!-- Left Notes -->
               <div class="invoice-notes-block flex flex-col justify-end">
                 <div class="text-slate-700">If you have any questions concerning this invoice, use the following contact information:</div>
                 <div id="retail-notice-contact" class="font-semibold text-slate-900 mt-0.5">CONTACT: 057 868 2426 &nbsp;&nbsp; EMAIL: INFO@IDFLMOBILE.COM</div>
-                <div class="font-bold text-slate-900 mt-1.5">Thank you for your business!</div>
+                <div class="font-bold text-slate-900 mt-1">Thank you for your business!</div>
                 <div class="text-slate-600 text-[10px] mt-0.5">Make all checks payable to Company Name</div>
               </div>
-
-              <!-- Right Totals Table -->
               <div>
                 <table class="totals-table">
                   <tr>
@@ -551,25 +472,20 @@
                     <td class="val-col" id="rt-subtotal-val">€ 12.20</td>
                   </tr>
                   <tr>
-                    <td class="label-col">
-                      <div class="flex items-center gap-1">
-                        <span>Tax Rate</span>
+                    <td class="label-col">Tax Rate (%)</td>
+                    <td class="val-col">
+                      <div class="flex items-center justify-end gap-1">
                         <input type="number" step="0.5" id="rt-taxrate-input" class="editable-cell-input text-right w-12 mono text-xs font-semibold" value="23.00">
-                        <span>%</span>
+                        <span class="text-xs text-slate-600">%</span>
                       </div>
                     </td>
-                    <td class="val-col text-xs text-slate-600 font-mono">23.00%</td>
                   </tr>
                   <tr>
                     <td class="label-col">Vat Cost</td>
                     <td class="val-col" id="rt-vat-val">€ 2.80</td>
                   </tr>
                   <tr>
-                    <td class="label-col">
-                      <div class="flex items-center gap-1">
-                        <span>Other Costs</span>
-                      </div>
-                    </td>
+                    <td class="label-col">Other Costs</td>
                     <td class="val-col">
                       <div class="flex items-center justify-end">
                         <span class="text-gray-500 mr-1 text-xs">€</span>
@@ -583,9 +499,250 @@
                   </tr>
                 </table>
               </div>
+            </div>
+          </div>
+        </div>
 
+        <!-- ========================================================= -->
+        <!-- PROFILE 3: ACCESSORIES SPECIALIST INVOICE                 -->
+        <!-- ========================================================= -->
+        <div id="canvas-accessories" class="a4-sheet hidden">
+          <div class="banner-accessories">
+            <div class="banner-logo-container">
+              <div class="flex items-center gap-3">
+                <span class="text-3xl">🔌</span>
+                <span class="font-extrabold text-2xl tracking-wider text-white drop-shadow-md">PHONE ACCESSORIES DIRECT</span>
+              </div>
+            </div>
+            <div class="banner-footer-text">
+              <div>Unit 3 Kewlew Business park, Mountrath Rd, Portlaoise, Co. Laois, R32 W0DT</div>
+              <div>
+                <span>CONTACT: 057 868 2426</span>
+                <span class="sep">•</span>
+                <span>EMAIL: ORDERS@IDFLMOBILE.COM</span>
+                <span class="sep">•</span>
+                <span>VAT: IE33845510H</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="invoice-body">
+            <div class="invoice-top-details">
+              <div>
+                <div class="invoice-title-large text-teal-950">ACCESSORIES VAT INVOICE</div>
+                <div class="mt-1 flex items-center gap-1.5">
+                  <span class="text-xs text-slate-600 font-medium">Invoice Date:</span>
+                  <span id="acc-disp-date" class="text-xs font-bold text-slate-900">03/09/2026</span>
+                  <input type="date" id="acc-input-date" class="no-print text-[11px] border border-slate-300 rounded px-1.5 py-0.5 bg-white">
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs font-semibold text-slate-700 flex items-center justify-end gap-1.5">
+                  <span>Invoice #:</span>
+                  <input type="text" id="acc-input-invoiceno" class="editable-cell-input text-right font-bold w-28 text-slate-900 mono text-xs" value="ACC-89412">
+                </div>
+              </div>
             </div>
 
+            <div class="mb-2.5">
+              <div class="bill-heading text-teal-900">Bill To</div>
+              <div class="bill-content">
+                <input type="text" id="acc-billto-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="Tech Fix Solutions">
+                <input type="text" id="acc-billto-address" class="editable-cell-input text-slate-700 text-[11px]" value="Main Street, Portlaoise, Co. Laois">
+                <div class="bill-meta-row flex items-center gap-4 text-[11px] mt-0.5">
+                  <div class="flex items-center gap-1">
+                    <span class="font-medium text-slate-700">Phone:</span>
+                    <input type="text" id="acc-billto-phone" class="editable-cell-input text-slate-800 w-32 text-[11px]" value="+353 87 223 4455">
+                  </div>
+                  <div class="flex items-center gap-1">
+                    <span class="font-medium text-slate-700">Email:</span>
+                    <input type="email" id="acc-billto-email" class="editable-cell-input text-slate-800 w-44 text-[11px]" value="orders@techfix.ie">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-1">
+              <table class="invoice-table table-theme-acc">
+                <thead>
+                  <tr>
+                    <th class="row-actions-cell no-print"></th>
+                    <th>SKU Code</th>
+                    <th>Accessory Description & Model</th>
+                    <th class="text-center" style="width: 8%;">QTY</th>
+                    <th class="text-right" style="width: 15%;">Unit Price</th>
+                    <th class="text-right" style="width: 15%;">Total</th>
+                  </tr>
+                </thead>
+                <tbody id="acc-items-tbody"></tbody>
+              </table>
+              <div class="no-print my-1 flex justify-start">
+                <button onclick="addRow('accessories')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Add Accessory</button>
+              </div>
+            </div>
+
+            <div class="invoice-bottom-grid">
+              <div class="invoice-notes-block flex flex-col justify-end">
+                <div class="font-medium text-teal-900">Warranty: Standard 12-Month Replacement on all Accessories</div>
+                <div class="text-slate-600 mt-0.5">Thank you for your business!</div>
+              </div>
+              <div>
+                <table class="totals-table">
+                  <tr>
+                    <td class="label-col">Subtotal</td>
+                    <td class="val-col" id="acc-subtotal-val">€ 36.59</td>
+                  </tr>
+                  <tr>
+                    <td class="label-col">Tax Rate (%)</td>
+                    <td class="val-col">
+                      <div class="flex items-center justify-end gap-1">
+                        <input type="number" step="0.5" id="acc-taxrate-input" class="editable-cell-input text-right w-12 mono text-xs font-semibold" value="23.00">
+                        <span class="text-xs text-slate-600">%</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="label-col">VAT Amount</td>
+                    <td class="val-col" id="acc-vat-val">€ 8.41</td>
+                  </tr>
+                  <tr>
+                    <td class="label-col">Other Costs</td>
+                    <td class="val-col">
+                      <div class="flex items-center justify-end">
+                        <span class="text-gray-500 mr-1 text-xs">€</span>
+                        <input type="number" step="0.5" id="acc-other-input" class="editable-cell-input text-right mono font-semibold w-16 text-xs" value="0.00">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="total-due-row">
+                    <td class="label-col text-slate-900 font-bold">Total Due</td>
+                    <td class="val-col text-slate-900 font-bold text-xs" id="acc-totaldue-val">€ 45.00</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- PROFILE 4: DEVICES & IMEI SALES INVOICE                   -->
+        <!-- ========================================================= -->
+        <div id="canvas-devices" class="a4-sheet hidden">
+          <div class="banner-devices">
+            <div class="banner-logo-container">
+              <div class="flex items-center gap-3">
+                <span class="text-3xl">📱</span>
+                <span class="font-extrabold text-2xl tracking-wider text-white drop-shadow-md">CERTIFIED DEVICE SALES & REPAIRS</span>
+              </div>
+            </div>
+            <div class="banner-footer-text">
+              <div>Unit 3 Kewlew Business park, Mountrath Rd, Portlaoise, Co. Laois, R32 W0DT</div>
+              <div>
+                <span>CONTACT: 057 868 2426</span>
+                <span class="sep">•</span>
+                <span>EMAIL: DEVICES@IDFLMOBILE.COM</span>
+                <span class="sep">•</span>
+                <span>VAT: IE33845510H</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="invoice-body">
+            <div class="invoice-top-details">
+              <div>
+                <div class="invoice-title-large text-indigo-950">DEVICE SALES & WARRANTY INVOICE</div>
+                <div class="mt-1 flex items-center gap-1.5">
+                  <span class="text-xs text-slate-600 font-medium">Sale Date:</span>
+                  <span id="dev-disp-date" class="text-xs font-bold text-slate-900">03/09/2026</span>
+                  <input type="date" id="dev-input-date" class="no-print text-[11px] border border-slate-300 rounded px-1.5 py-0.5 bg-white">
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs font-semibold text-slate-700 flex items-center justify-end gap-1.5">
+                  <span>Device Invoice #:</span>
+                  <input type="text" id="dev-input-invoiceno" class="editable-cell-input text-right font-bold w-28 text-slate-900 mono text-xs" value="DEV-2026-501">
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-2.5">
+              <div class="bill-heading text-indigo-900">Customer Details</div>
+              <div class="bill-content">
+                <input type="text" id="dev-billto-name" class="editable-cell-input font-bold text-slate-900 text-xs" value="Sean O'Connor">
+                <input type="text" id="dev-billto-address" class="editable-cell-input text-slate-700 text-[11px]" value="14 Elm Court, Portlaoise, Co. Laois">
+                <div class="bill-meta-row flex items-center gap-4 text-[11px] mt-0.5">
+                  <div class="flex items-center gap-1">
+                    <span class="font-medium text-slate-700">Phone:</span>
+                    <input type="text" id="dev-billto-phone" class="editable-cell-input text-slate-800 w-32 text-[11px]" value="085 123 4567">
+                  </div>
+                  <div class="flex items-center gap-1">
+                    <span class="font-medium text-slate-700">Email:</span>
+                    <input type="email" id="dev-billto-email" class="editable-cell-input text-slate-800 w-44 text-[11px]" value="sean.oconnor@gmail.com">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-1">
+              <table class="invoice-table table-theme-dev">
+                <thead>
+                  <tr>
+                    <th class="row-actions-cell no-print"></th>
+                    <th>Device Model</th>
+                    <th>IMEI / Serial No</th>
+                    <th>Grade</th>
+                    <th>Warranty</th>
+                    <th class="text-right" style="width: 18%;">Price</th>
+                    <th class="text-right" style="width: 18%;">Total</th>
+                  </tr>
+                </thead>
+                <tbody id="dev-items-tbody"></tbody>
+              </table>
+              <div class="no-print my-1 flex justify-start">
+                <button onclick="addRow('devices')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded border border-slate-300 font-medium">+ Add Handset / Device</button>
+              </div>
+            </div>
+
+            <div class="invoice-bottom-grid">
+              <div class="invoice-notes-block flex flex-col justify-end">
+                <div class="font-semibold text-indigo-900">Warranty Agreement: Covers hardware faults for the stated period.</div>
+                <div class="text-slate-600 mt-0.5">Thank you for choosing certified devices!</div>
+              </div>
+              <div>
+                <table class="totals-table">
+                  <tr>
+                    <td class="label-col">Subtotal</td>
+                    <td class="val-col" id="dev-subtotal-val">€ 365.04</td>
+                  </tr>
+                  <tr>
+                    <td class="label-col">Tax Rate (%)</td>
+                    <td class="val-col">
+                      <div class="flex items-center justify-end gap-1">
+                        <input type="number" step="0.5" id="dev-taxrate-input" class="editable-cell-input text-right w-12 mono text-xs font-semibold" value="23.00">
+                        <span class="text-xs text-slate-600">%</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="label-col">VAT Amount</td>
+                    <td class="val-col" id="dev-vat-val">€ 83.96</td>
+                  </tr>
+                  <tr>
+                    <td class="label-col">Other Costs</td>
+                    <td class="val-col">
+                      <div class="flex items-center justify-end">
+                        <span class="text-gray-500 mr-1 text-xs">€</span>
+                        <input type="number" step="0.5" id="dev-other-input" class="editable-cell-input text-right mono font-semibold w-16 text-xs" value="0.00">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="total-due-row">
+                    <td class="label-col text-slate-900 font-bold">Total Due</td>
+                    <td class="val-col text-slate-900 font-bold text-xs" id="dev-totaldue-val">€ 449.00</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -595,7 +752,7 @@
 
   </main>
 
-  <!-- Saved Invoices Modal -->
+  <!-- Saved Invoices History Modal -->
   <div id="saved-invoices-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-xl w-full max-w-lg shadow-2xl overflow-hidden">
       <div class="p-3.5 border-b border-slate-800 flex items-center justify-between">
@@ -606,9 +763,7 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
       </div>
-      <div id="saved-invoices-list" class="p-3.5 max-h-80 overflow-y-auto flex flex-col gap-2">
-        <!-- Invoices List -->
-      </div>
+      <div id="saved-invoices-list" class="p-3.5 max-h-80 overflow-y-auto flex flex-col gap-2"></div>
       <div class="p-3 bg-slate-950/70 border-t border-slate-800 flex justify-end">
         <button onclick="closeSavedModal()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg">Close</button>
       </div>
