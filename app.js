@@ -1,9 +1,9 @@
 /**
  * VAT Invoice Web Application
- * Comprehensive engine for Get Connected (Wholesale) & I Digital Fun (Retail)
+ * Master engine for Get Connected (Wholesale) & I Digital Fun (Retail)
  */
 
-// Store Master Database from Shop Details.xlsx
+// Store Master Directory from Shop Details.xlsx
 const STORES = [
   {
     id: 1,
@@ -12,7 +12,8 @@ const STORES = [
     address: "Unit 3 Kealew Business Park, Mountrath Rd, Portlaoise, Co. Laois, R32 W0DT",
     phone: "+353 (0)57 868 2426",
     email: "INFO@IDFLMOBILE.COM",
-    vat: "IE33845510H"
+    vat: "IE33845510H",
+    brand: "IDFL"
   },
   {
     id: 2,
@@ -21,7 +22,8 @@ const STORES = [
     address: "3 Patrick Street, Tullamore, Co. Offaly, R35 R657",
     phone: "+353 (0)87 118 9894",
     email: "INFO@IDFLMOBILE.COM",
-    vat: "IE33845510H"
+    vat: "IE33845510H",
+    brand: "IDFL"
   },
   {
     id: 3,
@@ -30,7 +32,8 @@ const STORES = [
     address: "Unit 9, Harbour Place Shopping Centre, Harbour St, Mullingar, Co. Westmeath, N91 RY26",
     phone: "+353 (0)87 168 6903",
     email: "INFO@IDFLMOBILE.COM",
-    vat: "IE33845510H"
+    vat: "IE33845510H",
+    brand: "IDFL"
   },
   {
     id: 4,
@@ -39,7 +42,8 @@ const STORES = [
     address: "4A The Bridgewater Shopping Centre, North Quay, Arklow, Co. Wicklow, Y14 TD79",
     phone: "+353 (0)87 477 8512",
     email: "INFO@IDFLMOBILE.COM",
-    vat: "IE33845510H"
+    vat: "IE33845510H",
+    brand: "IDFL"
   },
   {
     id: 5,
@@ -48,7 +52,8 @@ const STORES = [
     address: "Unit 10A, Thurles Shopping Centre, Slievenamon Road, Thurles, Co. Tipperary, E41 E674",
     phone: "+353 (0)87 314 1419",
     email: "INFO@IDFLMOBILE.COM",
-    vat: "IE33845510H"
+    vat: "IE33845510H",
+    brand: "IDFL"
   },
   {
     id: 6,
@@ -57,7 +62,8 @@ const STORES = [
     address: "Parkway Shopping Centre, Dublin Road, Limerick, Co. Limerick",
     phone: "+353 (0)57 868 2426",
     email: "INFO@IDFLMOBILE.COM",
-    vat: "IE33845510H"
+    vat: "IE33845510H",
+    brand: "IDFL"
   },
   {
     id: 7,
@@ -66,7 +72,8 @@ const STORES = [
     address: "Whitewater Shopping Centre, Newbridge, Co. Kildare",
     phone: "+353 (0)57 868 2426",
     email: "INFO@IDFLMOBILE.COM",
-    vat: "IE33845510H"
+    vat: "IE33845510H",
+    brand: "IDFL"
   },
   {
     id: 8,
@@ -75,7 +82,8 @@ const STORES = [
     address: "Unit 15, Manor Mill Shopping Centre, Maynooth, Co. Kildare",
     phone: "+353 (0)87 715 5040",
     email: "INFO@IDFLMOBILE.COM",
-    vat: "IE33845510H"
+    vat: "IE33845510H",
+    brand: "IDFL"
   },
   {
     id: 9,
@@ -84,7 +92,8 @@ const STORES = [
     address: "Letterkenny Shopping Centre, Letterkenny, Co. Donegal",
     phone: "+353 (0)57 868 2426",
     email: "INFO@IDFLMOBILE.COM",
-    vat: "IE33845510H"
+    vat: "IE33845510H",
+    brand: "IDFL"
   },
   {
     id: 10,
@@ -93,7 +102,8 @@ const STORES = [
     address: "Killarney Outlet Centre, Killarney, Co. Kerry",
     phone: "+353 (0)57 868 2426",
     email: "INFO@IDFLMOBILE.COM",
-    vat: "IE33845510H"
+    vat: "IE33845510H",
+    brand: "IDFL"
   },
   {
     id: 11,
@@ -102,7 +112,8 @@ const STORES = [
     address: "Manorwest Shopping Centre, Tralee, Co. Kerry",
     phone: "+353 (0)87 118 9894",
     email: "INFO@IDFLMOBILE.COM",
-    vat: "IE33845510H"
+    vat: "IE33845510H",
+    brand: "IDFL"
   },
   {
     id: 12,
@@ -111,7 +122,8 @@ const STORES = [
     address: "Unit 20, Manor West Shopping Centre, Cloonalour, Tralee, Co. Kerry",
     phone: "+353 (0)57 868 2426",
     email: "getconnectedire@gmail.com",
-    vat: "IE9692928"
+    vat: "IE9692928",
+    brand: "GC"
   },
   {
     id: 13,
@@ -120,46 +132,55 @@ const STORES = [
     address: "MacDonagh Junction Shopping Centre, Kilkenny, Co. Kilkenny",
     phone: "+353 (0)87 477 8010",
     email: "getconnectedire@gmail.com",
-    vat: "IE9692928"
+    vat: "IE9692928",
+    brand: "GC"
   }
 ];
 
-// Preset Items for Accessories and Devices
-const PRESET_ITEMS = {
-  wholesale: [
-    { desc: "Gerlax GA-25YPS Charger", qty: 50, amount: 4.00 },
-    { desc: "GSK9 Mini Watch", qty: 6, amount: 24.925, displayAmount: 24.93 },
-    { desc: "Hoco CA202 Infrared Induction Wireless Charging", qty: 6, amount: 9.95 },
+// 4 Dedicated Catalogs (Wholesale Acc, Wholesale Dev, Retail Acc, Retail Dev)
+const CATALOGS = {
+  wholesaleAccessories: [
+    { desc: "Gerlax GA-25YPS Charger (Bulk Pack)", qty: 50, amount: 4.00 },
+    { desc: "GSK9 Mini Smart Watch", qty: 6, amount: 24.925 },
+    { desc: "Hoco CA202 Infrared Induction Wireless Charger", qty: 6, amount: 9.95 },
     { desc: "Hoco X91 Type-C to Type-C Cable 3m", qty: 10, amount: 2.49 },
     { desc: "Hoco X91 Type-C to Lightning Cable 3m", qty: 10, amount: 2.49 },
-    { desc: "Smart Case 10th 2022 (2blk,1grn,1pnk,1red)", qty: 5, amount: 5.95 },
-    { desc: "Borofone BC48 Transmitter", qty: 10, amount: 5.95 },
-    { desc: "Apple Pamper Case 40mm", qty: 20, amount: 0.90 },
-    { desc: "Apple Pamper Case 41mm", qty: 20, amount: 0.90 },
-    { desc: "Hoco X93 Fast Data Cable Type C to Type C", qty: 10, amount: 2.45 },
-    { desc: "Hoco X93 Fast Data Cable Type C to Lightning", qty: 10, amount: 2.45 },
-    { desc: "Hoco CA52 Air outlet In-car Holder", qty: 7, amount: 2.95 }
+    { desc: "Smart Case 10th 2022 (Assorted Colours)", qty: 5, amount: 5.95 },
+    { desc: "Borofone BC48 Wireless Transmitter", qty: 10, amount: 5.95 },
+    { desc: "Apple Pamper Watch Case 40mm", qty: 20, amount: 0.90 },
+    { desc: "Apple Pamper Watch Case 41mm", qty: 20, amount: 0.90 },
+    { desc: "Hoco X93 Fast Data Cable Type-C to Type-C", qty: 10, amount: 2.45 },
+    { desc: "Hoco X93 Fast Data Cable Type-C to Lightning", qty: 10, amount: 2.45 },
+    { desc: "Hoco CA52 Air Outlet In-Car Magnetic Holder", qty: 7, amount: 2.95 }
   ],
-  accessories: [
+  wholesaleDevices: [
+    { desc: "Apple iPhone 11 64GB - Grade A (Wholesale Lot)", qty: 5, amount: 195.00 },
+    { desc: "Apple iPhone 12 128GB - Grade A (Wholesale Lot)", qty: 5, amount: 275.00 },
+    { desc: "Apple iPhone 13 128GB - Grade A (Wholesale Lot)", qty: 3, amount: 360.00 },
+    { desc: "Samsung Galaxy A14 64GB (Black) - Brand New Boxed", qty: 10, amount: 115.00 },
+    { desc: "Samsung Galaxy A54 5G 128GB - Brand New Boxed", qty: 5, amount: 235.00 },
+    { desc: "Apple iPad 10th Gen 64GB WiFi - Grade A Pack", qty: 3, amount: 295.00 }
+  ],
+  retailAccessories: [
     { desc: "00SSTG002 - TG Samsung A10/A20/A30/A50/A51", grossPrice: 15.00 },
-    { desc: "Tempered Glass Screen Protector - iPhone", grossPrice: 15.00 },
-    { desc: "20W PD Fast Charging Adapter", grossPrice: 15.00 },
-    { desc: "Type-C to Lightning Fast Cable 1m", grossPrice: 10.00 },
-    { desc: "Type-C to Type-C Fast Cable 1m", grossPrice: 10.00 },
-    { desc: "Shockproof Clear Case Series", grossPrice: 15.00 },
-    { desc: "Magnetic MagSafe Wireless Car Holder", grossPrice: 25.00 },
-    { desc: "TWS Wireless Bluetooth Earbuds Pro", grossPrice: 30.00 },
-    { desc: "10000mAh Ultra-Slim Power Bank", grossPrice: 25.00 },
-    { desc: "Heavy Duty Armor Ring Stand Case", grossPrice: 20.00 }
+    { desc: "Tempered Glass Screen Protector - iPhone Series", grossPrice: 15.00 },
+    { desc: "20W PD USB-C Fast Charging Adapter", grossPrice: 15.00 },
+    { desc: "Type-C to Lightning Fast Charge Cable 1m", grossPrice: 10.00 },
+    { desc: "Type-C to Type-C Fast Charge Cable 1m", grossPrice: 10.00 },
+    { desc: "Shockproof Clear Hybrid Armor Case", grossPrice: 15.00 },
+    { desc: "Magnetic MagSafe Fast Wireless Car Mount", grossPrice: 25.00 },
+    { desc: "TWS True Wireless Bluetooth Earbuds Pro", grossPrice: 30.00 },
+    { desc: "10,000mAh Ultra-Slim Fast Power Bank", grossPrice: 25.00 },
+    { desc: "Heavy Duty Shockproof Armor Ring Stand Case", grossPrice: 20.00 }
   ],
-  devices: [
-    { desc: "Apple iPhone 11 64GB - Grade A (Unlocked)", grossPrice: 249.00 },
-    { desc: "Apple iPhone 12 128GB - Grade A (Unlocked)", grossPrice: 349.00 },
-    { desc: "Apple iPhone 13 128GB - Grade A (Unlocked)", grossPrice: 449.00 },
-    { desc: "Samsung Galaxy A14 64GB (Black)", grossPrice: 149.00 },
-    { desc: "Samsung Galaxy A54 5G 128GB", grossPrice: 299.00 },
-    { desc: "Apple iPad 10th Gen 64GB WiFi", grossPrice: 389.00 },
-    { desc: "Samsung Galaxy Tab A8 10.5 32GB", grossPrice: 189.00 }
+  retailDevices: [
+    { desc: "Apple iPhone 11 64GB - Grade A (Unlocked) | IMEI Tracked", grossPrice: 249.00 },
+    { desc: "Apple iPhone 12 128GB - Grade A (Unlocked) | IMEI Tracked", grossPrice: 349.00 },
+    { desc: "Apple iPhone 13 128GB - Grade A (Unlocked) | IMEI Tracked", grossPrice: 449.00 },
+    { desc: "Samsung Galaxy A14 64GB (Black) | 24M Warranty", grossPrice: 149.00 },
+    { desc: "Samsung Galaxy A54 5G 128GB | 24M Warranty", grossPrice: 299.00 },
+    { desc: "Apple iPad 10th Gen 64GB WiFi (Silver) | 12M Warranty", grossPrice: 389.00 },
+    { desc: "Samsung Galaxy Tab A8 10.5 32GB WiFi | 12M Warranty", grossPrice: 189.00 }
   ]
 };
 
@@ -186,6 +207,7 @@ const state = {
     reference: 'SALE/POS250582',
     date: '2026-08-24',
     selectedStoreId: 5, // Thurles default
+    activeHeaderBrand: 'IDFL', // 'IDFL' or 'GC'
     billFromCustom: {
       name: 'I Digital Fun Thurles',
       address: 'Thurles Shopping Centre, Unit 10 Slievenamon Rd, Thurles Townparks, Thurles, Co. Tipperary, E41 E674',
@@ -246,17 +268,18 @@ function populateStoreDropdowns() {
   const billToSelectWholesale = document.getElementById('wholesale-store-select');
   
   if (billFromSelect) {
-    billFromSelect.innerHTML = '<option value="">-- Choose Branch Preset (13 Stores) --</option>';
+    billFromSelect.innerHTML = '<option value="">-- Choose Branch (13 Stores) --</option>';
     STORES.forEach(s => {
       const opt = document.createElement('option');
       opt.value = s.id;
       opt.textContent = `${s.name} (${s.city})`;
+      if (s.id === state.retail.selectedStoreId) opt.selected = true;
       billFromSelect.appendChild(opt);
     });
   }
 
   if (billToSelectWholesale) {
-    billToSelectWholesale.innerHTML = '<option value="">-- Select Store / Customer Preset --</option>';
+    billToSelectWholesale.innerHTML = '<option value="">-- Select Customer / Store Preset --</option>';
     STORES.forEach(s => {
       const opt = document.createElement('option');
       opt.value = s.id;
@@ -302,6 +325,7 @@ function loadSampleRetailData() {
   state.retail.reference = 'SALE/POS250582';
   state.retail.date = '2026-08-24';
   state.retail.selectedStoreId = 5;
+  state.retail.activeHeaderBrand = 'IDFL';
   state.retail.billFromCustom = {
     name: 'I Digital Fun Thurles',
     address: 'Thurles Shopping Centre, Unit 10 Slievenamon Rd, Thurles Townparks, Thurles, Co. Tipperary, E41 E674',
@@ -317,9 +341,9 @@ function loadSampleRetailData() {
   };
   state.retail.taxRate = 23.00;
   state.retail.otherCosts = 0.00;
-  // In sample: Gross price is €15.00 -> Net Amount is 15 / 1.23 = 12.20
+  // Sample: Gross price €15.00 -> Net Amount 15 / 1.23 = 12.20
   state.retail.items = [
-    { desc: '00SSTG002 - TG Samsung A10/A20/A30/A50/A51', qty: 1, grossPrice: 15.00 }
+    { desc: '00SSTG002 - TG Samsung A10/A20/A30/A50/A51', qty: 1, grossPrice: 15.00, amount: 15 / 1.23 }
   ];
 }
 
@@ -450,27 +474,32 @@ function renderWholesaleCanvas() {
       </td>
       <td style="width: 58%;">
         <input type="text" class="editable-cell-input font-medium" value="${escapeHtml(item.desc)}" 
-               oninput="updateWholesaleItemField(${index}, 'desc', this.value)" placeholder="Item Description">
+               oninput="updateWholesaleItemDesc(${index}, this.value)" placeholder="Item Description">
       </td>
       <td style="width: 10%; text-align: center;">
         <input type="number" step="1" min="1" class="editable-cell-input text-center mono font-medium" 
-               value="${item.qty}" oninput="updateWholesaleItemField(${index}, 'qty', this.value)">
+               value="${item.qty}" oninput="updateWholesaleItemCalcField(${index}, 'qty', this.value)">
       </td>
       <td style="width: 16%; text-align: right;">
         <div class="flex items-center justify-end">
           <span class="text-gray-500 mr-1 text-xs">€</span>
           <input type="number" step="0.01" min="0" class="editable-cell-input text-right mono font-medium" 
-                 value="${Number(item.amount).toFixed(2)}" oninput="updateWholesaleItemField(${index}, 'amount', this.value)">
+                 value="${Number(item.amount).toFixed(2)}" oninput="updateWholesaleItemCalcField(${index}, 'amount', this.value)">
         </div>
       </td>
-      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace;">
+      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace;" id="ws-linetotal-${index}">
         ${formatEuro(item.lineTotal)}
       </td>
     `;
     tbody.appendChild(tr);
   });
 
-  // Render Totals
+  updateWholesaleSummaryDisplays(calc);
+}
+
+// Update Wholesale Summary Totals without destroying inputs
+function updateWholesaleSummaryDisplays(calc) {
+  if (!calc) calc = calculateWholesale();
   document.getElementById('ws-subtotal-val').textContent = formatEuro(calc.subtotal);
   document.getElementById('ws-taxrate-input').value = Number(calc.taxRate).toFixed(2);
   document.getElementById('ws-vat-val').textContent = formatEuro(calc.vatAmount);
@@ -478,10 +507,77 @@ function renderWholesaleCanvas() {
   document.getElementById('ws-totaldue-val').textContent = formatEuro(calc.totalDue);
 }
 
+// In-place update for Wholesale Item description (No re-rendering so typing never loses cursor focus!)
+function updateWholesaleItemDesc(index, value) {
+  if (state.wholesale.items[index]) {
+    state.wholesale.items[index].desc = value;
+  }
+}
+
+// In-place update for Wholesale quantity or amount
+function updateWholesaleItemCalcField(index, field, value) {
+  if (!state.wholesale.items[index]) return;
+  state.wholesale.items[index][field] = parseNum(value);
+  
+  const calc = calculateWholesale();
+  const item = state.wholesale.items[index];
+  const lineTotalCell = document.getElementById(`ws-linetotal-${index}`);
+  if (lineTotalCell) {
+    lineTotalCell.textContent = formatEuro(item.lineTotal);
+  }
+  updateWholesaleSummaryDisplays(calc);
+}
+
 // Render Retail Invoice Canvas
 function renderRetailCanvas() {
   const data = state.retail;
   const calc = calculateRetail();
+
+  // Dynamic Header Switch (IDFL vs Get Connected)
+  const isGC = data.activeHeaderBrand === 'GC';
+  const headerElem = document.getElementById('retail-header-banner');
+  const logoElem = document.getElementById('retail-logo-img');
+  const brandTextElem = document.getElementById('retail-brand-text');
+  const contactTextElem = document.getElementById('retail-header-contact');
+  const noticeContactElem = document.getElementById('retail-notice-contact');
+
+  if (isGC) {
+    headerElem.className = 'invoice-banner retail-gc-banner-bg';
+    logoElem.src = 'assets/get-connected-banner-text.png';
+    logoElem.className = 'h-9 object-contain drop-shadow-md';
+    brandTextElem.textContent = '';
+    contactTextElem.innerHTML = `
+      <div>Unit 3 Kewlew Business park, Mountrath Rd, Portlaoise, Co. Laois, R32 W0DT</div>
+      <div>
+        <span>CONTACT: +353(0)857403331</span>
+        <span class="sep">•</span>
+        <span>EMAIL: getconnectedire@gmail.com</span>
+        <span class="sep">•</span>
+        <span>VAT: IE9692928</span>
+      </div>
+    `;
+    if (noticeContactElem) {
+      noticeContactElem.textContent = 'CONTACT: +353(0)857403331    EMAIL: getconnectedire@gmail.com';
+    }
+  } else {
+    headerElem.className = 'invoice-banner retail-idfl-banner-bg';
+    logoElem.src = 'assets/idfl-logo.png';
+    logoElem.className = 'h-10 object-contain drop-shadow-md';
+    brandTextElem.textContent = 'I DIGITAL FUN';
+    contactTextElem.innerHTML = `
+      <div>Unit 3 Kewlew Business park, Mountrath Rd, Portlaoise, Co. Laois, R32 W0DT</div>
+      <div>
+        <span>CONTACT: 057 868 2426</span>
+        <span class="sep">•</span>
+        <span>EMAIL: INFO@IDFLMOBILE.COM</span>
+        <span class="sep">•</span>
+        <span>VAT: IE33845510H</span>
+      </div>
+    `;
+    if (noticeContactElem) {
+      noticeContactElem.textContent = 'CONTACT: 057 868 2426    EMAIL: INFO@IDFLMOBILE.COM';
+    }
+  }
 
   // Top details
   document.getElementById('rt-input-ref').value = data.reference;
@@ -506,6 +602,9 @@ function renderRetailCanvas() {
   data.items.forEach((item, index) => {
     const tr = document.createElement('tr');
     tr.className = 'item-row';
+    const displayGross = item.grossPrice ? Number(item.grossPrice).toFixed(2) : (Number(item.amount) * 1.23).toFixed(2);
+    const displayNet = Number(item.amount).toFixed(2);
+
     tr.innerHTML = `
       <td class="row-actions-cell no-print">
         <div class="row-actions">
@@ -519,29 +618,34 @@ function renderRetailCanvas() {
       </td>
       <td style="width: 58%;">
         <input type="text" class="editable-cell-input font-medium" value="${escapeHtml(item.desc)}" 
-               oninput="updateRetailItemField(${index}, 'desc', this.value)" placeholder="Item Description">
+               oninput="updateRetailItemDesc(${index}, this.value)" placeholder="Item Description">
       </td>
       <td style="width: 10%; text-align: center;">
         <input type="number" step="1" min="1" class="editable-cell-input text-center mono font-medium" 
-               value="${item.qty}" oninput="updateRetailItemField(${index}, 'qty', this.value)">
+               value="${item.qty}" oninput="updateRetailItemCalcField(${index}, 'qty', this.value)">
       </td>
       <td style="width: 16%; text-align: right;">
-        <div class="flex items-center justify-end">
+        <div class="flex items-center justify-end" title="Enter Shelf Price (e.g. 15) -> Auto converts to 15 / 1.23 = 12.20">
           <span class="text-gray-500 mr-1 text-xs">€</span>
           <input type="number" step="0.01" min="0" class="editable-cell-input text-right mono font-medium" 
-                 value="${Number(item.amount).toFixed(2)}" 
-                 title="Net Unit Price (ex-VAT = Gross / 1.23)"
-                 oninput="updateRetailItemField(${index}, 'amount', this.value)">
+                 value="${displayGross}" 
+                 placeholder="Gross €"
+                 oninput="updateRetailItemGrossPrice(${index}, this.value)">
         </div>
       </td>
-      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace;">
+      <td style="width: 16%; text-align: right; font-weight: 600; font-family: 'JetBrains Mono', monospace;" id="rt-linetotal-${index}">
         ${formatEuro(item.lineTotal)}
       </td>
     `;
     tbody.appendChild(tr);
   });
 
-  // Render Totals
+  updateRetailSummaryDisplays(calc);
+}
+
+// Update Retail Summary Totals without destroying inputs
+function updateRetailSummaryDisplays(calc) {
+  if (!calc) calc = calculateRetail();
   document.getElementById('rt-subtotal-val').textContent = formatEuro(calc.subtotal);
   document.getElementById('rt-taxrate-input').value = Number(calc.taxRate).toFixed(2);
   document.getElementById('rt-vat-val').textContent = formatEuro(calc.vatAmount);
@@ -549,13 +653,45 @@ function renderRetailCanvas() {
   document.getElementById('rt-totaldue-val').textContent = formatEuro(calc.totalDue);
 }
 
-// Wholesale Item Manipulations
-function updateWholesaleItemField(index, field, value) {
-  if (!state.wholesale.items[index]) return;
-  state.wholesale.items[index][field] = value;
-  renderWholesaleCanvas();
+// In-place update for Retail Item description
+function updateRetailItemDesc(index, value) {
+  if (state.retail.items[index]) {
+    state.retail.items[index].desc = value;
+  }
 }
 
+// In-place update for Retail Item Gross Price (Price / 1.23)
+function updateRetailItemGrossPrice(index, value) {
+  if (!state.retail.items[index]) return;
+  const gross = parseNum(value);
+  const taxRate = parseNum(state.retail.taxRate) || 23;
+  state.retail.items[index].grossPrice = gross;
+  state.retail.items[index].amount = gross / (1 + (taxRate / 100));
+
+  const calc = calculateRetail();
+  const item = state.retail.items[index];
+  const lineTotalCell = document.getElementById(`rt-linetotal-${index}`);
+  if (lineTotalCell) {
+    lineTotalCell.textContent = formatEuro(item.lineTotal);
+  }
+  updateRetailSummaryDisplays(calc);
+}
+
+// In-place update for Retail quantity
+function updateRetailItemCalcField(index, field, value) {
+  if (!state.retail.items[index]) return;
+  state.retail.items[index][field] = parseNum(value);
+  
+  const calc = calculateRetail();
+  const item = state.retail.items[index];
+  const lineTotalCell = document.getElementById(`rt-linetotal-${index}`);
+  if (lineTotalCell) {
+    lineTotalCell.textContent = formatEuro(item.lineTotal);
+  }
+  updateRetailSummaryDisplays(calc);
+}
+
+// Row Add / Delete Handlers (Full table update only when rows change)
 function addWholesaleItem(desc = 'New Wholesale Item', qty = 1, amount = 0.00) {
   state.wholesale.items.push({ desc, qty: Number(qty), amount: Number(amount) });
   renderWholesaleCanvas();
@@ -574,22 +710,6 @@ function duplicateWholesaleItem(index) {
     renderWholesaleCanvas();
     showToast('Row duplicated');
   }
-}
-
-// Retail Item Manipulations
-function updateRetailItemField(index, field, value) {
-  if (!state.retail.items[index]) return;
-  
-  if (field === 'amount') {
-    state.retail.items[index].amount = parseNum(value);
-    delete state.retail.items[index].grossPrice;
-  } else if (field === 'qty') {
-    state.retail.items[index].qty = parseNum(value);
-  } else {
-    state.retail.items[index][field] = value;
-  }
-  
-  renderRetailCanvas();
 }
 
 function addRetailItem(desc = 'New Accessory / Device', qty = 1, grossPrice = 15.00) {
@@ -620,40 +740,31 @@ function duplicateRetailItem(index) {
   }
 }
 
-// Quick Preset Handlers
-function addPresetToCurrentInvoice(type, index) {
-  if (state.currentTab === 'wholesale') {
-    if (type === 'wholesale') {
-      const p = PRESET_ITEMS.wholesale[index];
-      addWholesaleItem(p.desc, p.qty, p.amount);
-    } else if (type === 'accessories') {
-      const p = PRESET_ITEMS.accessories[index];
-      addWholesaleItem(p.desc, 10, Math.round((p.grossPrice / 1.23) * 100) / 100);
-    } else if (type === 'devices') {
-      const p = PRESET_ITEMS.devices[index];
-      addWholesaleItem(p.desc, 1, Math.round((p.grossPrice / 1.23) * 100) / 100);
-    }
-  } else {
-    if (type === 'accessories') {
-      const p = PRESET_ITEMS.accessories[index];
-      addRetailItem(p.desc, 1, p.grossPrice);
-    } else if (type === 'devices') {
-      const p = PRESET_ITEMS.devices[index];
-      addRetailItem(p.desc, 1, p.grossPrice);
-    } else if (type === 'wholesale') {
-      const p = PRESET_ITEMS.wholesale[index];
-      addRetailItem(p.desc, p.qty, Math.round((p.amount * 1.23) * 100) / 100);
-    }
+// Catalog Preset Handlers for 4 Distinct Sections
+function addCatalogItem(catalogName, index) {
+  if (catalogName === 'wholesaleAccessories') {
+    const it = CATALOGS.wholesaleAccessories[index];
+    addWholesaleItem(it.desc, it.qty, it.amount);
+  } else if (catalogName === 'wholesaleDevices') {
+    const it = CATALOGS.wholesaleDevices[index];
+    addWholesaleItem(it.desc, it.qty, it.amount);
+  } else if (catalogName === 'retailAccessories') {
+    const it = CATALOGS.retailAccessories[index];
+    addRetailItem(it.desc, 1, it.grossPrice);
+  } else if (catalogName === 'retailDevices') {
+    const it = CATALOGS.retailDevices[index];
+    addRetailItem(it.desc, 1, it.grossPrice);
   }
 }
 
-// Store Selection Handler
+// Branch Selection Handler (Dynamic Switch to Get Connected if GC store selected in Retail)
 function onStoreSelectChanged(tab, storeId) {
   const store = STORES.find(s => s.id === Number(storeId));
   if (!store) return;
 
   if (tab === 'retail') {
     state.retail.selectedStoreId = store.id;
+    state.retail.activeHeaderBrand = store.brand; // 'GC' or 'IDFL'
     state.retail.billFromCustom = {
       name: store.name,
       address: store.address,
@@ -661,7 +772,7 @@ function onStoreSelectChanged(tab, storeId) {
       email: store.email
     };
     renderRetailCanvas();
-    showToast(`Selected Store: ${store.name}`);
+    showToast(`Branch selected: ${store.name}`);
   } else if (tab === 'wholesale') {
     state.wholesale.billTo = {
       name: store.name,
@@ -679,29 +790,36 @@ function onStoreSelectChanged(tab, storeId) {
 function setQuickTaxRate(rate) {
   if (state.currentTab === 'wholesale') {
     state.wholesale.taxRate = Number(rate);
-    renderWholesaleCanvas();
+    const calc = calculateWholesale();
+    updateWholesaleSummaryDisplays(calc);
   } else {
     state.retail.taxRate = Number(rate);
+    // Recalculate net amounts for retail items with gross price
+    state.retail.items.forEach(it => {
+      if (it.grossPrice) {
+        it.amount = it.grossPrice / (1 + (rate / 100));
+      }
+    });
     renderRetailCanvas();
   }
   showToast(`Tax Rate set to ${rate}%`);
 }
 
-// Generate New Reference / Invoice #
+// Auto New Invoice Number
 function generateNewInvoiceNumber() {
   const rand = Math.floor(100000 + Math.random() * 900000);
   if (state.currentTab === 'wholesale') {
     state.wholesale.invoiceNo = String(rand);
-    renderWholesaleCanvas();
+    document.getElementById('ws-input-invoiceno').value = rand;
     showToast(`Generated Invoice # ${rand}`);
   } else {
     state.retail.reference = `SALE/POS${rand}`;
-    renderRetailCanvas();
+    document.getElementById('rt-input-ref').value = `SALE/POS${rand}`;
     showToast(`Generated Reference SALE/POS${rand}`);
   }
 }
 
-// Clear / Reset
+// Reset Current Invoice
 function resetCurrentInvoice() {
   if (confirm('Are you sure you want to reset the current invoice?')) {
     if (state.currentTab === 'wholesale') {
@@ -776,22 +894,7 @@ function deleteSavedInvoiceRecord(id, e) {
   showToast('Invoice deleted from history');
 }
 
-// Export as JSON
-function exportInvoiceJSON() {
-  const isWs = state.currentTab === 'wholesale';
-  const data = isWs ? state.wholesale : state.retail;
-  const jsonStr = JSON.stringify({ type: state.currentTab, exportedAt: new Date(), ...data }, null, 2);
-  const blob = new Blob([jsonStr], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${state.currentTab}_invoice_${isWs ? data.invoiceNo : data.reference}_${Date.now()}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('Exported JSON');
-}
-
-// Export to CSV
+// Export CSV
 function exportInvoiceCSV() {
   const isWs = state.currentTab === 'wholesale';
   const data = isWs ? state.wholesale : state.retail;
@@ -817,6 +920,21 @@ function exportInvoiceCSV() {
   showToast('Exported CSV');
 }
 
+// Export JSON
+function exportInvoiceJSON() {
+  const isWs = state.currentTab === 'wholesale';
+  const data = isWs ? state.wholesale : state.retail;
+  const jsonStr = JSON.stringify({ type: state.currentTab, exportedAt: new Date(), ...data }, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${state.currentTab}_invoice_${isWs ? data.invoiceNo : data.reference}_${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Exported JSON');
+}
+
 // Import JSON
 function importInvoiceJSON(file) {
   if (!file) return;
@@ -839,7 +957,7 @@ function importInvoiceJSON(file) {
   reader.readAsText(file);
 }
 
-// Print / PDF
+// Print / PDF Trigger
 function triggerPrint() {
   window.print();
 }
@@ -921,12 +1039,12 @@ function setupEventListeners() {
   // Wholesale Listeners
   document.getElementById('ws-input-date')?.addEventListener('change', (e) => {
     state.wholesale.date = e.target.value;
-    renderWholesaleCanvas();
+    document.getElementById('ws-disp-date').textContent = formatDateDisplay(e.target.value);
   });
   document.getElementById('ws-input-invoiceno')?.addEventListener('input', (e) => {
     state.wholesale.invoiceNo = e.target.value;
   });
-  document.getElementById('ws-input-payment')?.addEventListener('change', (e) => {
+  document.getElementById('ws-input-payment')?.addEventListener('input', (e) => {
     state.wholesale.paymentMethod = e.target.value;
   });
   document.getElementById('ws-billto-name')?.addEventListener('input', (e) => {
@@ -946,17 +1064,19 @@ function setupEventListeners() {
   });
   document.getElementById('ws-taxrate-input')?.addEventListener('input', (e) => {
     state.wholesale.taxRate = parseNum(e.target.value);
-    renderWholesaleCanvas();
+    const calc = calculateWholesale();
+    updateWholesaleSummaryDisplays(calc);
   });
   document.getElementById('ws-other-input')?.addEventListener('input', (e) => {
     state.wholesale.otherCosts = parseNum(e.target.value);
-    renderWholesaleCanvas();
+    const calc = calculateWholesale();
+    updateWholesaleSummaryDisplays(calc);
   });
 
   // Retail Listeners
   document.getElementById('rt-input-date')?.addEventListener('change', (e) => {
     state.retail.date = e.target.value;
-    renderRetailCanvas();
+    document.getElementById('rt-disp-date').textContent = formatDateDisplay(e.target.value);
   });
   document.getElementById('rt-input-ref')?.addEventListener('input', (e) => {
     state.retail.reference = e.target.value;
@@ -983,15 +1103,23 @@ function setupEventListeners() {
     state.retail.billTo.address = e.target.value;
   });
   document.getElementById('rt-taxrate-input')?.addEventListener('input', (e) => {
-    state.retail.taxRate = parseNum(e.target.value);
+    const rate = parseNum(e.target.value);
+    state.retail.taxRate = rate;
+    // Auto recompute net amount on all retail items with gross prices
+    state.retail.items.forEach(it => {
+      if (it.grossPrice) {
+        it.amount = it.grossPrice / (1 + (rate / 100));
+      }
+    });
     renderRetailCanvas();
   });
   document.getElementById('rt-other-input')?.addEventListener('input', (e) => {
     state.retail.otherCosts = parseNum(e.target.value);
-    renderRetailCanvas();
+    const calc = calculateRetail();
+    updateRetailSummaryDisplays(calc);
   });
 
-  // Keyboard shortcut Ctrl+P / Cmd+P
+  // Shortcut Ctrl+P
   window.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
       e.preventDefault();
