@@ -190,6 +190,7 @@ const state = {
   scannedItemsBuffer: [],
   profiles: {
     ws_acc: {
+      pricingMode: 'net',
       invoiceNo: '223802',
       date: '2024-02-14',
       paymentMethod: 'Card',
@@ -205,6 +206,7 @@ const state = {
       otherCosts: 0.00
     },
     ws_dev: {
+      pricingMode: 'net',
       invoiceNo: 'GC-DEV-8821',
       date: '2024-02-14',
       paymentMethod: 'Bank Transfer',
@@ -220,6 +222,7 @@ const state = {
       otherCosts: 0.00
     },
     rt_acc: {
+      pricingMode: 'gross',
       reference: 'SALE/POS250582',
       date: '2026-08-24',
       selectedStoreId: 5,
@@ -241,6 +244,7 @@ const state = {
       otherCosts: 0.00
     },
     rt_dev: {
+      pricingMode: 'gross',
       reference: 'SALE/POS994120',
       date: '2026-08-24',
       selectedStoreId: 5,
@@ -335,13 +339,24 @@ function populateStoreDropdowns() {
 
 // Load Samples
 function loadAllSampleData() {
-  state.profiles.ws_acc.items = JSON.parse(JSON.stringify(CATALOGS.wsAccessories));
-  state.profiles.ws_dev.items = JSON.parse(JSON.stringify(CATALOGS.wsDevices));
+  state.profiles.ws_acc.items = CATALOGS.wsAccessories.map(it => ({
+    desc: it.desc,
+    qty: it.qty,
+    amount: it.amount,
+    grossPrice: round2(it.amount * 1.23)
+  }));
+  state.profiles.ws_dev.items = CATALOGS.wsDevices.map(it => ({
+    model: it.model,
+    specs: it.specs,
+    qty: it.qty,
+    amount: it.amount,
+    grossPrice: round2(it.amount * 1.23)
+  }));
   state.profiles.rt_acc.items = [
-    { sku: '00SSTG002', desc: '00SSTG002 - TG Samsung A10/A20/A30/A50/A51', qty: 1, grossPrice: 15.00 }
+    { sku: '00SSTG002', desc: '00SSTG002 - TG Samsung A10/A20/A30/A50/A51', qty: 1, grossPrice: 15.00, amount: 12.20 }
   ];
   state.profiles.rt_dev.items = [
-    { desc: '359012348756230 - Apple iPhone 13 128GB Midnight', grade: 'Brand New', qty: 1, grossPrice: 449.00 }
+    { desc: '359012348756230 - Apple iPhone 13 128GB Midnight', grade: 'Brand New', qty: 1, grossPrice: 449.00, amount: 365.04 }
   ];
 }
 
@@ -413,29 +428,21 @@ function calculateProfileTotals(profileKey) {
   const taxRate = parseNum(prof.taxRate) || 23;
   const taxMultiplier = 1 + (taxRate / 100);
   const otherCosts = parseNum(prof.otherCosts) || 0;
+  const isGross = prof.pricingMode === 'gross';
 
   let subtotal = 0;
   let totalGross = 0;
 
-  if (profileKey.startsWith('ws_')) {
+  if (isGross) {
     prof.items.forEach(it => {
       const qty = parseNum(it.qty) || 1;
-      const amount = parseNum(it.amount) || 0;
-      const lineTotal = round2(qty * amount);
-      it.lineTotal = lineTotal;
-      subtotal += lineTotal;
-    });
-    subtotal = round2(subtotal);
-    const vatAmount = round2(subtotal * (taxRate / 100));
-    const totalDue = round2(subtotal + vatAmount + otherCosts);
-    return { subtotal, taxRate, vatAmount, otherCosts, totalDue };
-  } else {
-    prof.items.forEach(it => {
-      const qty = parseNum(it.qty) || 1;
-      const gross = parseNum(it.grossPrice) || 0;
+      let gross = parseNum(it.grossPrice);
+      if (gross === 0 && it.amount) {
+        gross = round2(parseNum(it.amount) * taxMultiplier);
+        it.grossPrice = gross;
+      }
       const lineGross = round2(qty * gross);
       const lineNet = round2(lineGross / taxMultiplier);
-      
       it.lineTotal = lineNet;
       subtotal += lineNet;
       totalGross += lineGross;
@@ -445,9 +452,34 @@ function calculateProfileTotals(profileKey) {
     totalGross = round2(totalGross);
     const vatAmount = round2(totalGross - subtotal);
     const totalDue = round2(subtotal + vatAmount + otherCosts);
+    return { subtotal, taxRate, vatAmount, otherCosts, totalDue, totalGross };
+  } else {
+    prof.items.forEach(it => {
+      const qty = parseNum(it.qty) || 1;
+      let net = parseNum(it.amount);
+      if (net === 0 && it.grossPrice) {
+        net = round2(parseNum(it.grossPrice) / taxMultiplier);
+        it.amount = net;
+      }
+      const lineTotal = round2(qty * net);
+      it.lineTotal = lineTotal;
+      subtotal += lineTotal;
+    });
 
+    subtotal = round2(subtotal);
+    const vatAmount = round2(subtotal * (taxRate / 100));
+    const totalDue = round2(subtotal + vatAmount + otherCosts);
+    totalGross = totalDue - otherCosts;
     return { subtotal, taxRate, vatAmount, otherCosts, totalDue, totalGross };
   }
+}
+
+function togglePricingMode(profileKey) {
+  const prof = state.profiles[profileKey];
+  if (!prof) return;
+  prof.pricingMode = prof.pricingMode === 'gross' ? 'net' : 'gross';
+  renderActiveProfile();
+  showToast(`Pricing mode: ${prof.pricingMode === 'gross' ? '🏷️ Shelf Price (Inc VAT)' : '📊 Net Price (Ex VAT)'}`);
 }
 
 // Master Render
@@ -469,6 +501,8 @@ function adjustInputWidth(el) {
 function renderWholesaleAccessories() {
   const data = state.profiles.ws_acc;
   const calc = calculateProfileTotals('ws_acc');
+  const isGross = data.pricingMode === 'gross';
+  const taxRate = parseNum(data.taxRate) || 23;
 
   document.getElementById('ws-acc-disp-date').textContent = formatDateDisplay(data.date);
   document.getElementById('ws-acc-input-date').value = data.date;
@@ -488,6 +522,9 @@ function renderWholesaleAccessories() {
   data.items.forEach((item, index) => {
     const tr = document.createElement('tr');
     tr.className = 'item-row';
+    const grossVal = Number(item.grossPrice || (item.amount ? round2(item.amount * (1 + taxRate/100)) : 0)).toFixed(2);
+    const netVal = Number(item.amount || (item.grossPrice ? round2(item.grossPrice / (1 + taxRate/100)) : 0)).toFixed(2);
+
     tr.innerHTML = `
       <td class="row-actions-cell no-print">
         <div class="row-actions">
@@ -510,8 +547,17 @@ function renderWholesaleAccessories() {
       <td style="width: 16%; text-align: right; white-space: nowrap;">
         <div class="money-cell">
           <span class="money-sym">€</span>
-          <input type="number" step="0.01" min="0" class="money-input" 
-                 value="${Number(item.amount).toFixed(2)}" oninput="updateItemCalcField('ws_acc', ${index}, 'amount', this.value)">
+          <span class="print-only money-num" id="ws_acc-printamt-${index}">${netVal}</span>
+          ${isGross ? `
+            <input type="number" step="0.01" min="0" class="money-input no-print" 
+                   value="${grossVal}" oninput="updateItemGrossField('ws_acc', ${index}, this.value)" title="Shelf Price Inc VAT">
+          ` : `
+            <input type="number" step="0.01" min="0" class="money-input no-print" 
+                   value="${netVal}" oninput="updateItemNetField('ws_acc', ${index}, this.value)" title="Net Price Ex VAT">
+          `}
+        </div>
+        <div class="no-print text-[9px] text-slate-500 font-mono text-right" id="ws_acc-helper-${index}">
+          ${isGross ? `ex VAT: €${netVal}` : `inc VAT: €${grossVal}`}
         </div>
       </td>
       <td style="width: 16%; text-align: right; white-space: nowrap;" id="ws_acc-linetotal-${index}">
@@ -531,6 +577,8 @@ function renderWholesaleAccessories() {
 function renderWholesaleDevices() {
   const data = state.profiles.ws_dev;
   const calc = calculateProfileTotals('ws_dev');
+  const isGross = data.pricingMode === 'gross';
+  const taxRate = parseNum(data.taxRate) || 23;
 
   document.getElementById('ws-dev-disp-date').textContent = formatDateDisplay(data.date);
   document.getElementById('ws-dev-input-date').value = data.date;
@@ -550,6 +598,9 @@ function renderWholesaleDevices() {
   data.items.forEach((item, index) => {
     const tr = document.createElement('tr');
     tr.className = 'item-row';
+    const grossVal = Number(item.grossPrice || (item.amount ? round2(item.amount * (1 + taxRate/100)) : 0)).toFixed(2);
+    const netVal = Number(item.amount || (item.grossPrice ? round2(item.grossPrice / (1 + taxRate/100)) : 0)).toFixed(2);
+
     tr.innerHTML = `
       <td class="row-actions-cell no-print">
         <div class="row-actions">
@@ -576,8 +627,17 @@ function renderWholesaleDevices() {
       <td style="width: 16%; text-align: right; white-space: nowrap;">
         <div class="money-cell">
           <span class="money-sym">€</span>
-          <input type="number" step="0.01" min="0" class="money-input" 
-                 value="${Number(item.amount).toFixed(2)}" oninput="updateItemCalcField('ws_dev', ${index}, 'amount', this.value)">
+          <span class="print-only money-num" id="ws_dev-printamt-${index}">${netVal}</span>
+          ${isGross ? `
+            <input type="number" step="0.01" min="0" class="money-input no-print" 
+                   value="${grossVal}" oninput="updateItemGrossField('ws_dev', ${index}, this.value)" title="Shelf Price Inc VAT">
+          ` : `
+            <input type="number" step="0.01" min="0" class="money-input no-print" 
+                   value="${netVal}" oninput="updateItemNetField('ws_dev', ${index}, this.value)" title="Net Price Ex VAT">
+          `}
+        </div>
+        <div class="no-print text-[9px] text-slate-500 font-mono text-right" id="ws_dev-helper-${index}">
+          ${isGross ? `ex VAT: €${netVal}` : `inc VAT: €${grossVal}`}
         </div>
       </td>
       <td style="width: 16%; text-align: right; white-space: nowrap;" id="ws_dev-linetotal-${index}">
@@ -597,6 +657,8 @@ function renderWholesaleDevices() {
 function renderRetailAccessories() {
   const data = state.profiles.rt_acc;
   const calc = calculateProfileTotals('rt_acc');
+  const isGross = data.pricingMode === 'gross';
+  const taxRate = parseNum(data.taxRate) || 23;
 
   const isGC = data.activeBrand === 'GC';
   const headerElem = document.getElementById('rt-acc-header-banner');
@@ -658,7 +720,8 @@ function renderRetailAccessories() {
   data.items.forEach((item, index) => {
     const tr = document.createElement('tr');
     tr.className = 'item-row';
-    const displayAmount = Number(item.amount || (item.grossPrice ? round2(item.grossPrice / 1.23) : 0)).toFixed(2);
+    const grossVal = Number(item.grossPrice || (item.amount ? round2(item.amount * (1 + taxRate/100)) : 0)).toFixed(2);
+    const netVal = Number(item.amount || (item.grossPrice ? round2(item.grossPrice / (1 + taxRate/100)) : 0)).toFixed(2);
 
     tr.innerHTML = `
       <td class="row-actions-cell no-print">
@@ -682,8 +745,17 @@ function renderRetailAccessories() {
       <td style="width: 16%; text-align: right; white-space: nowrap;">
         <div class="money-cell">
           <span class="money-sym">€</span>
-          <input type="number" step="0.01" min="0" class="money-input" 
-                 value="${displayAmount}" oninput="updateItemNetField('rt_acc', ${index}, this.value)">
+          <span class="print-only money-num" id="rt_acc-printamt-${index}">${netVal}</span>
+          ${isGross ? `
+            <input type="number" step="0.01" min="0" class="money-input no-print" 
+                   value="${grossVal}" oninput="updateItemGrossField('rt_acc', ${index}, this.value)" title="Shelf Price Inc 23% VAT">
+          ` : `
+            <input type="number" step="0.01" min="0" class="money-input no-print" 
+                   value="${netVal}" oninput="updateItemNetField('rt_acc', ${index}, this.value)" title="Net Price Ex VAT">
+          `}
+        </div>
+        <div class="no-print text-[9px] text-slate-500 font-mono text-right" id="rt_acc-helper-${index}">
+          ${isGross ? `ex VAT: €${netVal}` : `inc VAT: €${grossVal}`}
         </div>
       </td>
       <td style="width: 16%; text-align: right; white-space: nowrap;" id="rt_acc-linetotal-${index}">
@@ -703,6 +775,8 @@ function renderRetailAccessories() {
 function renderRetailDevices() {
   const data = state.profiles.rt_dev;
   const calc = calculateProfileTotals('rt_dev');
+  const isGross = data.pricingMode === 'gross';
+  const taxRate = parseNum(data.taxRate) || 23;
 
   const isGC = data.activeBrand === 'GC';
   const headerElem = document.getElementById('rt-dev-header-banner');
@@ -762,7 +836,8 @@ function renderRetailDevices() {
   data.items.forEach((item, index) => {
     const tr = document.createElement('tr');
     tr.className = 'item-row';
-    const displayAmount = Number(item.amount || (item.grossPrice ? round2(item.grossPrice / 1.23) : 0)).toFixed(2);
+    const grossVal = Number(item.grossPrice || (item.amount ? round2(item.amount * (1 + taxRate/100)) : 0)).toFixed(2);
+    const netVal = Number(item.amount || (item.grossPrice ? round2(item.grossPrice / (1 + taxRate/100)) : 0)).toFixed(2);
     
     let itemDesc = item.desc;
     if (!itemDesc) {
@@ -798,8 +873,17 @@ function renderRetailDevices() {
       <td style="width: 13%; text-align: right; white-space: nowrap; vertical-align: top;">
         <div class="money-cell" style="width: 82px;">
           <span class="money-sym">€</span>
-          <input type="number" step="0.01" min="0" class="money-input" 
-                 value="${displayAmount}" oninput="updateItemNetField('rt_dev', ${index}, this.value)">
+          <span class="print-only money-num" id="rt_dev-printamt-${index}">${netVal}</span>
+          ${isGross ? `
+            <input type="number" step="0.01" min="0" class="money-input no-print" 
+                   value="${grossVal}" oninput="updateItemGrossField('rt_dev', ${index}, this.value)" title="Shelf Price Inc 23% VAT">
+          ` : `
+            <input type="number" step="0.01" min="0" class="money-input no-print" 
+                   value="${netVal}" oninput="updateItemNetField('rt_dev', ${index}, this.value)" title="Net Price Ex VAT">
+          `}
+        </div>
+        <div class="no-print text-[9px] text-slate-500 font-mono text-right" id="rt_dev-helper-${index}">
+          ${isGross ? `ex VAT: €${netVal}` : `inc VAT: €${grossVal}`}
         </div>
       </td>
       <td style="width: 13%; text-align: right; white-space: nowrap; vertical-align: top;" id="rt_dev-linetotal-${index}">
@@ -844,11 +928,20 @@ function updateItemNetField(profileKey, index, value) {
   const prof = state.profiles[profileKey];
   if (!prof || !prof.items[index]) return;
   const net = parseNum(value);
+  const taxRate = parseNum(prof.taxRate) || 23;
+  const gross = round2(net * (1 + taxRate / 100));
   prof.items[index].amount = net;
-  prof.items[index].grossPrice = round2(net * (1 + (parseNum(prof.taxRate) || 23) / 100));
+  prof.items[index].grossPrice = gross;
 
   const calc = calculateProfileTotals(profileKey);
   const item = prof.items[index];
+
+  const helper = document.getElementById(`${profileKey}-helper-${index}`);
+  if (helper) helper.textContent = `inc VAT: €${gross.toFixed(2)}`;
+
+  const printAmt = document.getElementById(`${profileKey}-printamt-${index}`);
+  if (printAmt) printAmt.textContent = net.toFixed(2);
+
   const linetotalCell = document.getElementById(`${profileKey}-linetotal-${index}`);
   if (linetotalCell) {
     const widthStyle = profileKey === 'rt_dev' ? 'style="width: 82px;"' : '';
@@ -867,11 +960,20 @@ function updateItemGrossField(profileKey, index, value) {
   const prof = state.profiles[profileKey];
   if (!prof || !prof.items[index]) return;
   const gross = parseNum(value);
+  const taxRate = parseNum(prof.taxRate) || 23;
+  const net = round2(gross / (1 + taxRate / 100));
   prof.items[index].grossPrice = gross;
-  prof.items[index].amount = round2(gross / (1 + (parseNum(prof.taxRate) || 23) / 100));
+  prof.items[index].amount = net;
 
   const calc = calculateProfileTotals(profileKey);
   const item = prof.items[index];
+
+  const helper = document.getElementById(`${profileKey}-helper-${index}`);
+  if (helper) helper.textContent = `ex VAT: €${net.toFixed(2)}`;
+
+  const printAmt = document.getElementById(`${profileKey}-printamt-${index}`);
+  if (printAmt) printAmt.textContent = net.toFixed(2);
+
   const linetotalCell = document.getElementById(`${profileKey}-linetotal-${index}`);
   if (linetotalCell) {
     const widthStyle = profileKey === 'rt_dev' ? 'style="width: 82px;"' : '';
@@ -893,6 +995,17 @@ function updateItemCalcField(profileKey, index, field, value) {
 
   const calc = calculateProfileTotals(profileKey);
   const item = prof.items[index];
+  const isGross = prof.pricingMode === 'gross';
+  const taxRate = parseNum(prof.taxRate) || 23;
+  const net = Number(item.amount || (item.grossPrice ? round2(item.grossPrice / (1 + taxRate/100)) : 0));
+  const gross = Number(item.grossPrice || (item.amount ? round2(item.amount * (1 + taxRate/100)) : 0));
+
+  const helper = document.getElementById(`${profileKey}-helper-${index}`);
+  if (helper) helper.textContent = isGross ? `ex VAT: €${net.toFixed(2)}` : `inc VAT: €${gross.toFixed(2)}`;
+
+  const printAmt = document.getElementById(`${profileKey}-printamt-${index}`);
+  if (printAmt) printAmt.textContent = net.toFixed(2);
+
   const linetotalCell = document.getElementById(`${profileKey}-linetotal-${index}`);
   if (linetotalCell) {
     const widthStyle = profileKey === 'rt_dev' ? 'style="width: 82px;"' : '';
@@ -936,13 +1049,13 @@ function addRow(profileKey, customItem = null) {
     prof.items.push(JSON.parse(JSON.stringify(customItem)));
   } else {
     if (profileKey === 'ws_acc') {
-      prof.items.push({ desc: 'New Wholesale Accessory', qty: 10, amount: 2.50 });
+      prof.items.push({ desc: 'New Wholesale Accessory', qty: 10, amount: 2.50, grossPrice: 3.08 });
     } else if (profileKey === 'ws_dev') {
-      prof.items.push({ model: 'New Handset Lot', specs: 'Grade A', qty: 5, amount: 150.00 });
+      prof.items.push({ model: 'New Handset Lot', specs: 'Grade A', qty: 5, amount: 150.00, grossPrice: 184.50 });
     } else if (profileKey === 'rt_acc') {
-      prof.items.push({ sku: 'ACC-NEW', desc: 'New Retail Accessory', qty: 1, grossPrice: 15.00 });
+      prof.items.push({ sku: 'ACC-NEW', desc: 'New Retail Accessory', qty: 1, grossPrice: 15.00, amount: 12.20 });
     } else if (profileKey === 'rt_dev') {
-      prof.items.push({ model: 'New Retail Device', imei: '', grade: 'Grade A', warranty: '12 Months', qty: 1, grossPrice: 249.00 });
+      prof.items.push({ desc: '', model: 'New Retail Device', imei: '', grade: 'Brand New', qty: 1, grossPrice: 100.00, amount: 81.30 });
     }
   }
 

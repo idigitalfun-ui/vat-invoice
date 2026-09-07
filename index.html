@@ -154,8 +154,6 @@
         </button>
       </div>
 
-      <!-- Controls: Wholesale Accessories -->
-      <div id="controls-ws_acc" class="flex flex-col gap-3">
       <!-- Controls: Wholesale Accessories (Greenish) -->
       <div id="controls-ws_acc" class="flex flex-col gap-3">
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-lg">
@@ -163,6 +161,12 @@
           <select id="ws-acc-store-select" onchange="onStoreSelectChanged('ws_acc', this.value)"
                   class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-emerald-400 outline-none">
           </select>
+          <div class="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400">Entry Mode:</span>
+            <button onclick="togglePricingMode('ws_acc')" class="px-2 py-0.5 bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/60 rounded text-[10.5px] font-medium">
+              🏷️ Toggle Ex-VAT / Inc-VAT
+            </button>
+          </div>
         </div>
 
         <div class="catalog-card bg-emerald-950/20 border-emerald-800/40">
@@ -196,6 +200,12 @@
           <select id="ws-dev-store-select" onchange="onStoreSelectChanged('ws_dev', this.value)"
                   class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-amber-400 outline-none">
           </select>
+          <div class="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400">Entry Mode:</span>
+            <button onclick="togglePricingMode('ws_dev')" class="px-2 py-0.5 bg-amber-950/60 hover:bg-amber-900 text-amber-300 border border-amber-700/60 rounded text-[10.5px] font-medium">
+              🏷️ Toggle Ex-VAT / Inc-VAT
+            </button>
+          </div>
         </div>
 
         <div class="catalog-card bg-amber-950/20 border-amber-800/40">
@@ -227,6 +237,12 @@
           <select id="rt-acc-store-select" onchange="onStoreSelectChanged('rt_acc', this.value)"
                   class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-blue-400 outline-none">
           </select>
+          <div class="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400">Entry Mode:</span>
+            <button onclick="togglePricingMode('rt_acc')" class="px-2 py-0.5 bg-blue-950/60 hover:bg-blue-900 text-blue-300 border border-blue-700/60 rounded text-[10.5px] font-medium">
+              🏷️ Toggle Inc-VAT / Ex-VAT
+            </button>
+          </div>
         </div>
 
         <!-- Quick Shelf Price Adder for Retail Accessories -->
@@ -243,7 +259,7 @@
               + Add Net Row
             </button>
           </div>
-          <p class="text-[10px] text-slate-400 mt-1">Converts €15 shelf price to official Net €12.20 on invoice.</p>
+          <p class="text-[10px] text-slate-400 mt-1">Directly type €100 or €15 anywhere in price column — automatically deducts 23% VAT!</p>
         </div>
 
         <div class="catalog-card bg-blue-950/20 border-blue-800/40">
@@ -277,6 +293,12 @@
           <select id="rt-dev-store-select" onchange="onStoreSelectChanged('rt_dev', this.value)"
                   class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg p-2 focus:ring-1 focus:ring-red-400 outline-none">
           </select>
+          <div class="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400">Entry Mode:</span>
+            <button onclick="togglePricingMode('rt_dev')" class="px-2 py-0.5 bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-700/60 rounded text-[10.5px] font-medium">
+              🏷️ Toggle Inc-VAT / Ex-VAT
+            </button>
+          </div>
         </div>
 
         <!-- Quick Shelf Price Adder for Retail Devices -->
@@ -293,7 +315,7 @@
               + Add Net Row
             </button>
           </div>
-          <p class="text-[10px] text-slate-400 mt-1">Converts €349 shelf price to official Net €283.74 on invoice.</p>
+          <p class="text-[10px] text-slate-400 mt-1">Directly type €100 or €349 anywhere in price column — automatically deducts 23% VAT!</p>
         </div>
 
         <div class="catalog-card bg-red-950/20 border-red-800/40">
