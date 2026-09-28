@@ -139,6 +139,54 @@ const STORES = [
   }
 ];
 
+// Wholesale invoices use a separate customer directory. Retail branches must
+// never appear as wholesale customers by accident.
+const WHOLESALE_CUSTOMERS = [
+  { id: 'variety-world', name: 'Variety World', address: 'Lyster Square, Portlaoise, R32P796', phone: '+353 862037780', email: 'annietariq2011@gmail.com', vatNo: '4063008G' },
+  { id: 'phone-kiosk-cork', name: 'Phone Kiosk Cork', address: 'Phone Kiosk, Paul Street Shopping Centre, Cork City, T12 FP83', phone: '', email: '', vatNo: '' },
+  { id: 'fone-dealz-kerry', name: 'Fone Dealz Kerry', address: 'Fone Dealz, 37 Upper Castle Street, Tralee, Co. Kerry, V92 PK83', phone: '', email: '', vatNo: '' },
+  { id: 'quality-tech', name: 'Quality Tech', address: 'Muhammad Shaheryar Niazi, Quality Tech, 100 Main Street, Midleton, Co. Cork, P25 R578', phone: '+353 89 966 02908', email: '', vatNo: '' },
+  { id: 'fonefix-pc-killarney', name: 'FoneFix & PC Ltd — Mansoor', address: 'Mansoor, Fonefix & PC, 28 High Street, Killarney, Co. Kerry, V93 KD81', phone: '+353 87 147 0087', email: '', vatNo: '' },
+  { id: 'zaid-amjad', name: 'Zaid Amjad', address: '32A Strand Street, Kanturk, Co. Cork, P51 NXA7', phone: '+353 83 869 9437', email: '', vatNo: '' },
+  { id: 'itech-letterkenny', name: 'iTech Letterkenny', address: 'iTech Store Phones & Laptops, 12B Upper Port Road, Letterkenny, Co. Donegal, F92 Y165', phone: '+353 85 848 1949', email: '', vatNo: '' },
+  { id: 'lukman-mallow', name: 'Lukman Mallow', address: "Lukman, IGenius, 18 William O'Brien Street, Mallow, County Cork, P51 H7KV", phone: '+447453000940', email: '', vatNo: '' },
+  { id: 'lee-bray', name: 'Lee Bray', address: 'Lee, Unit 1, 1 Albert Walk, Bray, Co. Wicklow, A98 TY00', phone: '', email: '', vatNo: '' },
+  { id: 'revive-belmulet', name: 'Revive', address: 'Mohammed Khaliq, Carter Square, Belmullet, Co. Mayo, F26 NH84', phone: '+353 89 976 8130', email: '', vatNo: '' },
+  { id: 'phonecare-banagher', name: 'Phonecare Banagher', address: 'Main Street, Banagher, County Offaly, R42 HC85', phone: '+353 85 102 6386', email: '', vatNo: '' },
+  { id: 'carrick-gadgets', name: 'Carrick Gadgets', address: 'MobiWorld, River Street, Clara, Co. Offaly, R35 HX30. Confirm before posting.', phone: '', email: '', vatNo: '' },
+  { id: 'fonefix-gadgets-duleek', name: 'Fonefix & Gadgets Duleek', address: 'Fonefix & Gadgets, Main Street, Duleek, Co. Meath, A92 YH79', phone: '+353 83 834 7092', email: '', vatNo: '' },
+  { id: 'mobile-king-mullingar', name: 'Mobile King', address: '18 Harbour Place Shopping Centre, Mullingar', phone: '089 988 8011', email: '', vatNo: '' },
+  { id: 'mobile-kingdom', name: 'Mobile Kingdom', address: '10 Oliver Plunkett Street, Mullingar, N91 XT50', phone: '089 988 9047', email: '', vatNo: '' },
+  { id: 'hamil-little-ireland', name: 'Hamil Little Ireland', address: "10 William Street, Prior's-Land, Limerick, V94 FD73", phone: '', email: '', vatNo: '' },
+  { id: 'phonezay-dundalk', name: 'Phonezay Dundalk', address: '23 Clanbrassil Street, Dundalk, Co. Louth, A91 Y864', phone: '', email: '', vatNo: '' },
+  { id: 'asim-ipoint-dundalk', name: 'Asim iPoint Dundalk', address: "iPoint Dundalk, Unit 10 Williamson's Mall, Francis Street, Dundalk, County Louth, A91 NA43", phone: '', email: '', vatNo: '' },
+  { id: 'farhad-waterford', name: 'Farhad Waterford', address: '22 Michael Street, Waterford, X91 NV96', phone: '', email: '', vatNo: '' },
+  { id: 'ishine-dublin', name: 'iShine — Asif Khan', address: 'iShine, Unit 33, D1 Slaney Road, Glasnevin, Dublin 11, D11 VA40', phone: '353838060333', email: '', vatNo: '' }
+];
+
+const WHOLESALE_SELLERS = {
+  GC: {
+    name: 'Get Connected',
+    logo: 'assets/get-connected-banner-text.png',
+    brandText: '',
+    address: 'Unit 3 Kealew Business Park, Mountrath Road, Portlaoise, Co. Laois, R32 W0DT',
+    phone: '+353 (0)85 740 3331',
+    email: 'getconnectedire@gmail.com',
+    vat: 'IE9692928'
+  },
+  IDFL: {
+    name: 'I Digital Fun',
+    logo: 'assets/idfl-logo.png',
+    brandText: 'I DIGITAL FUN',
+    address: 'Unit 3 Kealew Business Park, Mountrath Road, Portlaoise, Co. Laois, R32 W0DT',
+    phone: '057 868 2426',
+    email: 'INFO@IDFLMOBILE.COM',
+    vat: 'IE33845510H'
+  }
+};
+
+const WHOLESALE_CUSTOMERS_STORAGE_KEY = 'vat-invoice-wholesale-customers-v1';
+
 // 4 Preset Catalogs
 const CATALOGS = {
   wsAccessories: [
@@ -191,6 +239,8 @@ const state = {
   profiles: {
     ws_acc: {
       pricingMode: 'net',
+      sellerBrand: 'GC',
+      selectedCustomerId: 'variety-world',
       invoiceNo: '223802',
       date: '2024-02-14',
       paymentMethod: 'Card',
@@ -207,6 +257,8 @@ const state = {
     },
     ws_dev: {
       pricingMode: 'net',
+      sellerBrand: 'GC',
+      selectedCustomerId: '',
       invoiceNo: 'GC-DEV-8821',
       date: '2024-02-14',
       paymentMethod: 'Bank Transfer',
@@ -269,6 +321,10 @@ const state = {
   savedInvoices: []
 };
 
+const INVOICE_HISTORY_STORAGE_KEY = 'vat_invoices_history_v3';
+let invoiceCloudReady = false;
+let invoiceCloudUnsubscribe = null;
+
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
   loadSavedInvoicesFromStorage();
@@ -277,6 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
   setupScannerHandlers();
   switchHierarchy('wholesale', 'ws_acc');
+  bootInvoiceCloud();
 });
 
 // Format Date as DD/MM/YYYY
@@ -304,6 +361,107 @@ function round2(num) {
   return Math.round((Number(num) + Number.EPSILON) * 100) / 100;
 }
 
+function getTaxRate(profileOrKey) {
+  const profile = typeof profileOrKey === 'string' ? state.profiles[profileOrKey] : profileOrKey;
+  const rate = parseNum(profile?.taxRate);
+  return Number.isFinite(rate) && rate >= 0 ? rate : 23;
+}
+
+function getWholesaleSeller(profileKey) {
+  return WHOLESALE_SELLERS[state.profiles[profileKey]?.sellerBrand] || WHOLESALE_SELLERS.GC;
+}
+
+function formatAddressForInvoice(address) {
+  return String(address || '')
+    .replace(/\r\n?/g, '\n')
+    .split('\n')
+    .flatMap(line => line.split(/\s*,\s*/))
+    .map(line => line.trim())
+    .filter(Boolean)
+    .join('\n');
+}
+
+function syncItemPricePair(profile, item) {
+  const multiplier = 1 + (getTaxRate(profile) / 100);
+  if (profile.pricingMode === 'gross') {
+    item.grossPrice = parseNum(item.grossPrice);
+    item.amount = round2(item.grossPrice / multiplier);
+  } else {
+    item.amount = parseNum(item.amount);
+    item.grossPrice = round2(item.amount * multiplier);
+  }
+}
+
+function renderWholesaleSellerHeader(profileKey) {
+  const seller = getWholesaleSeller(profileKey);
+  const domPrefix = profileKey === 'ws_acc' ? 'ws-acc' : 'ws-dev';
+  const logo = document.getElementById(`${domPrefix}-logo-img`);
+  const brand = document.getElementById(`${domPrefix}-brand-text`);
+  const contact = document.getElementById(`${domPrefix}-header-contact`);
+
+  if (logo) {
+    logo.src = seller.logo;
+    logo.alt = seller.name;
+    logo.className = `${seller.brandText ? 'h-10' : 'h-9'} object-contain drop-shadow-md`;
+  }
+  if (brand) brand.textContent = seller.brandText;
+  if (contact) {
+    contact.innerHTML = `
+      <div>${escapeHtml(seller.address)}</div>
+      <div>
+        <span>CONTACT: ${escapeHtml(seller.phone)}</span>
+        <span class="sep">•</span>
+        <span>EMAIL: ${escapeHtml(seller.email)}</span>
+        <span class="sep">•</span>
+        <span>VAT: ${escapeHtml(seller.vat)}</span>
+      </div>`;
+  }
+  const payee = document.getElementById(`${domPrefix}-payee`);
+  if (payee) payee.textContent = `Make all payments payable to ${seller.name}`;
+  const terms = document.getElementById(`${domPrefix}-seller-terms`);
+  if (terms) terms.textContent = `${seller.name} wholesale terms: Tested and certified handset lots`;
+}
+
+function getCustomWholesaleCustomers() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(WHOLESALE_CUSTOMERS_STORAGE_KEY) || '[]');
+    return Array.isArray(saved) ? saved.filter(customer => customer && customer.id && customer.name) : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+function getWholesaleCustomers() {
+  return [...WHOLESALE_CUSTOMERS, ...getCustomWholesaleCustomers()];
+}
+
+function populateWholesaleCustomerSelect(select, profileKey) {
+  if (!select) return;
+  const profile = state.profiles[profileKey];
+  const selectedId = profile.selectedCustomerId || '';
+  select.innerHTML = '<option value="">-- Select customer preset --</option>';
+  getWholesaleCustomers().forEach(customer => {
+    const option = document.createElement('option');
+    option.value = customer.id;
+    option.textContent = customer.name;
+    option.selected = customer.id === selectedId;
+    select.appendChild(option);
+  });
+}
+
+function populateWholesaleSellerSelect(select, profileKey) {
+  if (!select) return;
+  const sellerBrand = state.profiles[profileKey].sellerBrand || 'GC';
+  select.innerHTML = '';
+  Object.entries(WHOLESALE_SELLERS).forEach(([key, seller]) => {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = seller.name;
+    option.selected = key === sellerBrand;
+    select.appendChild(option);
+  });
+}
+
 // Populate Store Selectors
 function populateStoreDropdowns() {
   const rAccStore = document.getElementById('rt-acc-store-select');
@@ -324,33 +482,28 @@ function populateStoreDropdowns() {
     }
   });
 
-  [wsAccStore, wsDevStore].forEach(sel => {
-    if (sel) {
-      sel.innerHTML = '<option value="">-- Select Customer Preset --</option>';
-      STORES.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s.id;
-        opt.textContent = `${s.name} - ${s.city}`;
-        sel.appendChild(opt);
-      });
-    }
-  });
+  populateWholesaleCustomerSelect(wsAccStore, 'ws_acc');
+  populateWholesaleCustomerSelect(wsDevStore, 'ws_dev');
+  populateWholesaleSellerSelect(document.getElementById('ws-acc-seller-select'), 'ws_acc');
+  populateWholesaleSellerSelect(document.getElementById('ws-dev-seller-select'), 'ws_dev');
 }
 
 // Load Samples
 function loadAllSampleData() {
+  const wsAccessoriesMultiplier = 1 + (getTaxRate('ws_acc') / 100);
+  const wsDevicesMultiplier = 1 + (getTaxRate('ws_dev') / 100);
   state.profiles.ws_acc.items = CATALOGS.wsAccessories.map(it => ({
     desc: it.desc,
     qty: it.qty,
     amount: it.amount,
-    grossPrice: round2(it.amount * 1.23)
+    grossPrice: round2(it.amount * wsAccessoriesMultiplier)
   }));
   state.profiles.ws_dev.items = CATALOGS.wsDevices.map(it => ({
     model: it.model,
     specs: it.specs,
     qty: it.qty,
     amount: it.amount,
-    grossPrice: round2(it.amount * 1.23)
+    grossPrice: round2(it.amount * wsDevicesMultiplier)
   }));
   state.profiles.rt_acc.items = [
     { sku: '00SSTG002', desc: '00SSTG002 - TG Samsung A10/A20/A30/A50/A51', qty: 1, grossPrice: 15.00, amount: 12.20 }
@@ -425,7 +578,7 @@ function switchHierarchy(mainCat, subCat = null) {
 // Exact Irish VAT Math
 function calculateProfileTotals(profileKey) {
   const prof = state.profiles[profileKey];
-  const taxRate = parseNum(prof.taxRate) || 23;
+  const taxRate = getTaxRate(prof);
   const taxMultiplier = 1 + (taxRate / 100);
   const otherCosts = parseNum(prof.otherCosts) || 0;
   const isGross = prof.pricingMode === 'gross';
@@ -474,10 +627,36 @@ function calculateProfileTotals(profileKey) {
   }
 }
 
+function applyTaxRate(profileKey, value) {
+  const profile = state.profiles[profileKey];
+  if (!profile) return;
+
+  profile.taxRate = Math.max(0, parseNum(value));
+  profile.items.forEach(item => syncItemPricePair(profile, item));
+
+  renderActiveProfile();
+  showToast(`VAT rate set to ${getTaxRate(profile).toFixed(2)}%`);
+}
+
+function previewTaxRate(profileKey, value) {
+  const profile = state.profiles[profileKey];
+  if (!profile) return;
+  profile.taxRate = Math.max(0, parseNum(value));
+  updateSummaryDisplays(profileKey, calculateProfileTotals(profileKey));
+}
+
+function wireTaxRateInput(profileKey) {
+  const input = document.getElementById(`${profileKey}-taxrate-input`);
+  if (!input) return;
+  input.addEventListener('input', event => previewTaxRate(profileKey, event.target.value));
+  input.addEventListener('change', event => applyTaxRate(profileKey, event.target.value));
+}
+
 function togglePricingMode(profileKey) {
   const prof = state.profiles[profileKey];
   if (!prof) return;
   prof.pricingMode = prof.pricingMode === 'gross' ? 'net' : 'gross';
+  prof.items.forEach(item => syncItemPricePair(prof, item));
   renderActiveProfile();
   showToast(`Pricing mode: ${prof.pricingMode === 'gross' ? '🏷️ Shelf Price (Inc VAT)' : '📊 Net Price (Ex VAT)'}`);
 }
@@ -502,7 +681,11 @@ function renderWholesaleAccessories() {
   const data = state.profiles.ws_acc;
   const calc = calculateProfileTotals('ws_acc');
   const isGross = data.pricingMode === 'gross';
-  const taxRate = parseNum(data.taxRate) || 23;
+  const taxRate = getTaxRate(data);
+
+  renderWholesaleSellerHeader('ws_acc');
+  populateWholesaleCustomerSelect(document.getElementById('ws-acc-store-select'), 'ws_acc');
+  populateWholesaleSellerSelect(document.getElementById('ws-acc-seller-select'), 'ws_acc');
 
   document.getElementById('ws-acc-disp-date').textContent = formatDateDisplay(data.date);
   document.getElementById('ws-acc-input-date').value = data.date;
@@ -511,7 +694,7 @@ function renderWholesaleAccessories() {
   document.getElementById('ws-acc-input-payment').value = data.paymentMethod;
 
   document.getElementById('ws-acc-billto-name').value = data.billTo.name || '';
-  document.getElementById('ws-acc-billto-address').value = data.billTo.address || '';
+  document.getElementById('ws-acc-billto-address').value = formatAddressForInvoice(data.billTo.address);
   document.getElementById('ws-acc-billto-phone').value = data.billTo.phone || '';
   document.getElementById('ws-acc-billto-email').value = data.billTo.email || '';
   document.getElementById('ws-acc-billto-vat').value = data.billTo.vatNo || '';
@@ -578,7 +761,11 @@ function renderWholesaleDevices() {
   const data = state.profiles.ws_dev;
   const calc = calculateProfileTotals('ws_dev');
   const isGross = data.pricingMode === 'gross';
-  const taxRate = parseNum(data.taxRate) || 23;
+  const taxRate = getTaxRate(data);
+
+  renderWholesaleSellerHeader('ws_dev');
+  populateWholesaleCustomerSelect(document.getElementById('ws-dev-store-select'), 'ws_dev');
+  populateWholesaleSellerSelect(document.getElementById('ws-dev-seller-select'), 'ws_dev');
 
   document.getElementById('ws-dev-disp-date').textContent = formatDateDisplay(data.date);
   document.getElementById('ws-dev-input-date').value = data.date;
@@ -587,7 +774,7 @@ function renderWholesaleDevices() {
   document.getElementById('ws-dev-input-payment').value = data.paymentMethod;
 
   document.getElementById('ws-dev-billto-name').value = data.billTo.name || '';
-  document.getElementById('ws-dev-billto-address').value = data.billTo.address || '';
+  document.getElementById('ws-dev-billto-address').value = formatAddressForInvoice(data.billTo.address);
   document.getElementById('ws-dev-billto-phone').value = data.billTo.phone || '';
   document.getElementById('ws-dev-billto-email').value = data.billTo.email || '';
   document.getElementById('ws-dev-billto-vat').value = data.billTo.vatNo || '';
@@ -658,7 +845,7 @@ function renderRetailAccessories() {
   const data = state.profiles.rt_acc;
   const calc = calculateProfileTotals('rt_acc');
   const isGross = data.pricingMode === 'gross';
-  const taxRate = parseNum(data.taxRate) || 23;
+  const taxRate = getTaxRate(data);
 
   const isGC = data.activeBrand === 'GC';
   const headerElem = document.getElementById('rt-acc-header-banner');
@@ -776,7 +963,7 @@ function renderRetailDevices() {
   const data = state.profiles.rt_dev;
   const calc = calculateProfileTotals('rt_dev');
   const isGross = data.pricingMode === 'gross';
-  const taxRate = parseNum(data.taxRate) || 23;
+  const taxRate = getTaxRate(data);
 
   const isGC = data.activeBrand === 'GC';
   const headerElem = document.getElementById('rt-dev-header-banner');
@@ -928,7 +1115,7 @@ function updateItemNetField(profileKey, index, value) {
   const prof = state.profiles[profileKey];
   if (!prof || !prof.items[index]) return;
   const net = parseNum(value);
-  const taxRate = parseNum(prof.taxRate) || 23;
+  const taxRate = getTaxRate(prof);
   const gross = round2(net * (1 + taxRate / 100));
   prof.items[index].amount = net;
   prof.items[index].grossPrice = gross;
@@ -960,7 +1147,7 @@ function updateItemGrossField(profileKey, index, value) {
   const prof = state.profiles[profileKey];
   if (!prof || !prof.items[index]) return;
   const gross = parseNum(value);
-  const taxRate = parseNum(prof.taxRate) || 23;
+  const taxRate = getTaxRate(prof);
   const net = round2(gross / (1 + taxRate / 100));
   prof.items[index].grossPrice = gross;
   prof.items[index].amount = net;
@@ -996,7 +1183,7 @@ function updateItemCalcField(profileKey, index, field, value) {
   const calc = calculateProfileTotals(profileKey);
   const item = prof.items[index];
   const isGross = prof.pricingMode === 'gross';
-  const taxRate = parseNum(prof.taxRate) || 23;
+  const taxRate = getTaxRate(prof);
   const net = Number(item.amount || (item.grossPrice ? round2(item.grossPrice / (1 + taxRate/100)) : 0));
   const gross = Number(item.grossPrice || (item.amount ? round2(item.amount * (1 + taxRate/100)) : 0));
 
@@ -1028,7 +1215,7 @@ function addFromShelfPrice(profileKey) {
     alert('Please enter a valid shelf price (e.g. 15.00)');
     return;
   }
-  const taxRate = parseNum(state.profiles[profileKey].taxRate) || 23;
+  const taxRate = getTaxRate(profileKey);
   const net = round2(gross / (1 + taxRate / 100));
 
   if (profileKey === 'rt_acc') {
@@ -1045,19 +1232,24 @@ function addRow(profileKey, customItem = null) {
   const prof = state.profiles[profileKey];
   if (!prof) return;
 
+  let newItem;
   if (customItem) {
-    prof.items.push(JSON.parse(JSON.stringify(customItem)));
+    newItem = JSON.parse(JSON.stringify(customItem));
   } else {
     if (profileKey === 'ws_acc') {
-      prof.items.push({ desc: 'New Wholesale Accessory', qty: 10, amount: 2.50, grossPrice: 3.08 });
+      newItem = { desc: 'New Wholesale Accessory', qty: 1, amount: 0, grossPrice: 0 };
     } else if (profileKey === 'ws_dev') {
-      prof.items.push({ model: 'New Handset Lot', specs: 'Grade A', qty: 5, amount: 150.00, grossPrice: 184.50 });
+      newItem = { model: 'New Handset Lot', specs: 'Grade A', qty: 1, amount: 0, grossPrice: 0 };
     } else if (profileKey === 'rt_acc') {
-      prof.items.push({ sku: 'ACC-NEW', desc: 'New Retail Accessory', qty: 1, grossPrice: 15.00, amount: 12.20 });
+      newItem = { sku: 'ACC-NEW', desc: 'New Retail Accessory', qty: 1, grossPrice: 0, amount: 0 };
     } else if (profileKey === 'rt_dev') {
-      prof.items.push({ desc: '', model: 'New Retail Device', imei: '', grade: 'Brand New', qty: 1, grossPrice: 100.00, amount: 81.30 });
+      newItem = { desc: '', model: 'New Retail Device', imei: '', grade: 'Brand New', qty: 1, grossPrice: 0, amount: 0 };
     }
   }
+
+  if (!newItem) return;
+  syncItemPricePair(prof, newItem);
+  prof.items.push(newItem);
 
   renderActiveProfile();
   showToast('Row added');
@@ -1090,10 +1282,9 @@ function addFromCatalog(catalogKey, index) {
 }
 
 function onStoreSelectChanged(profileKey, storeId) {
-  const store = STORES.find(s => s.id === Number(storeId));
-  if (!store) return;
-
   if (profileKey.startsWith('rt_')) {
+    const store = STORES.find(s => s.id === Number(storeId));
+    if (!store) return;
     state.profiles[profileKey].selectedStoreId = store.id;
     state.profiles[profileKey].activeBrand = store.brand;
     state.profiles[profileKey].billFrom = {
@@ -1105,24 +1296,78 @@ function onStoreSelectChanged(profileKey, storeId) {
     renderActiveProfile();
     showToast(`Branch selected: ${store.name}`);
   } else {
+    const customer = getWholesaleCustomers().find(entry => entry.id === storeId);
+    if (!customer) return;
+    state.profiles[profileKey].selectedCustomerId = customer.id;
     state.profiles[profileKey].billTo = {
-      name: store.name,
-      address: store.address,
-      phone: store.phone,
-      email: store.email,
-      vatNo: store.vat
+      name: customer.name,
+      address: formatAddressForInvoice(customer.address),
+      phone: customer.phone || '',
+      email: customer.email || '',
+      vatNo: customer.vatNo || ''
     };
     renderActiveProfile();
-    showToast(`Customer preset: ${store.name}`);
+    showToast(`Customer preset: ${customer.name}`);
   }
 }
 
-function setQuickTaxRate(rate) {
-  const prof = state.profiles[state.activeSub];
-  if (!prof) return;
-  prof.taxRate = Number(rate);
+function onWholesaleSellerChanged(profileKey, sellerBrand) {
+  const profile = state.profiles[profileKey];
+  if (!profile || !WHOLESALE_SELLERS[sellerBrand]) return;
+  profile.sellerBrand = sellerBrand;
   renderActiveProfile();
-  showToast(`Tax Rate set to ${rate}%`);
+  showToast(`Invoice from: ${WHOLESALE_SELLERS[sellerBrand].name}`);
+}
+
+function currentWholesaleCustomer(profileKey) {
+  const profile = state.profiles[profileKey];
+  const domPrefix = profileKey === 'ws_acc' ? 'ws-acc' : 'ws-dev';
+  return {
+    name: document.getElementById(`${domPrefix}-billto-name`)?.value.trim() || profile.billTo.name || 'New customer',
+    address: document.getElementById(`${domPrefix}-billto-address`)?.value.trim() || profile.billTo.address || '',
+    phone: document.getElementById(`${domPrefix}-billto-phone`)?.value.trim() || profile.billTo.phone || '',
+    email: document.getElementById(`${domPrefix}-billto-email`)?.value.trim() || profile.billTo.email || '',
+    vatNo: document.getElementById(`${domPrefix}-billto-vat`)?.value.trim() || profile.billTo.vatNo || ''
+  };
+}
+
+function saveCurrentWholesaleCustomer(profileKey) {
+  const customer = currentWholesaleCustomer(profileKey);
+  if (!customer.name) {
+    alert('Enter the customer name before saving this preset.');
+    return;
+  }
+  const saved = getCustomWholesaleCustomers();
+  const existingIndex = saved.findIndex(entry => entry.name.toLowerCase() === customer.name.toLowerCase());
+  const record = {
+    ...customer,
+    id: existingIndex >= 0 ? saved[existingIndex].id : `custom-${Date.now()}`
+  };
+  if (existingIndex >= 0) saved[existingIndex] = record;
+  else saved.push(record);
+  localStorage.setItem(WHOLESALE_CUSTOMERS_STORAGE_KEY, JSON.stringify(saved));
+  state.profiles[profileKey].selectedCustomerId = record.id;
+  state.profiles[profileKey].billTo = { ...record };
+  populateWholesaleCustomerSelect(document.getElementById(profileKey === 'ws_acc' ? 'ws-acc-store-select' : 'ws-dev-store-select'), profileKey);
+  showToast(`Saved customer: ${record.name}`);
+}
+
+function deleteSelectedWholesaleCustomer(profileKey) {
+  const profile = state.profiles[profileKey];
+  const selectedId = profile?.selectedCustomerId;
+  if (!selectedId || !selectedId.startsWith('custom-')) {
+    alert('Only customer presets you added can be removed.');
+    return;
+  }
+  const saved = getCustomWholesaleCustomers().filter(entry => entry.id !== selectedId);
+  localStorage.setItem(WHOLESALE_CUSTOMERS_STORAGE_KEY, JSON.stringify(saved));
+  profile.selectedCustomerId = '';
+  populateWholesaleCustomerSelect(document.getElementById(profileKey === 'ws_acc' ? 'ws-acc-store-select' : 'ws-dev-store-select'), profileKey);
+  showToast('Saved customer removed');
+}
+
+function setQuickTaxRate(rate) {
+  applyTaxRate(state.activeSub, rate);
 }
 
 function generateNewInvoiceNumber() {
@@ -1205,6 +1450,22 @@ function closeScannerModal() {
   }
 }
 
+function getScannerTargetProfile() {
+  return document.getElementById('scanner-target-profile')?.value || state.activeSub;
+}
+
+function scannerGrossToNet(gross) {
+  const profile = state.profiles[getScannerTargetProfile()] || state.profiles[state.activeSub];
+  return round2(parseNum(gross) / (1 + (getTaxRate(profile) / 100)));
+}
+
+function updateScannedItemGross(index, value) {
+  const item = state.scannedItemsBuffer[index];
+  if (!item) return;
+  item.grossPrice = parseNum(value);
+  item.amount = scannerGrossToNet(item.grossPrice);
+}
+
 async function processUploadedFile(file) {
   const statusElem = document.getElementById('scanner-status');
   const previewDiv = document.getElementById('scanner-preview-area');
@@ -1278,14 +1539,14 @@ function parseOCRText(text) {
         desc: desc,
         qty: qty,
         grossPrice: price,
-        amount: round2(price / 1.23)
+        amount: scannerGrossToNet(price)
       });
     }
   });
 
   if (items.length === 0) {
     lines.slice(0, 8).forEach(l => {
-      items.push({ desc: l, qty: 1, grossPrice: 15.00, amount: 12.20 });
+      items.push({ desc: l, qty: 1, grossPrice: 15.00, amount: scannerGrossToNet(15) });
     });
   }
 
@@ -1318,7 +1579,7 @@ function parseTableRows(rows) {
         desc: desc,
         qty: qty,
         grossPrice: price,
-        amount: round2(price / 1.23)
+        amount: scannerGrossToNet(price)
       });
     }
   });
@@ -1350,7 +1611,7 @@ function showParsedPreview(items) {
       </td>
       <td class="p-2 text-right" style="width: 100px;">
         <input type="number" step="0.01" class="w-full bg-slate-900 border border-slate-700 rounded p-1 text-right text-slate-100 mono" value="${Number(item.grossPrice || item.amount).toFixed(2)}"
-               oninput="state.scannedItemsBuffer[${index}].grossPrice = parseNum(this.value); state.scannedItemsBuffer[${index}].amount = round2(parseNum(this.value)/1.23)">
+               oninput="updateScannedItemGross(${index}, this.value)">
       </td>
       <td class="p-2 text-center" style="width: 40px;">
         <button onclick="deleteBufferRow(${index})" class="text-rose-400 hover:text-rose-300">✕</button>
@@ -1387,15 +1648,20 @@ function applyScannedItemsToProfile() {
   }
 
   state.scannedItemsBuffer.forEach(it => {
+    const scannedGross = parseNum(it.grossPrice || 0);
+    const scannedNet = scannedGross ? round2(scannedGross / (1 + (getTaxRate(prof) / 100))) : parseNum(it.amount);
+    let newItem;
     if (targetProfile === 'ws_acc') {
-      prof.items.push({ desc: it.desc, qty: it.qty || 1, amount: it.amount || round2(it.grossPrice / 1.23) });
+      newItem = { desc: it.desc, qty: it.qty || 1, amount: scannedNet, grossPrice: scannedGross };
     } else if (targetProfile === 'ws_dev') {
-      prof.items.push({ model: it.desc, specs: 'Grade A', qty: it.qty || 1, amount: it.amount || round2(it.grossPrice / 1.23) });
+      newItem = { model: it.desc, specs: 'Grade A', qty: it.qty || 1, amount: scannedNet, grossPrice: scannedGross };
     } else if (targetProfile === 'rt_dev') {
-      prof.items.push({ model: it.desc, imei: '', grade: 'Grade A', warranty: '12 Months', qty: it.qty || 1, grossPrice: it.grossPrice || round2(it.amount * 1.23) });
+      newItem = { model: it.desc, imei: '', grade: 'Grade A', warranty: '12 Months', qty: it.qty || 1, grossPrice: scannedGross, amount: scannedNet };
     } else {
-      prof.items.push({ sku: '00ACC', desc: it.desc, qty: it.qty || 1, grossPrice: it.grossPrice || round2(it.amount * 1.23) });
+      newItem = { sku: '00ACC', desc: it.desc, qty: it.qty || 1, grossPrice: scannedGross, amount: scannedNet };
     }
+    syncItemPricePair(prof, newItem);
+    prof.items.push(newItem);
   });
 
   const mainCat = targetProfile.startsWith('ws_') ? 'wholesale' : 'retail';
@@ -1404,7 +1670,152 @@ function applyScannedItemsToProfile() {
   showToast(`✨ Imported ${state.scannedItemsBuffer.length} items!`);
 }
 
-// Storage History
+// Local + Firebase invoice history
+function invoiceHistoryKey(record) {
+  return `${record?.subCat || ''}|${String(record?.invoiceNo || record?.id || '').trim().toLowerCase()}`;
+}
+
+function invoiceHistoryTimestamp(record) {
+  const timestamp = Date.parse(record?.timestamp || '') || 0;
+  return timestamp || Date.parse(record?.date || '') || 0;
+}
+
+function toInvoiceArray(value) {
+  if (Array.isArray(value)) return value.filter(record => record && record.id);
+  if (value && typeof value === 'object') return Object.values(value).filter(record => record && record.id);
+  return [];
+}
+
+function mergeInvoiceHistory(...collections) {
+  const byKey = new Map();
+  collections.flatMap(toInvoiceArray).forEach(record => {
+    const key = invoiceHistoryKey(record);
+    const existing = byKey.get(key);
+    if (!existing || invoiceHistoryTimestamp(record) >= invoiceHistoryTimestamp(existing)) {
+      byKey.set(key, record);
+    }
+  });
+  return [...byKey.values()].sort((a, b) => invoiceHistoryTimestamp(b) - invoiceHistoryTimestamp(a));
+}
+
+function invoiceHistoryPayload() {
+  const invoices = {};
+  state.savedInvoices.forEach(record => { invoices[record.id] = record; });
+  return { updatedAt: new Date().toISOString(), invoices };
+}
+
+function saveInvoiceHistoryLocally() {
+  localStorage.setItem(INVOICE_HISTORY_STORAGE_KEY, JSON.stringify(state.savedInvoices));
+}
+
+function updateInvoiceCloudUI(message = null) {
+  const button = document.getElementById('invoice-cloud-auth-button');
+  const status = document.getElementById('invoice-cloud-status');
+  const cloud = window.VatInvoiceCloud;
+  const user = cloud?.currentUser?.();
+  const approved = cloud?.allowed?.(user);
+
+  if (button) button.innerHTML = approved
+    ? '<span>☁️</span><span>Cloud history signed in</span>'
+    : '<span>☁️</span><span>Sign in to save history</span>';
+  if (status) {
+    status.textContent = message || (invoiceCloudReady
+      ? 'Cloud history protected'
+      : approved
+        ? 'Connecting to cloud…'
+        : 'Local history');
+  }
+}
+
+function waitForInvoiceCloud() {
+  if (window.VatInvoiceCloud) return Promise.resolve(window.VatInvoiceCloud);
+  return new Promise(resolve => {
+    window.addEventListener('vat-invoice-cloud-ready', () => resolve(window.VatInvoiceCloud), { once: true });
+  });
+}
+
+async function syncInvoiceHistoryToCloud({ quiet = false } = {}) {
+  const cloud = window.VatInvoiceCloud;
+  if (!invoiceCloudReady || !cloud?.allowed?.(cloud.currentUser?.())) return false;
+  try {
+    await cloud.write(invoiceHistoryPayload());
+    updateInvoiceCloudUI('Cloud history protected');
+    if (!quiet) showToast('Invoice history saved securely to Firebase');
+    return true;
+  } catch (error) {
+    console.error('Cloud invoice history error:', error);
+    updateInvoiceCloudUI('Local copy saved — cloud needs attention');
+    if (!quiet) showToast('Saved locally. Cloud history could not update yet.');
+    return false;
+  }
+}
+
+async function bootInvoiceCloud() {
+  try {
+    const cloud = await waitForInvoiceCloud();
+    updateInvoiceCloudUI();
+    cloud.observeAuth(async user => {
+      invoiceCloudUnsubscribe?.();
+      invoiceCloudUnsubscribe = null;
+      invoiceCloudReady = false;
+
+      if (!cloud.allowed(user)) {
+        updateInvoiceCloudUI(user ? 'Use the approved Google account' : 'Local history');
+        return;
+      }
+
+      updateInvoiceCloudUI('Merging local and cloud history…');
+      try {
+        const remotePayload = await cloud.read();
+        const merged = mergeInvoiceHistory(state.savedInvoices, remotePayload?.invoices || remotePayload);
+        state.savedInvoices = merged;
+        saveInvoiceHistoryLocally();
+        renderSavedInvoicesModal();
+        invoiceCloudReady = true;
+
+        // The merged copy is written once on sign-in. This preserves drafts
+        // created on this computer before cloud history was enabled.
+        await cloud.write(invoiceHistoryPayload());
+
+        invoiceCloudUnsubscribe = cloud.subscribe(payload => {
+          const remoteInvoices = toInvoiceArray(payload?.invoices || payload);
+          state.savedInvoices = mergeInvoiceHistory(remoteInvoices);
+          saveInvoiceHistoryLocally();
+          renderSavedInvoicesModal();
+          updateInvoiceCloudUI('Cloud history protected');
+        }, error => {
+          console.error('Cloud invoice history listener error:', error);
+          updateInvoiceCloudUI('Local copy saved — cloud needs attention');
+        });
+        updateInvoiceCloudUI('Cloud history protected');
+        showToast('Local drafts and Firebase history are merged');
+      } catch (error) {
+        console.error('Cloud invoice history setup error:', error);
+        updateInvoiceCloudUI('Local copy saved — create Firebase Database');
+      }
+    });
+  } catch (error) {
+    console.error('Firebase setup error:', error);
+    updateInvoiceCloudUI('Local history');
+  }
+}
+
+async function toggleInvoiceCloudSignIn() {
+  const cloud = await waitForInvoiceCloud();
+  const user = cloud.currentUser?.();
+  if (cloud.allowed(user)) {
+    await cloud.signOut();
+    showToast('Signed out — your local history remains on this device');
+    return;
+  }
+  try {
+    await cloud.signIn();
+  } catch (error) {
+    console.error('Google sign-in error:', error);
+    showToast('Google sign-in was not completed. Check the authorised website address in Firebase.');
+  }
+}
+
 function saveCurrentInvoice() {
   const p = state.activeSub;
   const prof = state.profiles[p];
@@ -1437,14 +1848,15 @@ function saveCurrentInvoice() {
     showToast(`Saved new draft: #${invoiceNo}`);
   }
 
-  localStorage.setItem('vat_invoices_history_v3', JSON.stringify(state.savedInvoices));
+  saveInvoiceHistoryLocally();
   renderSavedInvoicesModal();
+  void syncInvoiceHistoryToCloud();
 }
 
 function loadSavedInvoicesFromStorage() {
   try {
-    const raw = localStorage.getItem('vat_invoices_history_v3');
-    if (raw) state.savedInvoices = JSON.parse(raw);
+    const raw = localStorage.getItem(INVOICE_HISTORY_STORAGE_KEY);
+    if (raw) state.savedInvoices = mergeInvoiceHistory(JSON.parse(raw));
   } catch (e) {
     console.error('History error:', e);
   }
@@ -1463,8 +1875,9 @@ function loadInvoiceRecord(id) {
 function deleteSavedInvoiceRecord(id, e) {
   if (e) e.stopPropagation();
   state.savedInvoices = state.savedInvoices.filter(r => r.id !== id);
-  localStorage.setItem('vat_invoices_history_v3', JSON.stringify(state.savedInvoices));
+  saveInvoiceHistoryLocally();
   renderSavedInvoicesModal();
+  void syncInvoiceHistoryToCloud();
   showToast('Invoice deleted from history');
 }
 
@@ -1667,7 +2080,7 @@ function setupEventListeners() {
   document.getElementById('ws-acc-billto-phone')?.addEventListener('input', (e) => { state.profiles.ws_acc.billTo.phone = e.target.value; });
   document.getElementById('ws-acc-billto-email')?.addEventListener('input', (e) => { state.profiles.ws_acc.billTo.email = e.target.value; });
   document.getElementById('ws-acc-billto-vat')?.addEventListener('input', (e) => { state.profiles.ws_acc.billTo.vatNo = e.target.value; });
-  document.getElementById('ws_acc-taxrate-input')?.addEventListener('input', (e) => { state.profiles.ws_acc.taxRate = parseNum(e.target.value); updateSummaryDisplays('ws_acc'); });
+  wireTaxRateInput('ws_acc');
   document.getElementById('ws_acc-other-input')?.addEventListener('input', (e) => { state.profiles.ws_acc.otherCosts = parseNum(e.target.value); updateSummaryDisplays('ws_acc'); });
 
   // Wholesale Devices
@@ -1682,7 +2095,7 @@ function setupEventListeners() {
   document.getElementById('ws-dev-billto-phone')?.addEventListener('input', (e) => { state.profiles.ws_dev.billTo.phone = e.target.value; });
   document.getElementById('ws-dev-billto-email')?.addEventListener('input', (e) => { state.profiles.ws_dev.billTo.email = e.target.value; });
   document.getElementById('ws-dev-billto-vat')?.addEventListener('input', (e) => { state.profiles.ws_dev.billTo.vatNo = e.target.value; });
-  document.getElementById('ws_dev-taxrate-input')?.addEventListener('input', (e) => { state.profiles.ws_dev.taxRate = parseNum(e.target.value); updateSummaryDisplays('ws_dev'); });
+  wireTaxRateInput('ws_dev');
   document.getElementById('ws_dev-other-input')?.addEventListener('input', (e) => { state.profiles.ws_dev.otherCosts = parseNum(e.target.value); updateSummaryDisplays('ws_dev'); });
 
   // Retail Accessories
@@ -1697,7 +2110,7 @@ function setupEventListeners() {
   document.getElementById('rt-acc-billto-name')?.addEventListener('input', (e) => { state.profiles.rt_acc.billTo.name = e.target.value; });
   document.getElementById('rt-acc-billto-email')?.addEventListener('input', (e) => { state.profiles.rt_acc.billTo.email = e.target.value; });
   document.getElementById('rt-acc-billto-phone')?.addEventListener('input', (e) => { state.profiles.rt_acc.billTo.phone = e.target.value; });
-  document.getElementById('rt_acc-taxrate-input')?.addEventListener('input', (e) => { state.profiles.rt_acc.taxRate = parseNum(e.target.value); renderRetailAccessories(); });
+  wireTaxRateInput('rt_acc');
   document.getElementById('rt_acc-other-input')?.addEventListener('input', (e) => { state.profiles.rt_acc.otherCosts = parseNum(e.target.value); updateSummaryDisplays('rt_acc'); });
 
   // Retail Devices
@@ -1713,7 +2126,7 @@ function setupEventListeners() {
   document.getElementById('rt-dev-billto-email')?.addEventListener('input', (e) => { state.profiles.rt_dev.billTo.email = e.target.value; });
   document.getElementById('rt-dev-billto-phone')?.addEventListener('input', (e) => { state.profiles.rt_dev.billTo.phone = e.target.value; });
   document.getElementById('rt-dev-billto-address')?.addEventListener('input', (e) => { state.profiles.rt_dev.billTo.address = e.target.value; });
-  document.getElementById('rt_dev-taxrate-input')?.addEventListener('input', (e) => { state.profiles.rt_dev.taxRate = parseNum(e.target.value); renderRetailDevices(); });
+  wireTaxRateInput('rt_dev');
   document.getElementById('rt_dev-other-input')?.addEventListener('input', (e) => { state.profiles.rt_dev.otherCosts = parseNum(e.target.value); updateSummaryDisplays('rt_dev'); });
 
   window.addEventListener('beforeprint', () => {
