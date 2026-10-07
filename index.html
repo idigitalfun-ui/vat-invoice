@@ -20,6 +20,51 @@
   <!-- Toast Container -->
   <div id="toast-container"></div>
 
+  <!-- Header details modal -->
+  <div id="header-settings-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm p-4 overflow-y-auto">
+    <div class="max-w-3xl mx-auto my-8 rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl">
+      <div class="flex items-start justify-between gap-4 p-5 border-b border-slate-700">
+        <div>
+          <h2 class="text-lg font-bold text-white">Invoice Header Details</h2>
+          <p class="text-xs text-slate-400 mt-1">Change the logo, business name and contact details for IDFL or Get Connected. These details are saved locally and to Firebase when you are signed in.</p>
+        </div>
+        <button onclick="closeHeaderSettings()" class="text-slate-400 hover:text-white text-xl leading-none" title="Close">×</button>
+      </div>
+      <div class="p-5 grid md:grid-cols-2 gap-5">
+        <section class="rounded-xl border border-amber-500/30 bg-slate-950/40 p-4">
+          <h3 class="font-bold text-amber-300 mb-3">Get Connected</h3>
+          <div class="space-y-2.5 text-xs">
+            <label class="block">Business name<input id="header-GC-name" class="header-setting-input" maxlength="80"></label>
+            <label class="block">Text beside logo (optional)<input id="header-GC-brandText" class="header-setting-input" maxlength="80"></label>
+            <label class="block">Logo file / URL<input id="header-GC-logo" class="header-setting-input" maxlength="300"></label>
+            <label class="block">Address<textarea id="header-GC-address" class="header-setting-input resize-y" rows="3" maxlength="240"></textarea></label>
+            <label class="block">Phone<input id="header-GC-phone" class="header-setting-input" maxlength="80"></label>
+            <label class="block">Email<input id="header-GC-email" class="header-setting-input" maxlength="120"></label>
+            <label class="block">VAT number<input id="header-GC-vat" class="header-setting-input" maxlength="80"></label>
+          </div>
+          <button onclick="resetHeaderSettings('GC')" class="mt-3 text-xs text-slate-300 hover:text-white underline">Restore Get Connected defaults</button>
+        </section>
+        <section class="rounded-xl border border-blue-500/30 bg-slate-950/40 p-4">
+          <h3 class="font-bold text-blue-300 mb-3">I Digital Fun</h3>
+          <div class="space-y-2.5 text-xs">
+            <label class="block">Business name<input id="header-IDFL-name" class="header-setting-input" maxlength="80"></label>
+            <label class="block">Text beside logo (optional)<input id="header-IDFL-brandText" class="header-setting-input" maxlength="80"></label>
+            <label class="block">Logo file / URL<input id="header-IDFL-logo" class="header-setting-input" maxlength="300"></label>
+            <label class="block">Address<textarea id="header-IDFL-address" class="header-setting-input resize-y" rows="3" maxlength="240"></textarea></label>
+            <label class="block">Phone<input id="header-IDFL-phone" class="header-setting-input" maxlength="80"></label>
+            <label class="block">Email<input id="header-IDFL-email" class="header-setting-input" maxlength="120"></label>
+            <label class="block">VAT number<input id="header-IDFL-vat" class="header-setting-input" maxlength="80"></label>
+          </div>
+          <button onclick="resetHeaderSettings('IDFL')" class="mt-3 text-xs text-slate-300 hover:text-white underline">Restore IDFL defaults</button>
+        </section>
+      </div>
+      <div class="flex justify-end gap-2 p-5 border-t border-slate-700">
+        <button onclick="closeHeaderSettings()" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold">Cancel</button>
+        <button onclick="saveHeaderSettings()" class="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold">Save header details</button>
+      </div>
+    </div>
+  </div>
+
   <!-- App Header & Navigation Bar -->
   <header class="app-header sticky top-0 z-40 px-4 lg:px-8 py-2.5 shadow-2xl backdrop-blur-md">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
@@ -84,6 +129,10 @@
 
       <!-- Actions -->
       <div class="flex items-center flex-wrap gap-2">
+        <button onclick="openHeaderSettings()" title="Change IDFL or Get Connected invoice header details"
+                class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs border border-slate-700 transition">
+          Header details
+        </button>
         <button onclick="openScannerModal()" 
                 class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-lg shadow-indigo-950/60 transition hover:scale-[1.02] active:scale-[0.98]">
           <span class="text-sm">📷</span>

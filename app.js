@@ -186,6 +186,97 @@ const WHOLESALE_SELLERS = {
 };
 
 const WHOLESALE_CUSTOMERS_STORAGE_KEY = 'vat-invoice-wholesale-customers-v1';
+const HEADER_SETTINGS_STORAGE_KEY = 'vat-invoice-header-settings-v1';
+
+function readHeaderSettings() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(HEADER_SETTINGS_STORAGE_KEY) || '{}');
+    const valid = {};
+    ['GC', 'IDFL'].forEach(key => {
+      const values = saved?.[key];
+      if (!values || typeof values !== 'object') return;
+      const clean = {};
+      ['name', 'brandText', 'logo', 'address', 'phone', 'email', 'vat', 'updatedAt'].forEach(field => {
+        if (typeof values[field] === 'string' && values[field].length <= 300) clean[field] = values[field];
+      });
+      if (Object.keys(clean).length) valid[key] = clean;
+    });
+    return valid;
+  } catch (_) {
+    return {};
+  }
+}
+
+let invoiceHeaderSettings = readHeaderSettings();
+
+function getSellerHeader(brandKey) {
+  const key = WHOLESALE_SELLERS[brandKey] ? brandKey : 'GC';
+  return { ...WHOLESALE_SELLERS[key], ...(invoiceHeaderSettings[key] || {}) };
+}
+
+function persistHeaderSettings() {
+  localStorage.setItem(HEADER_SETTINGS_STORAGE_KEY, JSON.stringify(invoiceHeaderSettings));
+}
+
+function mergeHeaderSettings(...collections) {
+  const merged = {};
+  collections.forEach(collection => {
+    ['GC', 'IDFL'].forEach(key => {
+      const candidate = collection?.[key];
+      if (!candidate || typeof candidate !== 'object') return;
+      const existingTime = Date.parse(merged[key]?.updatedAt || '') || 0;
+      const candidateTime = Date.parse(candidate.updatedAt || '') || 0;
+      if (!merged[key] || candidateTime >= existingTime) merged[key] = candidate;
+    });
+  });
+  return merged;
+}
+
+function openHeaderSettings() {
+  ['GC', 'IDFL'].forEach(key => {
+    const header = getSellerHeader(key);
+    ['name', 'brandText', 'logo', 'address', 'phone', 'email', 'vat'].forEach(field => {
+      const input = document.getElementById(`header-${key}-${field}`);
+      if (input) input.value = header[field] || '';
+    });
+  });
+  document.getElementById('header-settings-modal')?.classList.remove('hidden');
+}
+
+function closeHeaderSettings() {
+  document.getElementById('header-settings-modal')?.classList.add('hidden');
+}
+
+function resetHeaderSettings(key) {
+  if (!WHOLESALE_SELLERS[key]) return;
+  delete invoiceHeaderSettings[key];
+  persistHeaderSettings();
+  openHeaderSettings();
+  renderActiveProfile();
+  void syncInvoiceHistoryToCloud({ quiet: true });
+}
+
+function saveHeaderSettings() {
+  const next = {};
+  for (const key of ['GC', 'IDFL']) {
+    const values = {};
+    for (const field of ['name', 'brandText', 'logo', 'address', 'phone', 'email', 'vat']) {
+      const input = document.getElementById(`header-${key}-${field}`);
+      values[field] = String(input?.value || '').trim();
+    }
+    if (!values.name || !values.logo || !values.address) {
+      showToast(`${key === 'GC' ? 'Get Connected' : 'I Digital Fun'} needs a business name, logo and address.`);
+      return;
+    }
+    next[key] = { ...values, updatedAt: new Date().toISOString() };
+  }
+  invoiceHeaderSettings = next;
+  persistHeaderSettings();
+  renderActiveProfile();
+  closeHeaderSettings();
+  void syncInvoiceHistoryToCloud({ quiet: true });
+  showToast('Invoice header details saved.');
+}
 
 // 4 Preset Catalogs
 const CATALOGS = {
@@ -368,7 +459,7 @@ function getTaxRate(profileOrKey) {
 }
 
 function getWholesaleSeller(profileKey) {
-  return WHOLESALE_SELLERS[state.profiles[profileKey]?.sellerBrand] || WHOLESALE_SELLERS.GC;
+  return getSellerHeader(state.profiles[profileKey]?.sellerBrand || 'GC');
 }
 
 function formatAddressForInvoice(address) {
@@ -420,6 +511,38 @@ function renderWholesaleSellerHeader(profileKey) {
   if (payee) payee.textContent = `Make all payments payable to ${seller.name}`;
   const terms = document.getElementById(`${domPrefix}-seller-terms`);
   if (terms) terms.textContent = `${seller.name} wholesale terms: Tested and certified handset lots`;
+}
+
+function sellerContactHtml(seller) {
+  return `
+    <div>${escapeHtml(seller.address)}</div>
+    <div>
+      <span>CONTACT: ${escapeHtml(seller.phone)}</span>
+      <span class="sep">•</span>
+      <span>EMAIL: ${escapeHtml(seller.email)}</span>
+      <span class="sep">•</span>
+      <span>VAT: ${escapeHtml(seller.vat)}</span>
+    </div>`;
+}
+
+function renderRetailSellerHeader(profileKey) {
+  const profile = state.profiles[profileKey];
+  const seller = getSellerHeader(profile?.activeBrand || 'IDFL');
+  const domPrefix = profileKey === 'rt_acc' ? 'rt-acc' : 'rt-dev';
+  const header = document.getElementById(`${domPrefix}-header-banner`);
+  const logo = document.getElementById(`${domPrefix}-logo-img`);
+  const brand = document.getElementById(`${domPrefix}-brand-text`);
+  const contact = document.getElementById(`${domPrefix}-header-contact`);
+  if (header) header.className = profileKey === 'rt_acc' ? 'banner-rt-acc' : 'banner-rt-dev';
+  if (logo) {
+    logo.src = seller.logo;
+    logo.alt = seller.name;
+    logo.className = `${seller.brandText ? 'h-10' : 'h-9'} object-contain drop-shadow-md`;
+  }
+  if (brand) brand.textContent = seller.brandText || '';
+  if (contact) contact.innerHTML = sellerContactHtml(seller);
+  const notice = document.getElementById(`${domPrefix}-notice-contact`);
+  if (notice) notice.textContent = `CONTACT: ${seller.phone}    EMAIL: ${seller.email}`;
 }
 
 function getCustomWholesaleCustomers() {
@@ -847,46 +970,7 @@ function renderRetailAccessories() {
   const isGross = data.pricingMode === 'gross';
   const taxRate = getTaxRate(data);
 
-  const isGC = data.activeBrand === 'GC';
-  const headerElem = document.getElementById('rt-acc-header-banner');
-  const logoElem = document.getElementById('rt-acc-logo-img');
-  const brandTextElem = document.getElementById('rt-acc-brand-text');
-  const contactTextElem = document.getElementById('rt-acc-header-contact');
-  const noticeContactElem = document.getElementById('rt-acc-notice-contact');
-
-  if (isGC) {
-    headerElem.className = 'banner-rt-acc';
-    logoElem.src = 'assets/get-connected-banner-text.png';
-    logoElem.className = 'h-9 object-contain drop-shadow-md';
-    brandTextElem.textContent = '';
-    contactTextElem.innerHTML = `
-      <div>Unit 3 Kewlew Business park, Mountrath Rd, Portlaoise, Co. Laois, R32 W0DT</div>
-      <div>
-        <span>CONTACT: +353(0)857403331</span>
-        <span class="sep">•</span>
-        <span>EMAIL: getconnectedire@gmail.com</span>
-        <span class="sep">•</span>
-        <span>VAT: IE9692928</span>
-      </div>
-    `;
-    if (noticeContactElem) noticeContactElem.textContent = 'CONTACT: +353(0)857403331    EMAIL: getconnectedire@gmail.com';
-  } else {
-    headerElem.className = 'banner-rt-acc';
-    logoElem.src = 'assets/idfl-logo.png';
-    logoElem.className = 'h-10 object-contain drop-shadow-md';
-    brandTextElem.textContent = 'I DIGITAL FUN';
-    contactTextElem.innerHTML = `
-      <div>Unit 3 Kewlew Business park, Mountrath Rd, Portlaoise, Co. Laois, R32 W0DT</div>
-      <div>
-        <span>CONTACT: 057 868 2426</span>
-        <span class="sep">•</span>
-        <span>EMAIL: INFO@IDFLMOBILE.COM</span>
-        <span class="sep">•</span>
-        <span>VAT: IE33845510H</span>
-      </div>
-    `;
-    if (noticeContactElem) noticeContactElem.textContent = 'CONTACT: 057 868 2426    EMAIL: INFO@IDFLMOBILE.COM';
-  }
+  renderRetailSellerHeader('rt_acc');
 
   const refEl = document.getElementById('rt-acc-input-ref');
   if (refEl) { refEl.value = data.reference; adjustInputWidth(refEl); }
@@ -965,43 +1049,7 @@ function renderRetailDevices() {
   const isGross = data.pricingMode === 'gross';
   const taxRate = getTaxRate(data);
 
-  const isGC = data.activeBrand === 'GC';
-  const headerElem = document.getElementById('rt-dev-header-banner');
-  const logoElem = document.getElementById('rt-dev-logo-img');
-  const brandTextElem = document.getElementById('rt-dev-brand-text');
-  const contactTextElem = document.getElementById('rt-dev-header-contact');
-
-  if (isGC) {
-    headerElem.className = 'banner-rt-dev';
-    logoElem.src = 'assets/get-connected-banner-text.png';
-    logoElem.className = 'h-9 object-contain drop-shadow-md';
-    brandTextElem.textContent = '';
-    contactTextElem.innerHTML = `
-      <div>Unit 3 Kewlew Business park, Mountrath Rd, Portlaoise, Co. Laois, R32 W0DT</div>
-      <div>
-        <span>CONTACT: +353(0)857403331</span>
-        <span class="sep">•</span>
-        <span>EMAIL: getconnectedire@gmail.com</span>
-        <span class="sep">•</span>
-        <span>VAT: IE9692928</span>
-      </div>
-    `;
-  } else {
-    headerElem.className = 'banner-rt-dev';
-    logoElem.src = 'assets/idfl-logo.png';
-    logoElem.className = 'h-10 object-contain drop-shadow-md';
-    brandTextElem.textContent = 'I DIGITAL FUN';
-    contactTextElem.innerHTML = `
-      <div>Unit 3 Kewlew Business park, Mountrath Rd, Portlaoise, Co. Laois, R32 W0DT</div>
-      <div>
-        <span>CONTACT: 057 868 2426</span>
-        <span class="sep">•</span>
-        <span>EMAIL: INFO@IDFLMOBILE.COM</span>
-        <span class="sep">•</span>
-        <span>VAT: IE33845510H</span>
-      </div>
-    `;
-  }
+  renderRetailSellerHeader('rt_dev');
 
   const refEl = document.getElementById('rt-dev-input-ref');
   if (refEl) { refEl.value = data.reference; adjustInputWidth(refEl); }
@@ -1701,7 +1749,7 @@ function mergeInvoiceHistory(...collections) {
 function invoiceHistoryPayload() {
   const invoices = {};
   state.savedInvoices.forEach(record => { invoices[record.id] = record; });
-  return { updatedAt: new Date().toISOString(), invoices };
+  return { updatedAt: new Date().toISOString(), invoices, headers: invoiceHeaderSettings };
 }
 
 function saveInvoiceHistoryLocally() {
@@ -1769,8 +1817,11 @@ async function bootInvoiceCloud() {
         const remotePayload = await cloud.read();
         const merged = mergeInvoiceHistory(state.savedInvoices, remotePayload?.invoices || remotePayload);
         state.savedInvoices = merged;
+        invoiceHeaderSettings = mergeHeaderSettings(invoiceHeaderSettings, remotePayload?.headers);
+        persistHeaderSettings();
         saveInvoiceHistoryLocally();
         renderSavedInvoicesModal();
+        renderActiveProfile();
         invoiceCloudReady = true;
 
         // The merged copy is written once on sign-in. This preserves drafts
@@ -1780,8 +1831,11 @@ async function bootInvoiceCloud() {
         invoiceCloudUnsubscribe = cloud.subscribe(payload => {
           const remoteInvoices = toInvoiceArray(payload?.invoices || payload);
           state.savedInvoices = mergeInvoiceHistory(remoteInvoices);
+          invoiceHeaderSettings = mergeHeaderSettings(invoiceHeaderSettings, payload?.headers);
+          persistHeaderSettings();
           saveInvoiceHistoryLocally();
           renderSavedInvoicesModal();
+          renderActiveProfile();
           updateInvoiceCloudUI('Cloud history protected');
         }, error => {
           console.error('Cloud invoice history listener error:', error);
